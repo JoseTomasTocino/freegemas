@@ -8,7 +8,6 @@ namespace GoSDL {
     class Sound {
 
     public:
-        Sound();
         ~Sound();
 
         void setSample(std::string path);

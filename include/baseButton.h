@@ -51,6 +51,7 @@ public:
     BaseButton();
 
     void set (GoSDL::Window * parentWindow, std::string caption, std::string iconPath);
+    void setText(std::string caption);
 
     void draw(int x, int y, double z);
 
@@ -66,6 +67,9 @@ public:
     bool clicked(unsigned int mX, unsigned int mY);
 
 private:
+
+    /// Parent window
+    GoSDL::Window * mParentWindow;
 
     /// Image for the background of the button
     GoSDL::Image mImgBackground;

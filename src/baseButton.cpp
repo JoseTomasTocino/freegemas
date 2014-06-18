@@ -5,26 +5,37 @@
 BaseButton::BaseButton() { }
 
 
-void BaseButton::set (GoSDL::Window * parentWindow, std::string caption, std::string iconPath){
+void BaseButton::set (GoSDL::Window * parentWindow, std::string caption, std::string iconPath) {
+
+    mParentWindow = parentWindow;
 
     // Load the background image
-    mImgBackground.setWindowAndPath(parentWindow, "media/buttonBackground.png");
+    mImgBackground.setWindowAndPath(mParentWindow, "media/buttonBackground.png");
 
+    // Set the flag
+    mHasIcon = iconPath != "";
+
+    // Load the icon image
+    if (mHasIcon) {
+        mImgIcon.setWindowAndPath(mParentWindow, "media/" + iconPath);
+    }
+
+    setText(caption);
+}
+
+void BaseButton::setText(std::string caption) {
     // Load the font for the button caption
     GoSDL::Font textFont;
-    textFont.setAll(parentWindow, "media/fuenteNormal.ttf", 27);
+    textFont.setAll(mParentWindow, "media/fuenteNormal.ttf", 27);
 
     // Generate the button caption texture
     mImgCaption = textFont.renderText(caption, {255, 255, 255});
     mImgCaptionShadow = textFont.renderText(caption, {0, 0, 0});
 
-    // Load the icon image
-    if (iconPath != "") {
-        mHasIcon = true;
-        mImgIcon.setWindowAndPath(parentWindow, "media/" + iconPath);
+    // Calculate the position of the text
+    if (mHasIcon) {
         mTextHorizontalPosition = 40 + (mImgBackground.getWidth() - 40) / 2 - mImgCaption.getWidth() / 2;
     } else {
-        mHasIcon = false;
         mTextHorizontalPosition = mImgBackground.getWidth() / 2 - mImgCaption.getWidth() / 2;
     }
 }

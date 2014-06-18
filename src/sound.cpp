@@ -1,10 +1,6 @@
 #include "sound.h"
 #include <cstdio>
 
-GoSDL::Sound::Sound () {
-
-}
-
 GoSDL::Sound::~Sound () {
     Mix_FreeChunk(mSample);
 }

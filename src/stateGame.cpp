@@ -66,7 +66,7 @@ void StateGame::init(){
     mHintButton.set(parent, _("Show hint"), "iconHint.png");
     mResetButton.set(parent, _("Reset game"), "iconRestart.png");
     mExitButton.set(parent, _("Exit"), "iconExit.png");
-    mMusicButton.set(parent, _("Turn on music"), "iconMusic.png");
+    mMusicButton.set(parent, _("Turn off music"), "iconMusic.png");
 
 
     // Sounds
@@ -75,7 +75,7 @@ void StateGame::init(){
     sfxMatch3.setSample("media/match3.ogg");
     sfxSelect.setSample("media/select.ogg");
     sfxFall.setSample("media/fall.ogg");
-    // sfxSong.reset(new Gosu::Song(Gosu::resourcePrefix() + L"media/music1.ogg"));
+    sfxSong.setSample("media/music2.ogg");
 
     // Images for the gems
     mImgWhite.setWindowAndPath(parent, "media/gemWhite.png");
@@ -107,8 +107,8 @@ void StateGame::init(){
     // Reset the game to the initial values
     resetGame();
 
-    //sfxSong -> play(true);
-    // sfxSong -> changeVolume(0.5);
+    sfxSong.play();
+    // sfxSong.changeVolume(0.5);
 }
 
 
@@ -740,13 +740,13 @@ void StateGame::mouseButtonDown(Uint8 button) {
 
         // Music button was clicked
         else if (mMusicButton.clicked(mouseX, mouseY)){
-            // if (sfxSong -> playing()){
-            //     mMusicButton -> changeText(Gosu::widen(_("Turn on music")));
-            //     sfxSong -> stop();
-            // }else{
-            //     musicButton -> changeText(Gosu::widen(_("Turn off music")));
-            //     sfxSong -> play(true);
-            // }
+            if (sfxSong.isPlaying()){
+                mMusicButton.setText(_("Turn on music"));
+                sfxSong.stop();
+            }else{
+                mMusicButton.setText(_("Turn off music"));
+                sfxSong.play();
+            }
         }
 
         // Reset button was clicked

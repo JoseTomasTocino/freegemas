@@ -36,6 +36,7 @@ using namespace std;
 #include "image.h"
 #include "font.h"
 #include "sound.h"
+#include "music.h"
 
 #include "state.h"
 #include "coord.h"
@@ -237,7 +238,7 @@ private:
     GoSDL::Sound sfxMatch1, sfxMatch2, sfxMatch3;
     GoSDL::Sound sfxSelect;
     GoSDL::Sound sfxFall;
-    // Gosu:Song sfxSong;
+    GoSDL::Music sfxSong;
     /// @}
     /*
 
