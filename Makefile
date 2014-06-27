@@ -1,11 +1,13 @@
-CXXFLAGS := `sdl2-config --cflags` -Iinclude -I. -Ilibs/SDL2_ttf-2.0.12
+CXXFLAGS := `sdl2-config --cflags` -Iinclude -I. 
+#CXXFLAGS += -Ilibs/SDL2_ttf-2.0.12
 CXXFLAGS += -Wall -pipe -g --pedantic
 CXXFLAGS += --std=c++11
 
 LIBS += `sdl2-config --libs`
 LIBS += -lSDL2_image
 LIBS += -lSDL2_mixer
-LIBS += libs/SDL2_ttf-2.0.12/.libs/libSDL2_ttf.a -lfreetype
+LIBS += -lSDL2_ttf
+#LIBS += libs/SDL2_ttf-2.0.12/.libs/libSDL2_ttf.a -lfreetype
 
 LDFLAGS += -Wall
 LDFLAGS += --std=c++11
