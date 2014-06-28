@@ -5,7 +5,7 @@
 #include <vector>
 using namespace std;
 
-#include <boost/array.hpp>
+#include <array>
 
 #include "log.h"
 #include "coord.h"
@@ -169,7 +169,7 @@ public:
     void endAnimations();
 
     /// Matrix of squares
-    boost::array< boost::array<Square, 8>, 8> squares;
+    std::array< std::array<Square, 8>, 8> squares;
 
     friend ostream& operator <<(ostream& out, Board & B);
 };
