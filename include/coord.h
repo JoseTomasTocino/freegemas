@@ -4,6 +4,12 @@
 #include <iostream>
 using namespace std;
 
+/**
+ * Standard class for a 2D coordinate.
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com>
+ *
+ */
 struct coord{
     /// Horizontal position
     int x;

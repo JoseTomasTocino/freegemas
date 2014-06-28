@@ -1,8 +1,6 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
-#include <boost/foreach.hpp>
-
 #include <algorithm>
 #include <vector>
 using namespace std;
@@ -61,12 +59,7 @@ struct Square{
     bool mustFall;
 };
 
-/**
- * Standard class for a 2D coordinate.
- *
- * @author José Tomás Tocino García <theom3ga@gmail.com>
- *
- */
+
 
 
 
