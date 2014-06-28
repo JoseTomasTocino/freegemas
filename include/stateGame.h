@@ -84,9 +84,6 @@ private:
     /// Resets the game
     void resetGame();
 
-    /// Redraws the score board
-    void redrawScoreboard();
-
     /// Plays the sound for the match
     void playMatchSound();
 

@@ -233,9 +233,6 @@ void StateGame::update(){
             // Switch to the next mState (new gems fall to their position)
             mState = eGemasNuevasCayendo;
 
-            // Redraw the score board with new points
-            redrawScoreboard();
-
             // Delete the squares that were matched in the board
             for(size_t i = 0; i < mGroupedSquares.size(); ++i){
                 for(size_t j = 0; j < mGroupedSquares[i].size(); ++j){
@@ -608,26 +605,8 @@ void StateGame::resetGame(){
     // Reset the score
     mScore = 0;
 
-    // Redraw the scoreboard
-    //redrawScoreboard();
-
     // Restart the time (two minutes)
     mTimeStart = SDL_GetTicks() + 2 * 60 * 1000;
-}
-
-void StateGame::redrawScoreboard(){
-    /*
-    Gosu::Bitmap temporal = Gosu::createText(
-        boost::lexical_cast<wstring>(puntos),  // Text of the bitmap
-        Gosu::resourcePrefix() + L"media/fuentelcd.ttf",   // Font of the bitmap
-        33, // Font size
-        0,  // Font flags
-        190,  // Text width
-        Gosu::taRight); // Text alignment
-
-    txtPuntos.reset(new Gosu::Image(parent -> graphics(), temporal)); // reset the image
-
-    //*/
 }
 
 void StateGame::playMatchSound(){
@@ -667,9 +646,6 @@ void StateGame::createFloatingScores() {
         mScore += m.size() * 5 * mMultiplier;
     }
 
-    redrawScoreboard();
-
-    //*/
 }
 
 
