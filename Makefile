@@ -24,6 +24,7 @@ OBJS := $(addprefix $(OBJDIR)/, $(addsuffix .o,$(basename $(SRCS))))
 all: $(OUTPUT)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
+	@mkdir -p $(OBJDIR)
 	@echo "Compiling..." $(notdir $<)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
