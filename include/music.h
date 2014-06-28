@@ -1,7 +1,7 @@
 #ifndef _MUSIC_H_
 #define _MUSIC_H_
 
-#include <SDL2/SDL_mixer.h>
+#include <SDL_mixer.h>
 #include <string>
 
 namespace GoSDL {
