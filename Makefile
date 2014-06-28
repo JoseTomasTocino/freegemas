@@ -11,7 +11,7 @@ LIBS += -lSDL2_ttf
 LDFLAGS += -Wall
 LDFLAGS += --std=c++11
 
-OUTPUT := programa.out
+OUTPUT := freegemas.out
 
 OBJDIR := obj
 SRCDIR := src
