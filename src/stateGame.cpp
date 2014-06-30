@@ -411,7 +411,7 @@ void StateGame::draw() {
         posY = 41;
 
     // Generic pointer for drawing the squares
-    GoSDL::Image * img;
+	GoSDL::Image * img = NULL;
 
     // If we're not in the final screen (showing the scores)
     if (mState != eShowingScoreTable){

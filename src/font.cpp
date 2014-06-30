@@ -2,9 +2,11 @@
 
 
 #include <memory>
+#include <cstdio>
+#include <stdexcept>
 
 #include "font.h"
-#include "cstdio"
+
 
 
 void GoSDL::Font::checkInit () {
