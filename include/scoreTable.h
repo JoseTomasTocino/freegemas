@@ -4,8 +4,6 @@
  * @author José Tomás Tocino García
  * @date 2010
  *
- *
- *
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  *
  * This program is free software; you can redistribute it and/or
@@ -55,8 +53,6 @@ class Game;
  *
  * @brief Represents a table of scores that appears at the end of the game.
  *
- *
- *
  * @author José Tomás Tocino García <theom3ga@gmail.com>
  *
  */
@@ -70,7 +66,7 @@ public:
     ScoreTable(Game * p, int points);
 
     /// Draws the score table at the given position
-    void draw(int x, int y, double z);
+    void draw(int x, int y, int z);
 
     /// Launches when a button is pressed
     void buttonDown(SDL_Keycode button);
@@ -79,17 +75,14 @@ private:
 
     void fillEmptyScoreFile();
 
-    /// Font for the first header
-    GoSDL::Font fntH1;
-
     /// Image for the first header
-    GoSDL::Image mHeader1;
+    GoSDL::Image mRenderedHeader;
 
-    /// Font for the second header
+    /// Image for the rendered score
+    GoSDL::Image mRenderedScore;
+
+    /// Font for the body
     GoSDL::Font fntH2;
-
-    /// Image for the subheader
-    GoSDL::Image mHeader2;
 
     /// LCD-style fonts for the content
     GoSDL::Font fntLcdBig, fntLcdSmall;

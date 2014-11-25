@@ -23,7 +23,7 @@ namespace GoSDL {
         void setPathAndSize(std::string path, unsigned size);
         void setAll(Window * parentWindow, std::string path, unsigned size);
 
-        double getTextWidth(std::string text);
+        int getTextWidth(std::string text);
 
         GoSDL::Image renderText(std::string text, SDL_Color color = {255, 255, 255, 255});
         GoSDL::Image renderBlock(std::string text, SDL_Color color, unsigned width);

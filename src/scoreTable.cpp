@@ -1,13 +1,11 @@
 #include "scoreTable.h"
-
-
 #include "inter.h"
 
 ScoreTable::ScoreTable(Game * p, int points) : parent(p), points(points)
 {
     // Render big header
+    GoSDL::Font fntH1;
     fntH1.setAll(parent, "media/fuenteMenu.ttf", 60);
-    mHeader1 = fntH1.renderText(_("GAME OVER"));
 
     fntH2.setAll(parent, "media/fuenteNormal.ttf", 35);
 
@@ -15,6 +13,10 @@ ScoreTable::ScoreTable(Game * p, int points) : parent(p), points(points)
     fntLcdSmall.setAll(parent, "media/fuentelcd.ttf", 36);
 
     string scoreFilePath = "freeGemasScore";
+
+    // Cache-render texts
+    mRenderedHeader = fntH1.renderText(_("GAME OVER"));
+    mRenderedScore = fntLcdBig.renderText(std::to_string(points));
 
     // scoreFile.open(scoreFilePath.c_str(), fstream::in);
 
@@ -56,36 +58,26 @@ ScoreTable::ScoreTable(Game * p, int points) : parent(p), points(points)
 
 #define KOL 0xffffffff
 
-void ScoreTable::draw(int x, int y, double z)
+void ScoreTable::draw(int x, int y, int z)
 {
     (void) x;
     (void) y;
     (void) z;
 
-    // Get the localized score table string
-    string stringTitle = _("GAME OVER");
-
-    // Get the width of the first header
-    double w1 = fntH1.getTextWidth(stringTitle);
-
-    // Get the width of the subheader
-    double wp = fntLcdBig.getTextWidth(std::to_string(points));
-
     // Get the center
     int center = x + scoreBoardWidth / 2;
 
-    mHeader1.draw(center - w1 / 2, y, z);
+    // Draw the title and its shadow
+    mRenderedHeader.draw(center - mRenderedHeader.getWidth() / 2, y, z);
+    mRenderedHeader.draw(center - mRenderedHeader.getWidth() / 2 + 1, y + 3, z - 1,
+        1, 1, 0, 128, {0, 0, 0, 255});
+
+    // Draw the score and its shadow
+    mRenderedScore.draw(center - mRenderedScore.getWidth() / 2, y + 67, z);
+    mRenderedScore.draw(center - mRenderedScore.getWidth() / 2 + 1, y + 70, z - 1,
+        1, 1, 0, 128, {0, 0, 0, 255});
 
 /*
-    fntH1.draw(stringTitle,
-                  center - w1 / 2 + 1,
-                  y+3, z - 0.1, 1, 1, 0x44000000);
-
-    fntLcdBig.draw(std::to_string(points),
-                      center - wp / 2, y + 67, z);
-
-
-
     if(state == eRequestPlayerName){
         wstring stringSubtitle = Gosu::widen(_("Write your name:"));
         double w2 = fntH2 -> getTextWidth(stringSubtitle);

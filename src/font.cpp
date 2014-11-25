@@ -50,7 +50,7 @@ void GoSDL::Font::setAll(Window * parentWindow, std::string path, unsigned size)
     setPathAndSize(path, size);
 }
 
-double GoSDL::Font::getTextWidth(std::string text) {
+int GoSDL::Font::getTextWidth(std::string text) {
     if (!mFont) return 0;
 
     int w;
