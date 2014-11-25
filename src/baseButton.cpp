@@ -29,8 +29,8 @@ void BaseButton::setText(std::string caption) {
     textFont.setAll(mParentWindow, "media/fuenteNormal.ttf", 27);
 
     // Generate the button caption texture
-    mImgCaption = textFont.renderText(caption, {255, 255, 255});
-    mImgCaptionShadow = textFont.renderText(caption, {0, 0, 0});
+    mImgCaption = textFont.renderText(caption, {255, 255, 255, 255});
+    mImgCaptionShadow = textFont.renderText(caption, {0, 0, 0, 255});
 
     // Calculate the position of the text
     if (mHasIcon) {

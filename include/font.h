@@ -25,7 +25,7 @@ namespace GoSDL {
 
         double getTextWidth(std::string text);
 
-        GoSDL::Image renderText(std::string text, SDL_Color color);
+        GoSDL::Image renderText(std::string text, SDL_Color color = {255, 255, 255, 255});
         GoSDL::Image renderBlock(std::string text, SDL_Color color, unsigned width);
 
         ~Font();

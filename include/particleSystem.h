@@ -86,7 +86,7 @@ public:
                       int y,
                       unsigned distance=200,
                       float scale=1,
-                      SDL_Color color = {255, 255, 255}) :
+                      SDL_Color color = {255, 255, 255, 255}) :
 
         mParticleQuantity(particleQuantity),
         mTotalSteps(totalSteps),

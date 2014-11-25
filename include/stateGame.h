@@ -43,7 +43,7 @@ using namespace std;
 #include "board.h"
 #include "floatingScore.h"
 #include "baseButton.h"
-// #include "scoreTable.h"
+#include "scoreTable.h"
 #include "particleSystem.h"
 
 class Game;
@@ -71,7 +71,6 @@ public:
     void draw();
 
     void buttonDown(SDL_Keycode button);
-    void buttonUp(SDL_Keycode button);
 
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
@@ -237,14 +236,10 @@ private:
     GoSDL::Sound sfxFall;
     GoSDL::Music sfxSong;
     /// @}
-    /*
-
-
-
 
 
     /// Reference to the score table
-    // ScoreTable scoreTable;
+    std::shared_ptr<ScoreTable> scoreTable;
     //*/
 };
 

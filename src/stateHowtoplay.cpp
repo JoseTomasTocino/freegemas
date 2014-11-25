@@ -17,8 +17,8 @@ StateHowtoplay::StateHowtoplay(Game * p) : State(p){
     fontTitle.setWindow(p);
     fontTitle.setPathAndSize("media/fuenteMenu.ttf", 48);
 
-    mImgTitle = fontTitle.renderText(_("How to play"), {255, 255, 255});
-    mImgTitleShadow = fontTitle.renderText(_("How to play"), {0, 0, 0});
+    mImgTitle = fontTitle.renderText(_("How to play"), {255, 255, 255, 255});
+    mImgTitleShadow = fontTitle.renderText(_("How to play"), {0, 0, 0, 255});
 
     // Build the subtitle text
     GoSDL::Font fontSubtitle;
@@ -26,8 +26,8 @@ StateHowtoplay::StateHowtoplay(Game * p) : State(p){
     fontSubtitle.setWindow(p);
     fontSubtitle.setPathAndSize("media/fuenteMenu.ttf", 23);
 
-    mImgSubtitle = fontSubtitle.renderText(_("Press escape to go back"), {255, 255, 255});
-    mImgSubtitleShadow = fontSubtitle.renderText(_("Press escape to go back"), {0, 0, 0});
+    mImgSubtitle = fontSubtitle.renderText(_("Press escape to go back"), {255, 255, 255, 255});
+    mImgSubtitleShadow = fontSubtitle.renderText(_("Press escape to go back"), {0, 0, 0, 255});
 
     // Build the main text
     GoSDL::Font fontText;
@@ -43,8 +43,8 @@ StateHowtoplay::StateHowtoplay(Game * p) : State(p){
     bodyText += "\n\n";
     bodyText += _("Bonus points are given when more than three identical gems are formed. Sometimes chain reactions, called cascades, are triggered, where chains are formed by the falling gems. Cascades are awarded with bonus points.");
 
-    mImgBodyText = fontText.renderBlock(bodyText.c_str(), {255, 255, 255}, 450);
-    mImgBodyTextShadow = fontText.renderBlock(bodyText.c_str(), {0, 0, 0}, 450);
+    mImgBodyText = fontText.renderBlock(bodyText.c_str(), {255, 255, 255, 255}, 450);
+    mImgBodyTextShadow = fontText.renderBlock(bodyText.c_str(), {0, 0, 0, 255}, 450);
 }
 
 void StateHowtoplay::update() { }

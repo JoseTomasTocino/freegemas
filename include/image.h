@@ -57,7 +57,9 @@ namespace GoSDL {
         void setWindowAndPath(Window * parentwindow, string path);
         void setTexture (SDL_Texture * texture);
 
-        void draw (int x, int y, int z, double factorX = 1, double factorY = 1, float angle = 0, Uint8 alpha = 255, SDL_Color color = {255, 255, 255});
+        void draw (int x, int y, int z,
+            double factorX = 1, double factorY = 1, float angle = 0,
+            Uint8 alpha = 255, SDL_Color color = {255, 255, 255, 255});
 
         int getWidth();
         int getHeight();

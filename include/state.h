@@ -44,14 +44,14 @@ public:
     virtual void draw() = 0;
 
     /// Triggers when a key is pressed
-    virtual void buttonDown(SDL_Keycode button){ }
+    virtual void buttonDown(SDL_Keycode){ }
 
     /// Triggers when a key is released
-    virtual void buttonUp(SDL_Keycode button){ }
+    virtual void buttonUp(SDL_Keycode){ }
 
-    virtual void mouseButtonDown(Uint8 button) { }
+    virtual void mouseButtonDown(Uint8) { }
 
-    virtual void mouseButtonUp(Uint8 button) { }
+    virtual void mouseButtonUp(Uint8) { }
 
     /// Default destructor
     virtual ~State();

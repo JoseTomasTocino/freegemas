@@ -47,8 +47,8 @@ public:
         tempFont.setAll(parentWindow, "media/fuentelcd.ttf", 60);
 
         // Build the image
-        mScoreImage = tempFont.renderText(std::to_string(score), {255, 255, 255});
-        mScoreImageShadow = tempFont.renderText(std::to_string(score), {0, 0, 0});
+        mScoreImage = tempFont.renderText(std::to_string(score), {255, 255, 255, 255});
+        mScoreImageShadow = tempFont.renderText(std::to_string(score), {0, 0, 0, 255});
     }
 
     bool ended(){

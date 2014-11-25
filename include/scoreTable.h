@@ -1,13 +1,13 @@
 /**
  * @file scoreTable.h
- * 
+ *
  * @author José Tomás Tocino García
  * @date 2010
  *
- * 
- * 
+ *
+ *
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -28,11 +28,11 @@
 #ifndef _SCORETABLE_
 #define _SCORETABLE_
 
-#include <Gosu/Gosu.hpp>
-
-#include <boost/scoped_ptr.hpp>
-#include <boost/bind.hpp>
-#include <boost/lexical_cast.hpp>
+#include <utility>
+#include <memory>
+#include <set>
+#include <string>
+using namespace std;
 
 #include <fstream>
 #include <string>
@@ -44,7 +44,8 @@ using namespace std;
 
 #include "log.h"
 #include "game.h"
-#include "resManager.h"
+#include "font.h"
+#include "image.h"
 
 
 class Game;
@@ -54,14 +55,15 @@ class Game;
  *
  * @brief Represents a table of scores that appears at the end of the game.
  *
- * 
  *
- * @author José Tomás Tocino García <theom3ga@gmail.com> 
+ *
+ * @author José Tomás Tocino García <theom3ga@gmail.com>
  *
  */
 
 
 class ScoreTable{
+
 public:
 
     /// Creates a new score table for the given amount of points
@@ -71,26 +73,33 @@ public:
     void draw(int x, int y, double z);
 
     /// Launches when a button is pressed
-    void buttonDown(Gosu::Button B);
+    void buttonDown(SDL_Keycode button);
 
 private:
 
     void fillEmptyScoreFile();
 
     /// Font for the first header
-    boost::shared_ptr<CustomFont> fntH1;
+    GoSDL::Font fntH1;
+
+    /// Image for the first header
+    GoSDL::Image mHeader1;
 
     /// Font for the second header
-    boost::shared_ptr<CustomFont> fntH2;
+    GoSDL::Font fntH2;
+
+    /// Image for the subheader
+    GoSDL::Image mHeader2;
 
     /// LCD-style fonts for the content
-    boost::shared_ptr<CustomFont> fntLcdBig, fntLcdSmall;
+    GoSDL::Font fntLcdBig, fntLcdSmall;
 
     /// Stream to access the file of scores
     fstream scoreFile;
 
     /// States of the score table
-    enum tState{
+    enum tState
+    {
         eRequestPlayerName,
         eShowScores
     };
@@ -99,8 +108,10 @@ private:
     tState state;
 
     /// Functor to compare scores
-    struct scoreComp{
-        bool operator()(const pair<string,int> & A, const pair<string,int>& B){
+    struct scoreComp
+    {
+        bool operator()(const pair<string,int> & A, const pair<string,int>& B)
+        {
             return A.second > B.second;
         }
     };
@@ -124,45 +135,48 @@ private:
      *
      * This class filters spaces from the user input
      *
-     * @author José Tomás Tocino García <theom3ga@gmail.com> 
+     * @author José Tomás Tocino García <theom3ga@gmail.com>
      *
      */
-    
 
-    class ScoreTableInput : public Gosu::TextInput{
-    public:
 
-        /** 
-         * Filters spaces from the given string. Also checks whether the
-         * complete text is no longer than 15 characters.
-         * 
-         * @param str_ the string to filter
-         * 
-         * @return the filtered string, without spaces
-         */
 
-        std::wstring filter(const std::wstring & str_) const{
+    // class ScoreTableInput : public Gosu::TextInput{
+    // public:
 
-            // If the length is higher than 15 characters, return the empty string
-            if(text().length() == 15) 
-                return L"";
+    //     /**
+    //      * Filters spaces from the given string. Also checks whether the
+    //      * complete text is no longer than 15 characters.
+    //      *
+    //      * @param str_ the string to filter
+    //      *
+    //      * @return the filtered string, without spaces
+    //      */
 
-            lDEBUG << "Filter: " << Gosu::narrow(str_);
-            std::wstring returnString = str_.substr(0, 15);
+    //     std::wstring filter(const std::wstring & str_) const{
 
-            returnString.erase(
-                std::remove_if(returnString.begin(), returnString.end(), 
-                               boost::bind<bool>(std::equal_to<wchar_t>(), _1, L' ')), 
-                returnString.end());
-            
-            return returnString;
-        }
+    //         // If the length is higher than 15 characters, return the empty string
+    //         if(text().length() == 15)
+    //             return L"";
 
-    };
+    //         lDEBUG << "Filter: " << Gosu::narrow(str_);
+    //         std::wstring returnString = str_.substr(0, 15);
 
-    /// Instance of the input object that deals with the user input text
-    ScoreTableInput nameInput;
-    
+    //         returnString.erase(
+    //             std::remove_if(returnString.begin(), returnString.end(),
+    //                            boost::bind<bool>(std::equal_to<wchar_t>(), _1, L' ')),
+    //             returnString.end());
+
+    //         return returnString;
+    //     }
+
+    // };
+
+    // /// Instance of the input object that deals with the user input text
+    // ScoreTableInput nameInput;
+
+    //*/
+
     /// Points to show
     int points;
 };
