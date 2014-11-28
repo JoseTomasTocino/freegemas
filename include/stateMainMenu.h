@@ -17,6 +17,7 @@
 #include <iostream>
 #include <cstdio>
 #include <memory>
+
 using namespace std;
 
 class Game;

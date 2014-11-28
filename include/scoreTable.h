@@ -82,7 +82,7 @@ private:
     int scoreBoardWidth;
 
     /// Reference to the main game
-    Game * parent;
+    Game * mGame;
 };
 
 #endif

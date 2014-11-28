@@ -10,7 +10,8 @@ void GoSDL::Sound::setSample (std::string path)
 {
     mSample = Mix_LoadWAV(path.c_str());
 
-    if(!mSample) {
+    if(!mSample)
+    {
         printf("Mix_LoadWAV: %s\n", Mix_GetError());
     }
 }

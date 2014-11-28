@@ -5,7 +5,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 
-ScoreTable::ScoreTable(Game * p, int score) : parent(p)
+ScoreTable::ScoreTable(Game * p, int score) : mGame(p)
 {
     int lastScore;
 
@@ -50,10 +50,10 @@ ScoreTable::ScoreTable(Game * p, int score) : parent(p)
 
     // Load necessary fonts
     GoSDL::Font fntH1, fntH2, fntLcdBig, fntLcdSmall;;
-    fntH1.setAll(parent, "media/fuenteMenu.ttf", 60);
-    fntH2.setAll(parent, "media/fuenteNormal.ttf", 35);
-    fntLcdBig.setAll(parent, "media/fuentelcd.ttf", 72);
-    fntLcdSmall.setAll(parent, "media/fuentelcd.ttf", 36);
+    fntH1.setAll(mGame, "media/fuenteMenu.ttf", 60);
+    fntH2.setAll(mGame, "media/fuenteNormal.ttf", 35);
+    fntLcdBig.setAll(mGame, "media/fuentelcd.ttf", 72);
+    fntLcdSmall.setAll(mGame, "media/fuentelcd.ttf", 36);
 
     // Cache-render texts
     mRenderedHeader = fntH1.renderText(_("GAME OVER"));

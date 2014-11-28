@@ -6,7 +6,8 @@
 
 #include "font.h"
 
-StateHowtoplay::StateHowtoplay(Game * p) : State(p){
+StateHowtoplay::StateHowtoplay(Game * p) : State(p)
+{
     lDEBUG << Log::CON("StateHowtoPlay");
 
     mImgBackground.setWindowAndPath(p, "media/howtoScreen.png");
@@ -49,7 +50,8 @@ StateHowtoplay::StateHowtoplay(Game * p) : State(p){
 
 void StateHowtoplay::update() { }
 
-void StateHowtoplay::draw() {
+void StateHowtoplay::draw()
+{
     mImgBackground.draw(0,0,0);
 
     mImgTitle.draw(300 + 470 / 2 - mImgTitle.getWidth() / 2, 20, 1);
@@ -62,18 +64,23 @@ void StateHowtoplay::draw() {
     mImgBodyTextShadow.draw(311, 112, 0.9,  1, 1, 0, 128);
 }
 
-void StateHowtoplay::buttonDown(SDL_Keycode button){
-    if (button == SDLK_ESCAPE) {
-        parent -> changeState("stateMainMenu");
+void StateHowtoplay::buttonDown(SDL_Keycode button)
+{
+    if (button == SDLK_ESCAPE)
+    {
+        mGame -> changeState("stateMainMenu");
     }
 }
 
-void StateHowtoplay::mouseButtonDown(Uint8 button){
-    if (button == SDL_BUTTON_LEFT) {
-        parent -> changeState("stateMainMenu");
+void StateHowtoplay::mouseButtonDown(Uint8 button)
+{
+    if (button == SDL_BUTTON_LEFT)
+    {
+        mGame -> changeState("stateMainMenu");
     }
 }
 
-StateHowtoplay::~StateHowtoplay(){
+StateHowtoplay::~StateHowtoplay()
+{
     lDEBUG << Log::DES("StateHowtoPlay");
 }

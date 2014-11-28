@@ -30,62 +30,54 @@ StateGame::~StateGame()
     lDEBUG << Log::DES("StateGame");
 }
 
-
 void StateGame::init()
 {
     lDEBUG << "StateGame::init";
 
-    // Load the font for the timer
-    mFontTime.setAll(parent, "media/fuentelcd.ttf", 62);
+    mGameIndicators.setGame(mGame, this);
+    mGameIndicators.init();
 
-    // Load the font for the scoreboard
-    mFontScore.setAll(parent, "media/fuentelcd.ttf", 33);
+    initSounds();
+    initImages();
+    initParameters();
 
-    // Load the backgorund image
-    mImgBoard.setWindowAndPath(parent, "media/board.png");
+    // Reset the game to the initial values
+    resetGame();
 
-    // Load the image for the square selector
-    mImgSelector.setWindowAndPath(parent, "media/selector.png");
+    // sfxSong.play();
+    // sfxSong.changeVolume(0.5);
+}
 
-    // Load the background image for the time
-    mImgTimeBackground.setWindowAndPath(parent, "media/timeBackground.png");
-
-    // Load the background image for the scoreboard
-    mImgScoreBackground.setWindowAndPath(parent, "media/scoreBackground.png");
-
-    // Font to render some headers
-    GoSDL::Font tempHeaderFont;
-    tempHeaderFont.setAll(parent, "media/fuenteNormal.ttf", 37);
-
-    mImgScoreHeader = tempHeaderFont.renderText(_("score"), {160, 169, 255, 255});
-    mImgScoreHeaderShadow = tempHeaderFont.renderText(_("score"), {0,0,0, 255});
-
-    mImgTimeHeader = tempHeaderFont.renderText(_("time left"), {160, 169, 255, 255});
-    mImgTimeHeaderShadow = tempHeaderFont.renderText(_("time left"), {0,0,0, 255});
-
-    // Buttons
-    mHintButton.set(parent, _("Show hint"), "iconHint.png");
-    mResetButton.set(parent, _("Reset game"), "iconRestart.png");
-    mExitButton.set(parent, _("Exit"), "iconExit.png");
-    mMusicButton.set(parent, _("Turn off music"), "iconMusic.png");
-
+void StateGame::initSounds()
+{
     // Sounds
     sfxMatch1.setSample("media/match1.ogg");
     sfxMatch2.setSample("media/match2.ogg");
     sfxMatch3.setSample("media/match3.ogg");
     sfxSelect.setSample("media/select.ogg");
     sfxFall.setSample("media/fall.ogg");
-    sfxSong.setSample("media/music2.ogg");
+}
+
+void StateGame::initImages()
+{
+    // Load the backgorund image
+    mImgBoard.setWindowAndPath(mGame, "media/board.png");
+
+    // Load the image for the square selector
+    mImgSelector.setWindowAndPath(mGame, "media/selector.png");
 
     // Images for the gems
-    mImgWhite.setWindowAndPath(parent, "media/gemWhite.png");
-    mImgRed.setWindowAndPath(parent, "media/gemRed.png");
-    mImgPurple.setWindowAndPath(parent, "media/gemPurple.png");
-    mImgOrange.setWindowAndPath(parent, "media/gemOrange.png");
-    mImgGreen.setWindowAndPath(parent, "media/gemGreen.png");
-    mImgYellow.setWindowAndPath(parent, "media/gemYellow.png");
-    mImgBlue.setWindowAndPath(parent, "media/gemBlue.png");
+    mImgWhite.setWindowAndPath(mGame, "media/gemWhite.png");
+    mImgRed.setWindowAndPath(mGame, "media/gemRed.png");
+    mImgPurple.setWindowAndPath(mGame, "media/gemPurple.png");
+    mImgOrange.setWindowAndPath(mGame, "media/gemOrange.png");
+    mImgGreen.setWindowAndPath(mGame, "media/gemGreen.png");
+    mImgYellow.setWindowAndPath(mGame, "media/gemYellow.png");
+    mImgBlue.setWindowAndPath(mGame, "media/gemBlue.png");
+}
 
+void StateGame::initParameters ()
+{
     // Initial animation state
     mAnimationCurrentStep = 0;
 
@@ -103,14 +95,7 @@ void StateGame::init()
 
     // Initial score mMultiplier
     mMultiplier = 1;
-
-    // Reset the game to the initial values
-    resetGame();
-
-    // sfxSong.play();
-    // sfxSong.changeVolume(0.5);
 }
-
 
 void StateGame::update()
 {
@@ -141,19 +126,13 @@ void StateGame::update()
     // Compute the remaining time
     double remainingTime = (mTimeStart - SDL_GetTicks()) / 1000;
 
-    // If there's some remaining time, compute the string for the time board
-    if (remainingTime >= 0)
-    {
-        int minutes = int(remainingTime / 60);
-        int seconds = int(remainingTime - minutes * 60);
-
-        mTxtTime = std::to_string(minutes) +
-        (seconds < 10 ? ":0" : ":") +
-        std::to_string(seconds);
-    }
+    // Update UI
+    mGameIndicators.updateScore(mScore);
+    mGameIndicators.updateTime(remainingTime);
+    mGameIndicators.update();
 
     // If there's no time left and we're not in a final state
-    else if (remainingTime < 0 && mState != eTimeFinished && mState != eShowingScoreTable)
+    if (remainingTime < 0 && mState != eTimeFinished && mState != eShowingScoreTable)
     {
         // End the game
         mState = eTimeFinished;
@@ -324,7 +303,7 @@ void StateGame::update()
         if (++mAnimationCurrentStep == mAnimationInitialSteps)
         {
             // Create a new score table
-            scoreTable.reset(new ScoreTable(parent, mScore));
+            scoreTable.reset(new ScoreTable(mGame, mScore));
 
             // Switch to the following mState
             mState = eShowingScoreTable;
@@ -358,40 +337,8 @@ void StateGame::draw()
     // Draw the background image
     mImgBoard.draw(0,0,1);
 
-    // Vertical initial position for the buttons
-    int vertButStart = 360;
-
-    // Draw the buttons
-    mHintButton.draw(17, vertButStart, 2);
-    mResetButton.draw(17, vertButStart + 47, 2);
-    mMusicButton.draw(17, vertButStart + 47 * 2, 2);
-    mExitButton.draw(17, 538, 2);
-
-    // Avoid re-generating the texture if the score hasn't changed
-    if (mScore != mLastScore)
-    {
-        mImgScore = mFontScore.renderText(std::to_string(mScore), {78, 193, 190, 255});
-        mLastScore = mScore;
-    }
-
-    // Draw the score
-    mImgScoreBackground.draw(17, 124, 2);
-    mImgScoreHeader.draw(17 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 84, 3);
-    mImgScoreHeaderShadow.draw(18 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 85, 2.95,  1, 1, 0, 128);
-    mImgScore.draw(197 - mImgScore.getWidth(), 127, 2);
-
-    // Avoid re-generating the time texture if the score hasn't changed
-    if (mTxtTime != mTxtLastTime)
-    {
-        mImgTime = mFontTime.renderText(mTxtTime, {78, 193, 190, 255});
-        mTxtLastTime = mTxtTime;
-    }
-
-    // Draw the time
-    mImgTimeBackground.draw(17, 230, 2);
-    mImgTimeHeader . draw(17 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 190, 3);
-    mImgTimeHeaderShadow . draw(18 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 191, 2, 1, 1, 0, 128);
-    mImgTime.draw(190 - mImgTime.getWidth(), 232, 2);
+    // Draw the UI
+    mGameIndicators.draw();
 
     // Draw each score little messages
     std::for_each(mFloatingScores.begin(),
@@ -557,8 +504,8 @@ void StateGame::draw()
         }
 
         // Get the mouse position
-        int mX = (int) parent -> getMouseX();
-        int mY = (int) parent -> getMouseY();
+        int mX = (int) mGame -> getMouseX();
+        int mY = (int) mGame -> getMouseY();
 
         // If the mouse is over a gem
         if (overGem(mX, mY) ){
@@ -642,7 +589,7 @@ void StateGame::createFloatingScores() {
     for (Match & m : mGroupedSquares) {
 
         // Create a new floating score image
-        mFloatingScores.push_back(FloatingScore(parent,
+        mFloatingScores.push_back(FloatingScore(mGame,
            m.size() * 5 * mMultiplier,
            m.midSquare().x,
            m.midSquare().y, 80));
@@ -650,7 +597,7 @@ void StateGame::createFloatingScores() {
         // Create a new particle system for it to appear over the square
         for(size_t i = 0, s = m.size(); i < s; ++i) {
 
-            mParticleSet.emplace_back(ParticleSystem(parent,
+            mParticleSet.emplace_back(ParticleSystem(mGame,
                 50, 50,
                 241 + m[i].x * 65 + 32,
                 41 + m[i].y * 65 + 32, 60, 0.5));
@@ -704,49 +651,22 @@ return returnValue;
 
 }
 
-void StateGame::mouseButtonDown(Uint8 button) {
+void StateGame::mouseButtonDown(Uint8 button)
+{
 
     // Left mouse button was pressed
     if (button == SDL_BUTTON_LEFT) {
         mMousePressed = true;
 
         // Get click location
-        int mouseX = parent->getMouseX();
-        int mouseY = parent->getMouseY();
+        int mouseX = mGame->getMouseX();
+        int mouseY = mGame->getMouseY();
 
-        // Exit button was clicked
-        if (mExitButton.clicked(mouseX, mouseY))
-        {
-            parent -> changeState("stateMainMenu");
-        }
-
-        // Hint button was clicked
-        else if (mHintButton.clicked(mouseX, mouseY) && mState != eShowingScoreTable)
-        {
-            showHint();
-        }
-
-        // Music button was clicked
-        else if (mMusicButton.clicked(mouseX, mouseY))
-        {
-            if (sfxSong.isPlaying()){
-                mMusicButton.setText(_("Turn on music"));
-                sfxSong.stop();
-            }else{
-                mMusicButton.setText(_("Turn off music"));
-                sfxSong.play();
-            }
-        }
-
-        // Reset button was clicked
-        else if (mResetButton.clicked(mouseX, mouseY))
-        {
-            // Reset the game
-            resetGame();
-        }
+        // Inform the UI
+        mGameIndicators.click(mouseX, mouseY);
 
         // A gem was clicked
-        else if (overGem(mouseX, mouseY) && mState != eShowingScoreTable)
+        if (overGem(mouseX, mouseY) && mState != eShowingScoreTable)
         {
             sfxSelect.play(0.3);
 
@@ -777,8 +697,8 @@ void StateGame::mouseButtonUp(Uint8 button)
 
         if (mState == eGemaMarcada)
         {
-            int mX = (int) parent -> getMouseX();
-            int mY = (int) parent -> getMouseY();
+            int mX = (int) mGame -> getMouseX();
+            int mY = (int) mGame -> getMouseY();
 
             coord res = getCoord(mX, mY);
 
@@ -795,7 +715,7 @@ void StateGame::buttonDown (SDL_Keycode button){
 
     if (button == SDLK_ESCAPE)
     {
-        parent -> changeState("stateMainMenu");
+        mGame -> changeState("stateMainMenu");
     }
 
     else if (button == SDLK_h)

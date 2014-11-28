@@ -8,9 +8,11 @@
 #include "window.h"
 #include "image.h"
 
-class JewelGroupAnim{
+class JewelGroupAnim
+{
 public:
-    void loadResources (GoSDL::Window * w) {
+    void loadResources (GoSDL::Window * w)
+    {
         imgGems[0].setWindowAndPath(w, "media/gemWhite.png");
         imgGems[1].setWindowAndPath(w, "media/gemRed.png");
         imgGems[2].setWindowAndPath(w, "media/gemPurple.png");

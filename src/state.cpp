@@ -2,10 +2,12 @@
 
 #include "log.h"
 
-State::State(Game * p) : parent(p){
+State::State(Game * p) : mGame(p)
+{
     lDEBUG << Log::CON("State");
 }
 
-State::~State(){
+State::~State()
+{
     lDEBUG << Log::DES("State");
 }

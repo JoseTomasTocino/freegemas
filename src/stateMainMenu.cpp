@@ -15,13 +15,15 @@
 
 template <typename T, typename R>
 
-T clamp(T v, R bottom, R top){
+T clamp(T v, R bottom, R top)
+{
     if(v > top) return top;
     if(v < bottom) return bottom;
     return v;
 }
 
-StateMainMenu::StateMainMenu(Game * p) : State(p){
+StateMainMenu::StateMainMenu(Game * p) : State(p)
+{
     lDEBUG << Log::CON("StateMainMenu");
 
     mCurrentTransitionState = TransitionIn;
@@ -72,10 +74,12 @@ StateMainMenu::StateMainMenu(Game * p) : State(p){
 
 void StateMainMenu::update(){
 
-    if(mCurrentTransitionState == TransitionIn){
+    if(mCurrentTransitionState == TransitionIn)
+    {
         mAnimationCurrentStep ++;
 
-        if(mAnimationCurrentStep == mAnimationTotalSteps){
+        if(mAnimationCurrentStep == mAnimationTotalSteps)
+        {
             mCurrentTransitionState = Active;
         }
 
@@ -86,13 +90,12 @@ void StateMainMenu::update(){
     }
 
     // Update menu highlighting according to mouse position
-    int mY = (int) parent -> getMouseY();
+    int mY = (int) mGame -> getMouseY();
 
-    if(mY >= mMenuYStart && mY < mMenuYEnd){
+    if(mY >= mMenuYStart && mY < mMenuYEnd)
+    {
         mMenuSelectedOption = (mY - mMenuYStart) / mMenuYGap;
     }
-
-    //*/
 }
 
 void StateMainMenu::draw(){
@@ -108,8 +111,8 @@ void StateMainMenu::draw(){
     mImgLogo.draw(86, 0, 2, 1, 1, 0, logoAlfa);
 
     // Loop to draw the menu items
-    for(size_t i = 0, s = (int) mMenuTargets.size(); i < s; ++i){
-
+    for(size_t i = 0, s = (int) mMenuTargets.size(); i < s; ++i)
+    {
         // Calculate the horizontal and vertical positions
 		int posX = std::round(800 / 2 - mMenuRenderedTexts[i].getWidth() / 2),
             posY = mMenuYStart + i * mMenuYGap;
@@ -128,10 +131,12 @@ void StateMainMenu::draw(){
     //*/
 }
 
-void StateMainMenu::buttonDown(SDL_Keycode button){
-    switch (button) {
+void StateMainMenu::buttonDown(SDL_Keycode button)
+{
+    switch (button)
+    {
         case SDLK_ESCAPE:
-            parent->close();
+            mGame->close();
             break;
 
         case SDLK_DOWN:
@@ -149,22 +154,27 @@ void StateMainMenu::buttonDown(SDL_Keycode button){
     }
 }
 
-void StateMainMenu::mouseButtonDown(Uint8 button) {
-    if (button == SDL_BUTTON_LEFT) {
+void StateMainMenu::mouseButtonDown(Uint8 button)
+{
+    if (button == SDL_BUTTON_LEFT)
+    {
 
         // Get mouse vertical position
-        int mY = parent->getMouseY();
+        int mY = mGame->getMouseY();
 
-        if (mY >= mMenuYStart && mY <= mMenuYEnd) {
+        if (mY >= mMenuYStart && mY <= mMenuYEnd)
+        {
             optionChosen();
         }
     }
 }
 
-void StateMainMenu::optionChosen(){
-    parent -> changeState(mMenuTargets[mMenuSelectedOption]);
+void StateMainMenu::optionChosen()
+{
+    mGame -> changeState(mMenuTargets[mMenuSelectedOption]);
 }
 
-StateMainMenu::~StateMainMenu(){
+StateMainMenu::~StateMainMenu()
+{
     lDEBUG << Log::DES("StateMainMenu");
 }

@@ -45,6 +45,7 @@ using namespace std;
 #include "baseButton.h"
 #include "scoreTable.h"
 #include "particleSystem.h"
+#include "GameIndicators.h"
 
 class Game;
 
@@ -80,6 +81,10 @@ private:
     /// Loads the resources and intializes some variables
     void init();
 
+    void initSounds();
+    void initImages();
+    void initParameters();
+
     /// Resets the game
     void resetGame();
 
@@ -104,6 +109,8 @@ private:
 
 private:
 
+    friend class GameIndicators;
+
     /// Different states of the game
     enum tState
     {
@@ -123,42 +130,17 @@ private:
     /// Current state
     tState mState;
 
+    /// Game left side of UI
+    GameIndicators mGameIndicators;
+
     /// Loading screen image
     GoSDL::Image mImgLoadingBanner;
-
-    /// Font for the timer
-    GoSDL::Font mFontTime;
-
-    /// Font for the current-score text
-    GoSDL::Font mFontScore;
 
     // Background image
     GoSDL::Image mImgBoard;
 
     /// Image for the gem selector
     GoSDL::Image mImgSelector;
-
-    // Background of the timer
-    GoSDL::Image mImgTimeBackground;
-
-    /// Background for the current-score board
-    GoSDL::Image mImgScoreBackground;
-
-    /// Image for the clock
-    GoSDL::Image mImgTime;
-    GoSDL::Image mImgTimeHeader;
-    GoSDL::Image mImgTimeHeaderShadow;
-
-    /// Image for the current-score
-    GoSDL::Image mImgScore;
-    GoSDL::Image mImgScoreHeader;
-    GoSDL::Image mImgScoreHeaderShadow;
-
-    /// String with the remaining time
-    string mTxtTime;
-
-    /// Score in previous iteration of game loop
-    string mTxtLastTime;
 
     /// Starting time
     double mTimeStart;
@@ -207,14 +189,6 @@ private:
     /// Coordinates for the second selected square
     coord mSelectedSquareSecond;
 
-    /// @{
-    /// @name Buttons of the interface
-    BaseButton mHintButton;
-    BaseButton mResetButton;
-    BaseButton mExitButton;
-    BaseButton mMusicButton;
-    /// @}
-
     /// Flag that indicates whether the user is clicking
     bool mMousePressed;
 
@@ -235,7 +209,6 @@ private:
     GoSDL::Sound sfxMatch1, sfxMatch2, sfxMatch3;
     GoSDL::Sound sfxSelect;
     GoSDL::Sound sfxFall;
-    GoSDL::Music sfxSong;
     /// @}
 
 

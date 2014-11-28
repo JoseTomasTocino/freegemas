@@ -28,7 +28,7 @@ protected:
      * It's used when we have to switch states (calling #Game::changeState(),
      * access the graphics system (using Game::graphics()), etc.
     **/
-    Game * parent;
+    Game * mGame;
 
 public:
     /**
