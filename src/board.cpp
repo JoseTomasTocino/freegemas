@@ -15,7 +15,7 @@ void Board::generate(){
     bool repeat = false;
 
     do {
-        lDEBUG << "### Generating...";
+        // lDEBUG << "### Generating...";
         repeat = false;
 
         for (int i = 0; i < 8; ++i)
@@ -29,19 +29,19 @@ void Board::generate(){
             }
         }
         if(!check().empty()){
-            lDEBUG << "Generated board has matches. Repeating...";
+            // lDEBUG << "Generated board has matches. Repeating...";
             repeat = true;
         }
 
         else if(solutions().empty()){
-            lDEBUG << "Generated board has no solutions. Repeating...";
+            // lDEBUG << "Generated board has no solutions. Repeating...";
             repeat = true;
         }
 
     } while(repeat);
     // Regenera si hay alguna solución directa o si es imposible
 
-    lDEBUG << "The generated board has no direct matches but some possible solutions.";
+    // lDEBUG << "The generated board has no direct matches but some possible solutions.";
 }
 
 void Board::swap(int x1, int y1, int x2, int y2){

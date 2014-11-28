@@ -88,6 +88,9 @@ private:
     /// Resets the game
     void resetGame();
 
+    /// Resets the time
+    void resetTime();
+
     /// Plays the sound for the match
     void playMatchSound();
 
@@ -107,15 +110,15 @@ private:
 
     void placeGemsOutScreen();
 
-private:
+
 
     friend class GameIndicators;
 
     /// Different states of the game
     enum tState
     {
+        eInitial,
         eFirstFlip,
-        eLoading,
         eInicialGemas,
         eEspera,
         eGemaMarcada,

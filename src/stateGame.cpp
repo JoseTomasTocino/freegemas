@@ -16,7 +16,8 @@ StateGame::StateGame(Game * p) : State(p)
     lDEBUG << Log::CON("StateGame");
 
     // Set the initial loading state
-    mState = eLoading;
+    mState = eInitial;
+    lDEBUG << "State: eInitial";
 
     // Load the loading screen
     mImgLoadingBanner.setWindowAndPath(p, "media/loadingBanner.png");
@@ -34,6 +35,7 @@ void StateGame::init()
 {
     lDEBUG << "StateGame::init";
 
+    // Initialize UI
     mGameIndicators.setGame(mGame, this);
     mGameIndicators.init();
 
@@ -43,9 +45,6 @@ void StateGame::init()
 
     // Reset the game to the initial values
     resetGame();
-
-    // sfxSong.play();
-    // sfxSong.changeVolume(0.5);
 }
 
 void StateGame::initSounds()
@@ -99,24 +98,15 @@ void StateGame::initParameters ()
 
 void StateGame::update()
 {
-    /*
-      Before doing anything else, we have to show, at least once, the loading
-      screen. After the first draw event, we'll jump to the eFirstFlip state, where
-      init() will be called and the resources will start to load
-    */
 
-    if (mState == eLoading)
-    {
-        return;
-    }
-
-    if (mState == eFirstFlip)
+    if (mState == eInitial)
     {
         // Call init to start loading resources
         init();
 
         // Switch to the main game state
         mState = eInicialGemas;
+        lDEBUG << "State: eInicialGemas";
 
         // Then stop computing the rest of the logic
         return;
@@ -136,6 +126,7 @@ void StateGame::update()
     {
         // End the game
         mState = eTimeFinished;
+        lDEBUG << "State: eTimeFinished";
 
         // Take the gems out of the screen
         placeGemsOutScreen();
@@ -159,6 +150,7 @@ void StateGame::update()
         {
             // Switch to next mState (waiting for user input)
             mState = eEspera;
+            lDEBUG << "State: eEspera";
             mBoard.endAnimations();
 
             // reset animation step counter
@@ -180,6 +172,7 @@ void StateGame::update()
         {
             // Switch to the next mState (gems start to disappear)
             mState = eGemasDesapareciendo;
+            lDEBUG << "State: eGemasDesapareciendo";
 
             // Swap the gems in the board
             mBoard.swap(mSelectedSquareFirst.x, mSelectedSquareFirst.y,
@@ -203,10 +196,11 @@ void StateGame::update()
     else if (mState == eGemasDesapareciendo)
     {
         // When animation ends
-        if (mAnimationCurrentStep++ == mAnimationTotalSteps){
-
+        if (mAnimationCurrentStep++ == mAnimationTotalSteps)
+        {
             // Switch to the next mState (new gems fall to their position)
             mState = eGemasNuevasCayendo;
+            lDEBUG << "State: eGemasNuevasCayendo";
 
             // Delete the squares that were matched in the board
             for(size_t i = 0; i < mGroupedSquares.size(); ++i)
@@ -242,6 +236,7 @@ void StateGame::update()
 
             // Switch to the next mState (waiting mState)
             mState = eEspera;
+            lDEBUG << "State: eEspera";
 
             // Reset animation counter
             mAnimationCurrentStep = 0;
@@ -266,6 +261,7 @@ void StateGame::update()
 
                 // Go back to the gems-fading mState
                 mState = eGemasDesapareciendo;
+                lDEBUG << "State: eGemasDesapareciendo";
             }
 
             // If there are neither current solutions nor possible future solutions
@@ -273,6 +269,7 @@ void StateGame::update()
             {
                 // Make the board disappear
                 mState = eDesapareceBoard;
+                lDEBUG << "State: eDesapareceBoard";
 
                 placeGemsOutScreen();
             }
@@ -287,6 +284,7 @@ void StateGame::update()
         {
             // Switch to the initial mState
             mState = eInicialGemas;
+            lDEBUG << "State: eInicialGemas";
 
             // Generate a brand new board
             mBoard.generate();
@@ -307,6 +305,7 @@ void StateGame::update()
 
             // Switch to the following mState
             mState = eShowingScoreTable;
+            lDEBUG << "State: eShowingScoreTable";
 
             // Reset animation counter
             mAnimationCurrentStep = 0;
@@ -326,9 +325,8 @@ void StateGame::update()
 void StateGame::draw()
 {
     // If we're still loading resources, just show the loading screen
-    if (mState == eLoading || mState == eFirstFlip)
+    if (mState == eInitial || mState == eFirstFlip)
     {
-        mState = eFirstFlip;
         mImgLoadingBanner.draw(156, 200, 2);
 
         return;
@@ -350,14 +348,13 @@ void StateGame::draw()
       mParticleSet.end(),
       std::bind(&ParticleSystem::draw, _1));
 
-
     // Starting position for the squares
     int posX = 241;
     int posY = 41;
 
     // Draw the squares only if we're not showing the score table
-    if (mState != eShowingScoreTable){
-
+    if (mState != eShowingScoreTable)
+    {
         // Generic pointer for drawing the squares
         GoSDL::Image * img = NULL;
 
@@ -451,8 +448,8 @@ void StateGame::draw()
                     else if (mState == eGemasCambiando)
                     {
                         if (i == mSelectedSquareFirst.x &&
-                         j == mSelectedSquareFirst.y){
-
+                         j == mSelectedSquareFirst.y)
+                         {
                             imgX = Animacion::easeOutQuad(
                                 float(mAnimationCurrentStep),
                                 float(posX + i * 65),
@@ -468,8 +465,8 @@ void StateGame::draw()
                     }
 
                     else if (i == mSelectedSquareSecond.x &&
-                        j == mSelectedSquareSecond.y){
-
+                        j == mSelectedSquareSecond.y)
+                        {
                         imgX = Animacion::easeOutQuad(
                             float(mAnimationCurrentStep),
                             float(posX + i * 65),
@@ -485,11 +482,12 @@ void StateGame::draw()
                 }
             }
 
-            else if (mState == eGemasDesapareciendo){
+            else if (mState == eGemasDesapareciendo)
+            {
                 // Desaparición de las gemas ganadoras
 
-                if (mGroupedSquares.matched(coord(i,j))){
-
+                if (mGroupedSquares.matched(coord(i,j)))
+                {
                     imgAlpha = int(255 * (1 -(float)mAnimationCurrentStep/mAnimationTotalSteps));
                 }
             }
@@ -508,8 +506,8 @@ void StateGame::draw()
         int mY = (int) mGame -> getMouseY();
 
         // If the mouse is over a gem
-        if (overGem(mX, mY) ){
-
+        if (overGem(mX, mY) )
+        {
             // Draw the selector over that gem
             mImgSelector.draw( 241 + getCoord(mX, mY).x * 65,
                41 + getCoord(mX, mY).y * 65,
@@ -517,8 +515,8 @@ void StateGame::draw()
         }
 
         // If a gem was previously clicked
-        if (mState == eGemaMarcada){
-
+        if (mState == eGemaMarcada)
+        {
             // Draw the tinted selector over it
             mImgSelector.draw(241 + mSelectedSquareFirst.x * 65,
               41 + mSelectedSquareFirst.y * 65,
@@ -526,7 +524,8 @@ void StateGame::draw()
         }
 
         // If a hint is being shown
-        if (mShowingHint != -1){
+        if (mShowingHint != -1)
+        {
             // Get the opacity percentage
             float p1 = (float)mShowingHint / mHintAnimationTotalSteps;
 
@@ -547,34 +546,41 @@ void StateGame::draw()
     //*/
 }
 
-
 void StateGame::resetGame()
 {
     // Reset the score
     mScore = 0;
 
-    // Restart the time (two minutes)
-    mTimeStart = SDL_GetTicks() + 2 * 60 * 1000;
-    mTimeStart = SDL_GetTicks() + 5 * 1000;
+    resetTime();
 
-    if (mState != eShowingScoreTable)
+    if (mState == eShowingScoreTable)
     {
-        // Switch state
-        mState = eDesapareceBoard;
-
-        // Let the gems get out of the screen
-        placeGemsOutScreen();
+        mState = eGemasNuevasCayendo;
+        lDEBUG << "State: eGemasNuevasCayendo";
     }
 
     else
     {
-        mState = eGemasNuevasCayendo;
+        // Switch state
+        mState = eDesapareceBoard;
+        lDEBUG << "State: eDesapareceBoard";
+
+        // Let the gems get out of the screen
+        placeGemsOutScreen();
     }
+}
+
+void StateGame::resetTime()
+{
+    // Restart the time (two minutes)
+    mTimeStart = SDL_GetTicks() + 2 * 60 * 1000;
+    mTimeStart = SDL_GetTicks() + 5 * 1000;
 }
 
 void StateGame::playMatchSound()
 {
-    if (mMultiplier == 1){
+    if (mMultiplier == 1)
+    {
         sfxMatch1.play(0.25);
     }else if (mMultiplier == 2){
         sfxMatch2.play(0.25);
@@ -583,11 +589,11 @@ void StateGame::playMatchSound()
     }
 }
 
-void StateGame::createFloatingScores() {
-
+void StateGame::createFloatingScores()
+{
     // For each match in the group of matched squares
-    for (Match & m : mGroupedSquares) {
-
+    for (Match & m : mGroupedSquares)
+    {
         // Create a new floating score image
         mFloatingScores.push_back(FloatingScore(mGame,
            m.size() * 5 * mMultiplier,
@@ -595,8 +601,8 @@ void StateGame::createFloatingScores() {
            m.midSquare().y, 80));
 
         // Create a new particle system for it to appear over the square
-        for(size_t i = 0, s = m.size(); i < s; ++i) {
-
+        for(size_t i = 0, s = m.size(); i < s; ++i)
+        {
             mParticleSet.emplace_back(ParticleSystem(mGame,
                 50, 50,
                 241 + m[i].x * 65 + 32,
@@ -611,18 +617,20 @@ void StateGame::createFloatingScores() {
 
 
 
-bool StateGame::overGem(int mX, int mY){
+bool StateGame::overGem(int mX, int mY)
+{
     return (mX > 241 && mX < 241 + 65 * 8 &&
         mY > 41 && mY < 41 + 65 * 8);
 }
 
-coord StateGame::getCoord(int mX, int mY){
+coord StateGame::getCoord(int mX, int mY)
+{
     return coord((mX - 241) / 65 ,
        (mY - 41) / 65 );
 }
 
-bool StateGame::checkClickedSquare(int mX, int mY) {
-
+bool StateGame::checkClickedSquare(int mX, int mY)
+{
     bool returnValue = false;
 
     // Get the selected gem
@@ -641,8 +649,10 @@ bool StateGame::checkClickedSquare(int mX, int mY) {
     mGroupedSquares = temporal.check();
 
         // If there are winning movements
-    if (! mGroupedSquares.empty()){
+    if (! mGroupedSquares.empty())
+    {
         mState = eGemasCambiando;
+        lDEBUG << "State: eGemasCambiando";
         returnValue = true;
     }
 }
@@ -655,7 +665,8 @@ void StateGame::mouseButtonDown(Uint8 button)
 {
 
     // Left mouse button was pressed
-    if (button == SDL_BUTTON_LEFT) {
+    if (button == SDL_BUTTON_LEFT)
+    {
         mMousePressed = true;
 
         // Get click location
@@ -671,18 +682,23 @@ void StateGame::mouseButtonDown(Uint8 button)
             sfxSelect.play(0.3);
 
             // If there's no gem selected
-            if (mState == eEspera) {
+            if (mState == eEspera)
+            {
                 mState = eGemaMarcada;
+                lDEBUG << "State: eGemaMarcada";
                 mSelectedSquareFirst.x = getCoord(mouseX, mouseY).x;
                 mSelectedSquareFirst.y = getCoord(mouseX, mouseY).y;
             }
 
             // If there was a gem selected
-            else if (mState == eGemaMarcada) {
-                if (!checkClickedSquare(mouseX, mouseY)){
+            else if (mState == eGemaMarcada)
+            {
+                if (!checkClickedSquare(mouseX, mouseY))
+                {
                     mSelectedSquareFirst.x = -1;
                     mSelectedSquareFirst.y = -1;
                     mState = eEspera;
+                    lDEBUG << "State: eEspera";
                 }
             }
         }
@@ -711,8 +727,8 @@ void StateGame::mouseButtonUp(Uint8 button)
 }
 
 
-void StateGame::buttonDown (SDL_Keycode button){
-
+void StateGame::buttonDown (SDL_Keycode button)
+{
     if (button == SDLK_ESCAPE)
     {
         mGame -> changeState("stateMainMenu");
@@ -724,8 +740,8 @@ void StateGame::buttonDown (SDL_Keycode button){
     }
 }
 
-void StateGame::showHint() {
-
+void StateGame::showHint()
+{
     // Get possible hint locations
     vector<coord> hintLocations = mBoard.solutions();
     mHintLocation = hintLocations[0];
@@ -734,8 +750,8 @@ void StateGame::showHint() {
     mShowingHint = mHintAnimationTotalSteps;
 }
 
-void StateGame::placeGemsOutScreen(){
-
+void StateGame::placeGemsOutScreen()
+{
     for(int x = 0; x < 8; ++x)
     {
         for(int y = 0; y < 8; ++y)
