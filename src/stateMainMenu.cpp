@@ -1,15 +1,12 @@
-#include <cmath>
-
 #include "stateMainMenu.h"
 
 #include "game.h"
 #include "log.h"
-
-//#include "resManager.h"
 #include "inter.h"
 
-#include "font.h"
+#include "go_font.h"
 
+#include <cmath>
 #include <tuple>
 
 

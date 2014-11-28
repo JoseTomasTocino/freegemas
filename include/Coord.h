@@ -2,15 +2,14 @@
 #define COORD_H
 
 #include <iostream>
-using namespace std;
 
 /**
- * Standard class for a 2D coordinate.
+ * Represents a 2D coordinate.
  *
  * @author José Tomás Tocino García <theom3ga@gmail.com>
- *
  */
-struct coord{
+struct Coord
+{
     /// Horizontal position
     int x;
 
@@ -18,13 +17,17 @@ struct coord{
     int y;
 
     /// Default constructor
-    coord(int x = -1, int y = -1) : x(x), y(y) { }
+    Coord(int x = -1, int y = -1)
+        : x(x), y(y)
+    { }
 
-    bool operator ==(const coord & c) const{
+    bool operator ==(const Coord & c) const
+    {
         return (c.x == x && c.y == y);
     }
 
-    friend ostream& operator << (ostream& out, coord & C){
+    friend std::ostream& operator << (std::ostream& out, Coord & C)
+    {
         out << "(" << C.x << "," << C.y << ")";
 
         return out;

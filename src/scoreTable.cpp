@@ -1,9 +1,15 @@
 #include "scoreTable.h"
 #include "inter.h"
 
+#include "log.h"
+#include "go_font.h"
+#include "game.h"
+
+#include <fstream>
 #include <unistd.h>
-#include <sys/types.h>
 #include <pwd.h>
+
+using namespace std;
 
 ScoreTable::ScoreTable(Game * p, int score) : mGame(p)
 {

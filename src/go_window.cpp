@@ -1,4 +1,4 @@
-#include "window.h"
+#include "go_window.h"
 
 #include <iostream>
 #include <stdexcept>

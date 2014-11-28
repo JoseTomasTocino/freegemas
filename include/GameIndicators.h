@@ -1,9 +1,10 @@
 #ifndef GAME_INDICATORS_H
 #define GAME_INDICATORS_H
 
-#include "font.h"
-#include "image.h"
-#include "music.h"
+#include "go_font.h"
+#include "go_image.h"
+#include "go_music.h"
+
 #include "baseButton.h"
 
 #include <string>

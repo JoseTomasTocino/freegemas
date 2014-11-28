@@ -1,4 +1,4 @@
-#include "sound.h"
+#include "go_sound.h"
 #include <cstdio>
 
 GoSDL::Sound::~Sound ()

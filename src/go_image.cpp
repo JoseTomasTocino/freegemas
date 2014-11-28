@@ -1,5 +1,5 @@
-#include "image.h"
-#include "window.h"
+#include "go_image.h"
+#include "go_window.h"
 
 #include "log.h"
 

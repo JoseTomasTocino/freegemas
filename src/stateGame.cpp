@@ -228,6 +228,8 @@ void StateGame::update()
     // In this mState, new gems are falling
     else if (mState == eGemasNuevasCayendo)
     {
+        lDEBUG << "Caen: " << mAnimationCurrentStep;
+
         // When animation ends
         if (mAnimationCurrentStep++ == mAnimationTotalSteps)
         {
@@ -486,7 +488,7 @@ void StateGame::draw()
             {
                 // Desaparición de las gemas ganadoras
 
-                if (mGroupedSquares.matched(coord(i,j)))
+                if (mGroupedSquares.matched(Coord(i,j)))
                 {
                     imgAlpha = int(255 * (1 -(float)mAnimationCurrentStep/mAnimationTotalSteps));
                 }
@@ -548,6 +550,8 @@ void StateGame::draw()
 
 void StateGame::resetGame()
 {
+    lDEBUG << "Resetting game...";
+
     // Reset the score
     mScore = 0;
 
@@ -555,8 +559,16 @@ void StateGame::resetGame()
 
     if (mState == eShowingScoreTable)
     {
-        mState = eGemasNuevasCayendo;
+        // Let the gems get out of the screen
+        placeGemsOutScreen();
+
+        mState = eInicialGemas;
         lDEBUG << "State: eGemasNuevasCayendo";
+    }
+
+    else if (mState == eInitial)
+    {
+
     }
 
     else
@@ -623,9 +635,9 @@ bool StateGame::overGem(int mX, int mY)
         mY > 41 && mY < 41 + 65 * 8);
 }
 
-coord StateGame::getCoord(int mX, int mY)
+Coord StateGame::getCoord(int mX, int mY)
 {
-    return coord((mX - 241) / 65 ,
+    return Coord((mX - 241) / 65 ,
        (mY - 41) / 65 );
 }
 
@@ -716,7 +728,7 @@ void StateGame::mouseButtonUp(Uint8 button)
             int mX = (int) mGame -> getMouseX();
             int mY = (int) mGame -> getMouseY();
 
-            coord res = getCoord(mX, mY);
+            Coord res = getCoord(mX, mY);
 
             if (!(res == mSelectedSquareFirst))
             {
@@ -743,7 +755,7 @@ void StateGame::buttonDown (SDL_Keycode button)
 void StateGame::showHint()
 {
     // Get possible hint locations
-    vector<coord> hintLocations = mBoard.solutions();
+    vector<Coord> hintLocations = mBoard.solutions();
     mHintLocation = hintLocations[0];
 
     // Start hint animation

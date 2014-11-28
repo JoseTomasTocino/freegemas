@@ -7,7 +7,8 @@
 
 
 Game::Game ()
-    : GoSDL::Window(800, 600, "FreeGemas") {
+    : GoSDL::Window(800, 600, "FreeGemas")
+{
 
     mMouseCursor.setWindow(this);
     mMouseCursor.setPath("media/handCursor.png");

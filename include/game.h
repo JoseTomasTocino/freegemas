@@ -4,8 +4,8 @@
 #include <string>
 #include <memory>
 
-#include "window.h"
-#include "image.h"
+#include "go_window.h"
+#include "go_image.h"
 
 
 class State;

@@ -9,12 +9,14 @@ Board::Board(){
     generate();
 }
 
-void Board::generate(){
+void Board::generate()
+{
     std::srand((unsigned int) time(0));
 
     bool repeat = false;
 
-    do {
+    do
+    {
         // lDEBUG << "### Generating...";
         repeat = false;
 
@@ -28,12 +30,15 @@ void Board::generate(){
                 squares[i][j].destY = j - squares[i][j].origY;
             }
         }
-        if(!check().empty()){
+
+        if(!check().empty())
+        {
             // lDEBUG << "Generated board has matches. Repeating...";
             repeat = true;
         }
 
-        else if(solutions().empty()){
+        else if(solutions().empty())
+        {
             // lDEBUG << "Generated board has no solutions. Repeating...";
             repeat = true;
         }
@@ -44,22 +49,25 @@ void Board::generate(){
     // lDEBUG << "The generated board has no direct matches but some possible solutions.";
 }
 
-void Board::swap(int x1, int y1, int x2, int y2){
+void Board::swap(int x1, int y1, int x2, int y2)
+{
     tSquare temp = squares[x1][y1];
 
     squares[x1][y1] = squares[x2][y2];
     squares[x2][y2] = temp;
 }
 
-void Board::del(int x, int y){
+void Board::del(int x, int y)
+{
     squares[x][y] = sqEmpty;
 }
 
-vector<coord> Board::solutions(){
-    vector<coord> resultados;
+vector<Coord> Board::solutions()
+{
+    vector<Coord> resultados;
 
     if(!check().empty()){
-        resultados.push_back(coord(-1,-1));
+        resultados.push_back(Coord(-1,-1));
         return resultados;
     }
 
@@ -78,7 +86,7 @@ vector<coord> Board::solutions(){
             if(y > 0){
                 temp.swap(x,y, x,y-1);
                 if(!temp.check().empty()){
-                    resultados.push_back(coord(x,y));
+                    resultados.push_back(Coord(x,y));
                 }
                 temp.swap(x,y, x,y-1);
             }
@@ -87,7 +95,7 @@ vector<coord> Board::solutions(){
             if(y < 7){
                 temp.swap(x, y, x, y+1);
                 if(!temp.check().empty()){
-                    resultados.push_back(coord(x,y));
+                    resultados.push_back(Coord(x,y));
                 }
                 temp.swap(x, y, x, y+1);
             }
@@ -96,7 +104,7 @@ vector<coord> Board::solutions(){
             if(x > 0){
                 temp.swap(x, y, x - 1, y);
                 if(!temp.check().empty()){
-                    resultados.push_back(coord(x,y));
+                    resultados.push_back(Coord(x,y));
                 }
                 temp.swap(x, y, x - 1, y);
             }
@@ -105,7 +113,7 @@ vector<coord> Board::solutions(){
             if(x < 7){
                 temp.swap(x, y, x + 1, y);
                 if(!temp.check().empty()){
-                    resultados.push_back(coord(x,y));
+                    resultados.push_back(Coord(x,y));
                 }
                 temp.swap(x, y, x + 1, y);
             }
@@ -118,7 +126,8 @@ vector<coord> Board::solutions(){
 
 }
 
-MultipleMatch Board::check(){
+MultipleMatch Board::check()
+{
     //lDEBUG << "Checking board...";
 
     int k;
@@ -131,12 +140,12 @@ MultipleMatch Board::check(){
         for(int x = 0; x < 6; ++x){
 
             Match currentRow;
-            currentRow.push_back(coord(x,y));
+            currentRow.push_back(Coord(x,y));
 
             for(k = x+1; k < 8; ++k){
                 if(squares[x][y] == squares[k][y] &&
                    squares[x][y] != sqEmpty){
-                    currentRow.push_back(coord(k,y));
+                    currentRow.push_back(Coord(k,y));
                 }else{
                     break;
                 }
@@ -154,12 +163,12 @@ MultipleMatch Board::check(){
         for(int y = 0; y < 6; ++y){
 
             Match currentColumn;
-            currentColumn.push_back(coord(x,y));
+            currentColumn.push_back(Coord(x,y));
 
             for(k = y + 1; k < 8; ++k){
                 if(squares[x][y] == squares[x][k] &&
                    squares[x][y] != sqEmpty){
-                    currentColumn.push_back(coord(x,k));
+                    currentColumn.push_back(Coord(x,k));
                 }else{
                     break;
                 }
@@ -176,7 +185,8 @@ MultipleMatch Board::check(){
     return matches;
 }
 
-ostream& operator <<(ostream& out, Board & B){
+ostream& operator <<(ostream& out, Board & B)
+{
     for(int i = 0; i < 8; ++i){
         for(int j = 0; j < 8; ++j){
             out << B.squares[j][i] << " ";
@@ -187,7 +197,8 @@ ostream& operator <<(ostream& out, Board & B){
     return out;
 }
 
-void Board::calcFallMovements(){
+void Board::calcFallMovements()
+{
     //lDEBUG << "Board::calcFallMovements";
 
     for(int x = 0; x < 8; ++x){
@@ -211,7 +222,8 @@ void Board::calcFallMovements(){
     }
 }
 
-void Board::applyFall(){
+void Board::applyFall()
+{
     //lDEBUG << "Board::applyFall";
 
     for(int x = 0; x < 8; ++x){

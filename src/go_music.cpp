@@ -1,4 +1,4 @@
-#include "music.h"
+#include "go_music.h"
 #include <cstdio>
 
 GoSDL::Music::~Music ()
@@ -10,7 +10,8 @@ void GoSDL::Music::setSample (std::string path)
 {
     mSample = Mix_LoadMUS(path.c_str());
 
-    if(!mSample) {
+    if (!mSample)
+    {
         printf("Mix_LoadMUS: %s\n", Mix_GetError());
     }
 }

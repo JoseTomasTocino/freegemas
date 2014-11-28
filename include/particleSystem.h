@@ -1,7 +1,8 @@
 #ifndef _PARTICULAS_H_
 #define _PARTICULAS_H_
 
-#include "image.h"
+#include "go_image.h"
+
 #include "animation.h"
 #include "log.h"
 #include "util.h"

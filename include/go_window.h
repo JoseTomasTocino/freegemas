@@ -7,8 +7,7 @@
 
 #include <string>
 
-#include "button.h"
-#include "DrawingQueue.h"
+#include "go_drawingqueue.h"
 
 
 namespace GoSDL {

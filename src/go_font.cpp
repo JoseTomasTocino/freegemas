@@ -1,28 +1,30 @@
 #include <SDL.h>
 
-
 #include <memory>
 #include <cstdio>
 #include <stdexcept>
 
-#include "font.h"
+#include "go_font.h"
 
-
-
-void GoSDL::Font::checkInit () {
-    if (!TTF_WasInit()) {
-        TTF_Init(); // TODO: check for errors
-    }
-}
-
-GoSDL::Font::Font() {
+GoSDL::Font::Font()
+{
     checkInit();
 }
 
-GoSDL::Font::~Font() {
-    if (mFont != nullptr) {
+GoSDL::Font::~Font()
+{
+    if (mFont != nullptr)
+    {
         TTF_CloseFont(mFont);
         mFont = nullptr;
+    }
+}
+
+void GoSDL::Font::checkInit ()
+{
+    if (!TTF_WasInit())
+    {
+        TTF_Init(); // TODO: check for errors
     }
 }
 

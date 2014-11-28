@@ -1,10 +1,9 @@
 #include "stateHowtoplay.h"
 
 #include "game.h"
-// #include "resManager.h"
 #include "inter.h"
 
-#include "font.h"
+#include "go_font.h"
 
 StateHowtoplay::StateHowtoplay(Game * p) : State(p)
 {

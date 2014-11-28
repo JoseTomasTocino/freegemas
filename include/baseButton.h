@@ -31,7 +31,7 @@ using namespace std;
 
 // #include "resManager.h"
 #include "log.h"
-#include "image.h"
+#include "go_image.h"
 
 /**
  * @class BaseButton

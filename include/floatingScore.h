@@ -30,8 +30,8 @@
 using namespace std;
 
 #include "log.h"
-#include "image.h"
-#include "font.h"
+#include "go_image.h"
+#include "go_font.h"
 
 namespace GoSDL {
   class Window;

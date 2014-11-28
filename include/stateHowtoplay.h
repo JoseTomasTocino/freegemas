@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "state.h"
-#include "image.h"
+#include "go_image.h"
 
 class TextBlock;
 class Game;

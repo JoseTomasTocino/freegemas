@@ -2,12 +2,9 @@
 #define _CUSTOMFONT_H_
 
 #include <string>
-#include <iostream>
-#include <memory>
-#include <vector>
 
-#include "window.h"
-#include "image.h"
+#include "go_window.h"
+#include "go_image.h"
 
 #include <SDL_ttf.h>
 
@@ -32,7 +29,13 @@ namespace GoSDL {
 
     private:
 
-    	// Parent window
+        // TTF_Init wrapper
+        void checkInit();
+
+        // Receives a surface and returns a pointer to an image (containing a texture)
+        GoSDL::Image surfaceToImage (SDL_Surface * tempSurface);
+
+        // Parent window
         Window * mParentWindow = NULL;
 
         // Path to the font file
@@ -43,12 +46,6 @@ namespace GoSDL {
 
         // Actual font
         TTF_Font * mFont = NULL;
-
-    	// TTF_Init wrapper
-        void checkInit();
-
-        // Receives a surface and returns a pointer to an image (containing a texture)
-        GoSDL::Image surfaceToImage (SDL_Surface * tempSurface);
     };
 }
 

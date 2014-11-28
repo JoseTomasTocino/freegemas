@@ -2,21 +2,13 @@
 #define _STATEMAINMENU_H_
 
 #include "state.h"
-//#include "resManager.h"
 #include "jewelGroupAnim.h"
-//#include "sdlfont.h"
 
-#include <SDL.h>
-
-#include "image.h"
-#include "font.h"
+#include "go_image.h"
+#include "go_font.h"
 
 
-#include <utility>
-#include <tuple>
-#include <iostream>
-#include <cstdio>
-#include <memory>
+#include <vector>
 
 using namespace std;
 

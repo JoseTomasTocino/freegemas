@@ -26,24 +26,8 @@
 #ifndef _SCORETABLE_
 #define _SCORETABLE_
 
-#include <utility>
-#include <memory>
-#include <set>
-#include <string>
-using namespace std;
 
-#include <fstream>
-#include <string>
-#include <set>
-#include <utility>
-#include <algorithm>
-
-using namespace std;
-
-#include "log.h"
-#include "game.h"
-#include "font.h"
-#include "image.h"
+#include "go_image.h"
 
 
 class Game;

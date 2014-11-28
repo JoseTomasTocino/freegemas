@@ -33,13 +33,12 @@
 #include <set>
 using namespace std;
 
-#include "image.h"
-#include "font.h"
-#include "sound.h"
-#include "music.h"
+#include "go_image.h"
+#include "go_font.h"
+#include "go_sound.h"
+#include "go_music.h"
 
 #include "state.h"
-#include "coord.h"
 #include "board.h"
 #include "floatingScore.h"
 #include "baseButton.h"
@@ -101,7 +100,7 @@ private:
     bool overGem(int mx, int my);
 
     /// Returns the coords of the gem the mouse is over
-    coord getCoord(int mx, int my);
+    Coord getCoord(int mx, int my);
 
     bool checkClickedSquare(int mx, int my);
 
@@ -184,13 +183,13 @@ private:
     int mMultiplier;
 
     /// Coordinates for the hint
-    coord mHintLocation;
+    Coord mHintLocation;
 
     /// Coordinates for the selected square (if any)
-    coord mSelectedSquareFirst;
+    Coord mSelectedSquareFirst;
 
     /// Coordinates for the second selected square
-    coord mSelectedSquareSecond;
+    Coord mSelectedSquareSecond;
 
     /// Flag that indicates whether the user is clicking
     bool mMousePressed;
