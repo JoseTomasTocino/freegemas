@@ -33,9 +33,12 @@ namespace GoSDL {
 
         shared_ptr<SDL_Texture> mTexture;
 
-        struct SDL_Texture_Deleter {
-            void operator()(SDL_Texture * texture) const {
-                if (texture != NULL) {
+        struct SDL_Texture_Deleter
+        {
+            void operator()(SDL_Texture * texture) const
+            {
+                if (texture != NULL)
+                {
                     SDL_DestroyTexture(texture);
                 }
             }

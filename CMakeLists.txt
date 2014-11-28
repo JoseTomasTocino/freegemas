@@ -17,7 +17,7 @@ include_directories(
     ${SDL2MIXER_INCLUDE_DIRS}
 )
 
-if(CMAKE_COMPILER_IS_GNUCC)
+if(CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -g")
 endif()
 

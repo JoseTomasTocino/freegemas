@@ -57,121 +57,32 @@ class Game;
  *
  */
 
-
 class ScoreTable{
 
 public:
 
     /// Creates a new score table for the given amount of points
-    ScoreTable(Game * p, int points);
+    ScoreTable(Game * p, int);
 
     /// Draws the score table at the given position
     void draw(int x, int y, int z);
 
-    /// Launches when a button is pressed
-    void buttonDown(SDL_Keycode button);
-
 private:
 
-    void fillEmptyScoreFile();
-
-    /// Image for the first header
+    /// Image for the rendered header
     GoSDL::Image mRenderedHeader;
 
     /// Image for the rendered score
     GoSDL::Image mRenderedScore;
 
-    /// Font for the body
-    GoSDL::Font fntH2;
-
-    /// LCD-style fonts for the content
-    GoSDL::Font fntLcdBig, fntLcdSmall;
-
-    /// Stream to access the file of scores
-    fstream scoreFile;
-
-    /// States of the score table
-    enum tState
-    {
-        eRequestPlayerName,
-        eShowScores
-    };
-
-    /// Current state of the table
-    tState state;
-
-    /// Functor to compare scores
-    struct scoreComp
-    {
-        bool operator()(const pair<string,int> & A, const pair<string,int>& B)
-        {
-            return A.second > B.second;
-        }
-    };
-
-    /// Container of scores
-    set<pair<string, int>, scoreComp > readScoreSet;
-
-    /// Iterator for the score set
-    typedef set<pair<string, int>, scoreComp >::iterator scoreSetIterator;
+    /// Image for the last high score
+    GoSDL::Image mRenderedLastScore;
 
     /// Width of the score board
     int scoreBoardWidth;
 
     /// Reference to the main game
     Game * parent;
-
-    /**
-     * @class ScoreTableInput
-     *
-     * @brief Filter class for the input at the score table
-     *
-     * This class filters spaces from the user input
-     *
-     * @author José Tomás Tocino García <theom3ga@gmail.com>
-     *
-     */
-
-
-
-    // class ScoreTableInput : public Gosu::TextInput{
-    // public:
-
-    //     /**
-    //      * Filters spaces from the given string. Also checks whether the
-    //      * complete text is no longer than 15 characters.
-    //      *
-    //      * @param str_ the string to filter
-    //      *
-    //      * @return the filtered string, without spaces
-    //      */
-
-    //     std::wstring filter(const std::wstring & str_) const{
-
-    //         // If the length is higher than 15 characters, return the empty string
-    //         if(text().length() == 15)
-    //             return L"";
-
-    //         lDEBUG << "Filter: " << Gosu::narrow(str_);
-    //         std::wstring returnString = str_.substr(0, 15);
-
-    //         returnString.erase(
-    //             std::remove_if(returnString.begin(), returnString.end(),
-    //                            boost::bind<bool>(std::equal_to<wchar_t>(), _1, L' ')),
-    //             returnString.end());
-
-    //         return returnString;
-    //     }
-
-    // };
-
-    // /// Instance of the input object that deals with the user input text
-    // ScoreTableInput nameInput;
-
-    //*/
-
-    /// Points to show
-    int points;
 };
 
 #endif

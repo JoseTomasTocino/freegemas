@@ -11,7 +11,8 @@
 
 using namespace std::placeholders;
 
-StateGame::StateGame(Game * p) : State(p){
+StateGame::StateGame(Game * p) : State(p)
+{
     lDEBUG << Log::CON("StateGame");
 
     // Set the initial loading state
@@ -63,12 +64,10 @@ void StateGame::init()
     mImgTimeHeaderShadow = tempHeaderFont.renderText(_("time left"), {0,0,0, 255});
 
     // Buttons
-
     mHintButton.set(parent, _("Show hint"), "iconHint.png");
     mResetButton.set(parent, _("Reset game"), "iconRestart.png");
     mExitButton.set(parent, _("Exit"), "iconExit.png");
     mMusicButton.set(parent, _("Turn off music"), "iconMusic.png");
-
 
     // Sounds
     sfxMatch1.setSample("media/match1.ogg");
@@ -108,7 +107,7 @@ void StateGame::init()
     // Reset the game to the initial values
     resetGame();
 
-    sfxSong.play();
+    // sfxSong.play();
     // sfxSong.changeVolume(0.5);
 }
 
@@ -368,34 +367,31 @@ void StateGame::draw()
     mMusicButton.draw(17, vertButStart + 47 * 2, 2);
     mExitButton.draw(17, 538, 2);
 
-    // Draw the score
-    mImgScoreBackground.draw(17, 124, 2);
-    mImgScoreHeader.draw(17 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 84, 3);
-    mImgScoreHeaderShadow.draw(18 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 85, 2.95,  1, 1, 0, 128);
-
-    // Avoid re-rendering the texture if the score hasn't changed
+    // Avoid re-generating the texture if the score hasn't changed
     if (mScore != mLastScore)
     {
         mImgScore = mFontScore.renderText(std::to_string(mScore), {78, 193, 190, 255});
         mLastScore = mScore;
     }
 
+    // Draw the score
+    mImgScoreBackground.draw(17, 124, 2);
+    mImgScoreHeader.draw(17 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 84, 3);
+    mImgScoreHeaderShadow.draw(18 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 85, 2.95,  1, 1, 0, 128);
     mImgScore.draw(197 - mImgScore.getWidth(), 127, 2);
 
-    // Draw the time
-    mImgTimeBackground.draw(17, 230, 2);
-    mImgTimeHeader . draw(17 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 190, 3);
-    mImgTimeHeaderShadow . draw(18 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 191, 2, 1, 1, 0, 128);
-
-    // Avoid re-rendering the time if the score hasn't changed
+    // Avoid re-generating the time texture if the score hasn't changed
     if (mTxtTime != mTxtLastTime)
     {
         mImgTime = mFontTime.renderText(mTxtTime, {78, 193, 190, 255});
         mTxtLastTime = mTxtTime;
     }
 
+    // Draw the time
+    mImgTimeBackground.draw(17, 230, 2);
+    mImgTimeHeader . draw(17 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 190, 3);
+    mImgTimeHeaderShadow . draw(18 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 191, 2, 1, 1, 0, 128);
     mImgTime.draw(190 - mImgTime.getWidth(), 232, 2);
-
 
     // Draw each score little messages
     std::for_each(mFloatingScores.begin(),
@@ -409,23 +405,24 @@ void StateGame::draw()
 
 
     // Starting position for the squares
-    int posX = 241,
-    posY = 41;
+    int posX = 241;
+    int posY = 41;
 
-    // Generic pointer for drawing the squares
-    GoSDL::Image * img = NULL;
-
-    // If we're not in the final screen (showing the scores)
+    // Draw the squares only if we're not showing the score table
     if (mState != eShowingScoreTable){
 
-        // Go through all of the squares
-        for(int i = 0; i < 8; ++i){
-            for(int j = 0; j < 8; ++j){
+        // Generic pointer for drawing the squares
+        GoSDL::Image * img = NULL;
 
+        // Go through all of the squares
+        for(int i = 0; i < 8; ++i)
+        {
+            for(int j = 0; j < 8; ++j)
+            {
                 // Check the type of each square and
                 // save the proper image in the img pointer
-
-                switch(mBoard.squares[i][j]){
+                switch(mBoard.squares[i][j])
+                {
                     case sqWhite:
                     img = &mImgWhite;
                     break;
@@ -461,18 +458,17 @@ void StateGame::draw()
                 } // fin switch
 
                 // Now, if img is not NULL (there's something to draw)
-                if (img != NULL){
+                if (img != NULL)
+                {
                     // Default positions
                     float imgX = posX + i * 65;
                     float imgY = posY + j * 65;
                     float imgAlpha = 255;
 
-                    // Default color
-                    // Gosu::Color imgColor = 0xffffffff;
-
                     // In the initial state, the gems fall vertically
                     // decreasing its speed
-                    if (mState == eInicialGemas){
+                    if (mState == eInicialGemas)
+                    {
                         imgY = Animacion::easeOutQuad(
                             float(mAnimationCurrentStep),
                             float(posY + mBoard.squares[i][j].origY * 65),
@@ -482,7 +478,8 @@ void StateGame::draw()
 
                     // In the ending states, gems fall vertically,
                     // increasing their speed
-                    else if (mState == eDesapareceBoard || mState == eTimeFinished){
+                    else if (mState == eDesapareceBoard || mState == eTimeFinished)
+                    {
                         imgY = Animacion::easeInQuad(
                             float(mAnimationCurrentStep),
                             float(posY + mBoard.squares[i][j].origY * 65),
@@ -504,7 +501,8 @@ void StateGame::draw()
                     }
 
                     // When two gems are switching
-                    else if (mState == eGemasCambiando){
+                    else if (mState == eGemasCambiando)
+                    {
                         if (i == mSelectedSquareFirst.x &&
                          j == mSelectedSquareFirst.y){
 
@@ -591,9 +589,7 @@ void StateGame::draw()
             mImgSelector.draw(pX1, pY1, 3,
               2 - p1, 2 - p1,
               0, p1 * 255, {0, 255, 0, 255});
-
         }
-
     }
 
     else
@@ -605,18 +601,32 @@ void StateGame::draw()
 }
 
 
-void StateGame::resetGame(){
-
+void StateGame::resetGame()
+{
     // Reset the score
     mScore = 0;
 
     // Restart the time (two minutes)
     mTimeStart = SDL_GetTicks() + 2 * 60 * 1000;
-    mTimeStart = SDL_GetTicks() + 1 * 1000;
+    mTimeStart = SDL_GetTicks() + 5 * 1000;
+
+    if (mState != eShowingScoreTable)
+    {
+        // Switch state
+        mState = eDesapareceBoard;
+
+        // Let the gems get out of the screen
+        placeGemsOutScreen();
+    }
+
+    else
+    {
+        mState = eGemasNuevasCayendo;
+    }
 }
 
-void StateGame::playMatchSound(){
-
+void StateGame::playMatchSound()
+{
     if (mMultiplier == 1){
         sfxMatch1.play(0.25);
     }else if (mMultiplier == 2){
@@ -624,8 +634,6 @@ void StateGame::playMatchSound(){
     }else{
         sfxMatch3.play(0.25);
     }
-
-    //
 }
 
 void StateGame::createFloatingScores() {
@@ -703,21 +711,24 @@ void StateGame::mouseButtonDown(Uint8 button) {
         mMousePressed = true;
 
         // Get click location
-        int mouseX = parent->getMouseX(),
-        mouseY = parent->getMouseY();
+        int mouseX = parent->getMouseX();
+        int mouseY = parent->getMouseY();
 
         // Exit button was clicked
-        if (mExitButton.clicked(mouseX, mouseY)){
+        if (mExitButton.clicked(mouseX, mouseY))
+        {
             parent -> changeState("stateMainMenu");
         }
 
         // Hint button was clicked
-        else if (mHintButton.clicked(mouseX, mouseY)){
+        else if (mHintButton.clicked(mouseX, mouseY) && mState != eShowingScoreTable)
+        {
             showHint();
         }
 
         // Music button was clicked
-        else if (mMusicButton.clicked(mouseX, mouseY)){
+        else if (mMusicButton.clicked(mouseX, mouseY))
+        {
             if (sfxSong.isPlaying()){
                 mMusicButton.setText(_("Turn on music"));
                 sfxSong.stop();
@@ -728,20 +739,15 @@ void StateGame::mouseButtonDown(Uint8 button) {
         }
 
         // Reset button was clicked
-        else if (mResetButton.clicked(mouseX, mouseY)){
-
-            // Switch state
-            mState = eDesapareceBoard;
-
-            // Let the gems get out of the screen
-            placeGemsOutScreen();
-
+        else if (mResetButton.clicked(mouseX, mouseY))
+        {
             // Reset the game
             resetGame();
         }
 
         // A gem was clicked
-        else if (overGem(mouseX, mouseY)){
+        else if (overGem(mouseX, mouseY) && mState != eShowingScoreTable)
+        {
             sfxSelect.play(0.3);
 
             // If there's no gem selected
@@ -763,17 +769,21 @@ void StateGame::mouseButtonDown(Uint8 button) {
     }
 }
 
-void StateGame::mouseButtonUp(Uint8 button) {
-    if (button == SDL_BUTTON_LEFT) {
+void StateGame::mouseButtonUp(Uint8 button)
+{
+    if (button == SDL_BUTTON_LEFT)
+    {
         mMousePressed = false;
 
-        if (mState == eGemaMarcada){
+        if (mState == eGemaMarcada)
+        {
             int mX = (int) parent -> getMouseX();
             int mY = (int) parent -> getMouseY();
 
             coord res = getCoord(mX, mY);
 
-            if (!(res == mSelectedSquareFirst)){
+            if (!(res == mSelectedSquareFirst))
+            {
                 checkClickedSquare(mX, mY);
             }
         }
@@ -783,17 +793,15 @@ void StateGame::mouseButtonUp(Uint8 button) {
 
 void StateGame::buttonDown (SDL_Keycode button){
 
-    if (button == SDLK_ESCAPE){
+    if (button == SDLK_ESCAPE)
+    {
         parent -> changeState("stateMainMenu");
     }
 
-    else if (button == SDLK_h){
+    else if (button == SDLK_h)
+    {
         showHint();
     }
-
-    // if (state == eShowingScoreTable){
-    //     scoreTable -> buttonDown(B);
-    // }
 }
 
 void StateGame::showHint() {
@@ -808,12 +816,13 @@ void StateGame::showHint() {
 
 void StateGame::placeGemsOutScreen(){
 
-    for(int x = 0; x < 8; ++x){
-        for(int y = 0; y < 8; ++y){
+    for(int x = 0; x < 8; ++x)
+    {
+        for(int y = 0; y < 8; ++y)
+        {
             mBoard.squares[x][y].mustFall = true;
             mBoard.squares[x][y].origY = y;
             mBoard.squares[x][y].destY = int(9 + rand() % 8);
         }
     }
-    //
 }

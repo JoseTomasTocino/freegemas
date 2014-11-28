@@ -105,7 +105,8 @@ private:
 private:
 
     /// Different states of the game
-    enum tState{
+    enum tState
+    {
         eFirstFlip,
         eLoading,
         eInicialGemas,

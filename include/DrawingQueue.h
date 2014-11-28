@@ -28,7 +28,8 @@
 
 namespace GoSDL {
 
-    struct DrawingQueueOperation {
+    struct DrawingQueueOperation
+    {
         SDL_Texture * mTexture;
         SDL_Rect mDstRect;
         double mAngle;
@@ -42,19 +43,21 @@ namespace GoSDL {
      * depending on their depth (which is the key of the map).
      */
 
-    class DrawingQueue : private std::multimap<float, DrawingQueueOperation>{
-
-        friend class Window;
-
+    class DrawingQueue : private std::multimap<float, DrawingQueueOperation>
+    {
     public:
-        /// Adds a new drawable element to the drawing queue in the selected depth
-        void draw(float z, DrawingQueueOperation & operation){
 
+        /// Adds a new drawable element to the drawing queue in the selected depth
+        void draw(float z, DrawingQueueOperation & operation)
+        {
             insert(std::pair<float, DrawingQueueOperation>(z, operation));
         }
+
+    private:
+        friend class Window;
     };
 
-// Iterator for the DrawingQueue
+    // Iterator for the DrawingQueue
     typedef std::multimap<float, DrawingQueueOperation>::const_iterator DrawingQueueIterator;
 
 }
