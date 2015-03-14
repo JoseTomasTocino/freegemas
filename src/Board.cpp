@@ -1,12 +1,19 @@
-#include "board.h"
+#include "Board.h"
 
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 
-Board::Board(){
+Board::Board()
+{
     lDEBUG << Log::CON("Board");
+
     generate();
+}
+
+Board::~Board()
+{
+    lDEBUG << Log::DES("Board");
 }
 
 void Board::generate()
@@ -26,27 +33,27 @@ void Board::generate()
             {
                 squares[i][j] = static_cast<tSquare>(rand() % 7 + 1);
                 squares[i][j].mustFall = true;
-                squares[i][j].origY = rand() % 8 - 7;
+                squares[i][j].origY = rand() % 8 - 9;
                 squares[i][j].destY = j - squares[i][j].origY;
             }
         }
 
         if(!check().empty())
         {
-            // lDEBUG << "Generated board has matches. Repeating...";
+            // lDEBUG << "Generated Board.has matches. Repeating...";
             repeat = true;
         }
 
         else if(solutions().empty())
         {
-            // lDEBUG << "Generated board has no solutions. Repeating...";
+            // lDEBUG << "Generated Board.has no solutions. Repeating...";
             repeat = true;
         }
 
     } while(repeat);
     // Regenera si hay alguna solución directa o si es imposible
 
-    // lDEBUG << "The generated board has no direct matches but some possible solutions.";
+    // lDEBUG << "The generated Board.has no direct matches but some possible solutions.";
 }
 
 void Board::swap(int x1, int y1, int x2, int y2)
@@ -187,8 +194,10 @@ MultipleMatch Board::check()
 
 ostream& operator <<(ostream& out, Board & B)
 {
-    for(int i = 0; i < 8; ++i){
-        for(int j = 0; j < 8; ++j){
+    for(int i = 0; i < 8; ++i)
+    {
+        for(int j = 0; j < 8; ++j)
+        {
             out << B.squares[j][i] << " ";
         }
         out << endl;
@@ -199,76 +208,81 @@ ostream& operator <<(ostream& out, Board & B)
 
 void Board::calcFallMovements()
 {
-    //lDEBUG << "Board::calcFallMovements";
+    // Before anything else, let's reset the animation coordinates for each square
+    endAnimations();
 
-    for(int x = 0; x < 8; ++x){
+    // First, let's calculate the new position for each gem
+    // We start going column by column, from left to right
 
-        // De abajo a arriba
-        for(int y = 7; y >= 0; --y){
-
-            // origY guarda la posición en el inicio de la caida
+    for(int x = 0; x < 8; ++x)
+    {
+        // We go from the bottom up
+        for(int y = 7; y >= 0; --y)
+        {
+            // origY stores the initial vertical position of the gem before falling
             squares[x][y].origY = y;
 
-            // Si la casilla es vacía, bajamos todas las squares por encima
-            if(squares[x][y] == sqEmpty){
-
-                for(int k = y-1; k >= 0; --k){
+            // If the current square is empty, every square above it should fall one position
+            if (squares[x][y] == sqEmpty)
+            {
+                for(int k = y-1; k >= 0; --k)
+                {
                     squares[x][k].mustFall = true;
                     squares[x][k].destY ++;
-
                 }
             }
         }
-    }
-}
 
-void Board::applyFall()
-{
-    //lDEBUG << "Board::applyFall";
+        // Now that each square has its new position in their destY property,
+        // let's move them to that final position
 
-    for(int x = 0; x < 8; ++x){
-        // Desde abajo a arriba para no sobreescribir squares
-
-        for(int y = 7; y >= 0; --y){
-            if(squares[x][y].mustFall && squares[x][y] != sqEmpty){
+        for(int y = 7; y >= 0; --y)
+        {
+            // If the square is not empty and has to fall, move it to the new position
+            if (squares[x][y].mustFall && squares[x][y] != sqEmpty)
+            {
                 int y0 = squares[x][y].destY;
 
                 squares[x][y + y0] = squares[x][y];
                 squares[x][y] = sqEmpty;
             }
         }
-    }
-}
 
-void Board::fillSpaces(){
+        // Finally, let's count how many new empty spaces there are so we can fill
+        // them with new random gems
+        int emptySpaces = 0;
 
-    //lDEBUG << "Board::fillSpaces";
+        // We start counting from top to bottom. Once we find a square, we stop counting
+        for(int y = 0; y < 8; ++y)
+        {
+            if(squares[x][y] != sqEmpty)
+                break;
 
-    for(int x = 0; x < 8; ++x){
-        // Contar cuántos espacios hay que bajar
-        int saltos = 0;
-
-        for(int y = 0; y < 8; ++y){
-            if(squares[x][y] != sqEmpty) break;
-            saltos ++;
+            emptySpaces ++;
         }
 
-        for(int y = 0; y < 8; ++y){
-            if(squares[x][y] == sqEmpty) {
-
+        // Again from top to bottom, fill the emtpy squares, assigning them a
+        // proper position outta screen for the animation to work
+        for(int y = 0; y < 8; ++y)
+        {
+            if(squares[x][y] == sqEmpty)
+            {
                 squares[x][y] = static_cast<tSquare> ( rand() % 7 + 1 );
 
                 squares[x][y].mustFall = true;
-                squares[x][y].origY = y - saltos;
-                squares[x][y].destY = saltos;
+                squares[x][y].origY = y - emptySpaces;
+                squares[x][y].destY = emptySpaces;
             }
         }
     }
 }
 
-void Board::endAnimations(){
-    for(int x = 0; x < 8; ++x){
-        for(int y = 0; y < 8; ++y){
+void Board::endAnimations()
+{
+    for(int x = 0; x < 8; ++x)
+    {
+        for(int y = 0; y < 8; ++y)
+        {
             squares[x][y].mustFall = false;
             squares[x][y].origY = y;
             squares[x][y].destY = 0;
@@ -276,7 +290,15 @@ void Board::endAnimations(){
     }
 }
 
-Board::~Board(){
-
+void Board::dropAllGems()
+{
+    for(int x = 0; x < 8; ++x)
+    {
+        for(int y = 0; y < 8; ++y)
+        {
+            squares[x][y].mustFall = true;
+            squares[x][y].origY = y;
+            squares[x][y].destY = int(9 + rand() % 8);
+        }
+    }
 }
-

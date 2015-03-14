@@ -5,7 +5,7 @@
 #include "go_image.h"
 #include "go_music.h"
 
-#include "baseButton.h"
+#include "BaseButton.h"
 
 #include <string>
 
@@ -19,28 +19,42 @@ public:
 
     void setGame(Game *, StateGame *);
 
-    void init();
+    void loadResources();
 
-    void updateScore (int score);
+    /// Returns the current score
+    int getScore();
+
+    /// Sets the score to the given amount
+    void setScore (int score);
+
+    /// Increases the score by the given amount
+    void increaseScore (int amount);
+
+    /// Updates the remaining time, the argument is given in seconds
     void updateTime (double time);
-    void update();
 
     void draw();
     void click(int, int);
 
 private:
+
+    /// Regenerates the texture for the score, if necessary
+    void regenerateScoreTexture();
+
     Game * mGame;
     StateGame * mStateGame;
 
-    int mScore, mLastScore;
+    /// Current score
+    int mScore = 0;
 
-    double mRemainingTime;
+    /// Score in the previous frame
+    int mScorePrevious = -1;
 
-    /// String with the remaining time
-    std::string mTxtTime;
+    /// Remaining time, in seconds
+    double mRemainingTime = 0;
 
-    /// Score in previous iteration of game loop
-    std::string mTxtLastTime;
+    /// Remaining time in the previous frame
+    double mRemainingTimePrevious = 0;
 
     /// Font for the timer
     GoSDL::Font mFontTime;

@@ -1,6 +1,6 @@
-#include "stateHowtoplay.h"
+#include "StateHowToPlay.h"
 
-#include "game.h"
+#include "Game.h"
 #include "inter.h"
 
 #include "go_font.h"

@@ -1,14 +1,12 @@
 #include "GameIndicators.h"
-#include "game.h"
+#include "Game.h"
 #include "inter.h"
 
-#include "stateGame.h"
+#include "StateGame.h"
 
 GameIndicators::GameIndicators() :
     mGame (NULL),
-    mStateGame (NULL),
-    mScore (0),
-    mLastScore (0)
+    mStateGame (NULL)
 {
 
 }
@@ -19,7 +17,7 @@ void GameIndicators::setGame (Game * g, StateGame * sg)
     mStateGame = sg;
 }
 
-void GameIndicators::init()
+void GameIndicators::loadResources()
 {
     // Load the font for the timer
     mFontTime.setAll(mGame, "media/fuentelcd.ttf", 62);
@@ -53,26 +51,52 @@ void GameIndicators::init()
     sfxSong.setSample("media/music2.ogg");
 }
 
-void GameIndicators::updateScore (int score)
+int GameIndicators::getScore()
+{
+    return mScore;
+}
+
+void GameIndicators::setScore (int score)
 {
     mScore = score;
+
+    regenerateScoreTexture();
+}
+
+void GameIndicators::increaseScore (int amount)
+{
+    mScore += amount;
+
+    regenerateScoreTexture();
+}
+
+void GameIndicators::regenerateScoreTexture()
+{
+    // Regenerate the texture if the score has changed
+    if (mScore != mScorePrevious)
+    {
+        mImgScore = mFontScore.renderText(std::to_string(mScore), {78, 193, 190, 255});
+        mScorePrevious = mScore;
+    }
 }
 
 void GameIndicators::updateTime (double time)
 {
     mRemainingTime = time;
-}
 
-void GameIndicators::update()
-{
-    if (mRemainingTime > 0)
+    // Only recreate the tiem string if it's changed
+    if (mRemainingTime >= 0 && mRemainingTime != mRemainingTimePrevious)
     {
         int minutes = int(mRemainingTime / 60);
         int seconds = int(mRemainingTime - minutes * 60);
 
-        mTxtTime = std::to_string(minutes) +
-        (seconds < 10 ? ":0" : ":") +
-        std::to_string(seconds);
+        std::string txtTime = std::to_string(minutes) +
+            (seconds < 10 ? ":0" : ":") +
+            std::to_string(seconds);
+
+        mImgTime = mFontTime.renderText(txtTime, {78, 193, 190, 255});
+
+        mRemainingTimePrevious = mRemainingTime;
     }
 }
 
@@ -87,25 +111,11 @@ void GameIndicators::draw()
     mMusicButton.draw(17, vertButStart + 47 * 2, 2);
     mExitButton.draw(17, 538, 2);
 
-    // Avoid re-generating the texture if the score hasn't changed
-    if (mScore != mLastScore)
-    {
-        mImgScore = mFontScore.renderText(std::to_string(mScore), {78, 193, 190, 255});
-        mLastScore = mScore;
-    }
-
     // Draw the score
     mImgScoreBackground.draw(17, 124, 2);
     mImgScoreHeader.draw(17 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 84, 3);
     mImgScoreHeaderShadow.draw(18 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 85, 2.95,  1, 1, 0, 128);
     mImgScore.draw(197 - mImgScore.getWidth(), 127, 2);
-
-    // Avoid re-generating the time texture if the score hasn't changed
-    if (mTxtTime != mTxtLastTime)
-    {
-        mImgTime = mFontTime.renderText(mTxtTime, {78, 193, 190, 255});
-        mTxtLastTime = mTxtTime;
-    }
 
     // Draw the time
     mImgTimeBackground.draw(17, 230, 2);
@@ -131,17 +141,19 @@ void GameIndicators::click(int mouseX, int mouseY)
     // Reset button was clicked
     else if (mResetButton.clicked(mouseX, mouseY))
     {
-        // Reset the game
         mStateGame -> resetGame();
     }
 
     // Music button was clicked
     else if (mMusicButton.clicked(mouseX, mouseY))
     {
-        if (sfxSong.isPlaying()){
+        if (sfxSong.isPlaying())
+        {
             mMusicButton.setText(_("Turn on music"));
             sfxSong.stop();
-        }else{
+        }
+        else
+        {
             mMusicButton.setText(_("Turn off music"));
             sfxSong.play();
         }

@@ -1,13 +1,13 @@
 /**
  * @file ecuaciones.cpp
- * 
+ *
  * @author José Tomás Tocino García
  * @date 2010
  *
  * Implementación para las ecuaciones de animación
- * 
+ *
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
@@ -24,7 +24,7 @@
  * 02110-1301, USA.
  */
 
-#include "animation.h"
+#include "Animation.h"
 
 // ######################################################
 // Ecuaciones de tweening
@@ -42,7 +42,7 @@ float Animacion::easeOutQuad(float t, float b, float c, float d) {
     t/=d;
     return -c *(t)*(t-2) + b;
 }
-    
+
 float Animacion::easeInOutQuad(float t, float b, float c, float d) {
     t /= d/2;
     if (t < 1){
@@ -52,7 +52,7 @@ float Animacion::easeInOutQuad(float t, float b, float c, float d) {
 	return -c/2 * ((t)*(t-2) - 1) + b;
     }
 }
-    
+
 float Animacion::easeInCubic(float t, float b, float c, float d) {
     t/=d;
     return c*(t)*t*t + b;

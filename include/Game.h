@@ -10,10 +10,12 @@
 
 class State;
 
-class Game : public GoSDL::Window{
+class Game : public GoSDL::Window
+{
 
 public:
     Game ();
+    ~Game();
 
     void update();
 
@@ -25,8 +27,6 @@ public:
     void mouseButtonUp(Uint8 button);
 
     void changeState(std::string S);
-
-    ~Game();
 
 private:
 

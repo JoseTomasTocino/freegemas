@@ -1,5 +1,5 @@
 /**
- * @file floatingScore.h
+ * @file FloatingScore.h
  *
  * @author José Tomás Tocino García
  * @date 2010

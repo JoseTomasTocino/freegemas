@@ -48,7 +48,7 @@ namespace GoSDL {
     public:
 
         /// Adds a new drawable element to the drawing queue in the selected depth
-        void draw(float z, DrawingQueueOperation & operation)
+        void draw(float z, DrawingQueueOperation operation)
         {
             insert(std::pair<float, DrawingQueueOperation>(z, operation));
         }

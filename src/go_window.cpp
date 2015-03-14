@@ -52,7 +52,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     }
 
     // Initialize renderer color
-    SDL_SetRenderDrawColor( mRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+    SDL_SetRenderDrawColor( mRenderer, 0, 0, 0, 255 );
 
     // Initialize PNG loading
     int imgFlags = IMG_INIT_PNG;
@@ -224,4 +224,12 @@ int GoSDL::Window::getMouseY ()
     return y;
 }
 
+void GoSDL::Window::showCursor ()
+{
+    SDL_ShowCursor(1);
+}
 
+void GoSDL::Window::hideCursor ()
+{
+    SDL_ShowCursor(0);
+}

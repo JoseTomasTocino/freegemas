@@ -1,7 +1,7 @@
 #ifndef _JEWELGROUPANIM_H_
 #define _JEWELGROUPANIM_H_
 
-#include "animation.h"
+#include "Animation.h"
 
 #include <memory>
 

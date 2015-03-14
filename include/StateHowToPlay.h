@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "state.h"
+#include "State.h"
 #include "go_image.h"
 
 class TextBlock;

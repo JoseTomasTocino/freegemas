@@ -1,4 +1,4 @@
-#include "animation.h"
+#include "Animation.h"
 #include "log.h"
 
 Animacion::Animacion(int n, int d, tipoAnim anim, int e) :

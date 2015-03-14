@@ -1,6 +1,6 @@
-#include "stateMainMenu.h"
+#include "StateMainMenu.h"
 
-#include "game.h"
+#include "Game.h"
 #include "log.h"
 #include "inter.h"
 

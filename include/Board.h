@@ -23,7 +23,6 @@ using namespace std;
 class Board{
 public:
     Board();
-
     ~Board();
 
     /// Swaps squares x1,y1 and x2,y2
@@ -35,19 +34,15 @@ public:
     /// Generates a random board.
     void generate();
 
-    /// Calculates squares' positions after deleting the matching gems.
+    /// Calculates squares' positions after deleting the matching gems, also filling the new spaces
     void calcFallMovements();
 
-    /// Applies calculated positions on previous method
-    void applyFall();
-
-    /// Fills board gaps with newly generated gems
-    void fillSpaces();
+    void dropAllGems();
 
     /// Checks if there are matching horizontal and/or vertical groups
     MultipleMatch check();
 
-    /// Checks if current board has any possible valid movement
+    /// Checks if current Board.has any possible valid movement
     vector<Coord> solutions();
 
     /// Resets squares' animations

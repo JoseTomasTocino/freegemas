@@ -1,5 +1,5 @@
 /**
- * @file scoreTable.h
+ * @file ScoreTable.h
  *
  * @author José Tomás Tocino García
  * @date 2010

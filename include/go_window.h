@@ -94,6 +94,15 @@ namespace GoSDL {
          */
         int getMouseY();
 
+        /**
+         * @brief Shows the OS mouse cursor
+         */
+        void showCursor();
+
+        /**
+         * @brief Hides the OS mouse cursor
+         */
+        void hideCursor();
 
     private:
         friend class Image;

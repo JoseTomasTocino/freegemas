@@ -3,9 +3,9 @@
 
 #include "go_image.h"
 
-#include "animation.h"
+#include "Animation.h"
 #include "log.h"
-#include "util.h"
+#include "Util.h"
 
 #include <ctime>
 #include <vector>

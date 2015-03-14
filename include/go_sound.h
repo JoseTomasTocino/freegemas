@@ -14,7 +14,7 @@ namespace GoSDL {
         void play(float vol = 1);
 
     private:
-        Mix_Chunk * mSample;
+        Mix_Chunk * mSample = nullptr;
     };
 
 }

@@ -1,5 +1,5 @@
 /**
- * @file baseButton.h
+ * @file BaseButton.h
  *
  * @author José Tomás Tocino García
  * @date 2011

@@ -1,8 +1,8 @@
 #ifndef _STATEMAINMENU_H_
 #define _STATEMAINMENU_H_
 
-#include "state.h"
-#include "jewelGroupAnim.h"
+#include "State.h"
+#include "JewelGroupAnim.h"
 
 #include "go_image.h"
 #include "go_font.h"

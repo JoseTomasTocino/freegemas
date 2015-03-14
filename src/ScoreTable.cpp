@@ -1,9 +1,9 @@
-#include "scoreTable.h"
+#include "ScoreTable.h"
 #include "inter.h"
 
 #include "log.h"
 #include "go_font.h"
-#include "game.h"
+#include "Game.h"
 
 #include <fstream>
 #include <unistd.h>

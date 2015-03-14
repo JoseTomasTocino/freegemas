@@ -15,6 +15,32 @@ namespace GoSDL {
 
     class Image {
 
+    public:
+
+        Image ();
+        Image (Window * parentWindow, string path);
+        ~Image ();
+
+        Image (const Image & other);
+        Image (Image && other);
+        Image & operator= (Image&& other);
+
+        void setWindow (Window * parentWindow);
+        void setPath (string path);
+        bool setWindowAndPath(Window * parentwindow, string path);
+        void setTexture (SDL_Texture * texture);
+
+        bool draw (int x, int y, int z,
+            double factorX = 1, double factorY = 1, float angle = 0,
+            Uint8 alpha = 255, SDL_Color color = {255, 255, 255, 255});
+
+        int getWidth();
+        int getHeight();
+
+    private:
+        bool loadTexture();
+
+
         /*
             This class holds a pointer to a SDL_Texture. It used
             to destroy that texture in the destructor, but that
@@ -37,7 +63,7 @@ namespace GoSDL {
         {
             void operator()(SDL_Texture * texture) const
             {
-                if (texture != NULL)
+                if (texture)
                 {
                     SDL_DestroyTexture(texture);
                 }
@@ -48,27 +74,6 @@ namespace GoSDL {
         int mWidth, mHeight;
 
         string mPath;
-
-    public:
-
-        Image ();
-        Image (Window * parentWindow, string path);
-        ~Image ();
-
-        void setWindow (Window * parentWindow);
-        void setPath (string path);
-        void setWindowAndPath(Window * parentwindow, string path);
-        void setTexture (SDL_Texture * texture);
-
-        void draw (int x, int y, int z,
-            double factorX = 1, double factorY = 1, float angle = 0,
-            Uint8 alpha = 255, SDL_Color color = {255, 255, 255, 255});
-
-        int getWidth();
-        int getHeight();
-
-    private:
-        void loadTexture();
     };
 }
 

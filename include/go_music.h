@@ -17,7 +17,7 @@ namespace GoSDL {
         bool isPlaying();
 
     private:
-        Mix_Music * mSample;
+        Mix_Music * mSample = nullptr;
     };
 
 }

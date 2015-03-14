@@ -3,7 +3,8 @@
 
 GoSDL::Music::~Music ()
 {
-    Mix_FreeMusic(mSample);
+    if (mSample)
+        Mix_FreeMusic(mSample);
 }
 
 void GoSDL::Music::setSample (std::string path)

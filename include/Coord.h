@@ -21,9 +21,19 @@ struct Coord
         : x(x), y(y)
     { }
 
+    bool equals (int lx, int ly) const
+    {
+        return (x == lx && y == ly);
+    }
+
     bool operator ==(const Coord & c) const
     {
         return (c.x == x && c.y == y);
+    }
+
+    bool operator !=(const Coord & c) const
+    {
+        return !(c.x == x && c.y == y);
     }
 
     friend std::ostream& operator << (std::ostream& out, Coord & C)
