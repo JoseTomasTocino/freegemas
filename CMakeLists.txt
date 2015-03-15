@@ -18,14 +18,14 @@ include_directories(
 )
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -g -Wno-unused-parameter")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -O")
 endif()
 
 file(GLOB SOURCE_FILES
     ${PROJECT_SOURCE_DIR}/src/*.cpp
 )
 
-MESSAGE(STATUS "SOURCE FILES: " ${SOURCE_FILES})
+# MESSAGE(STATUS "SOURCE FILES: " ${SOURCE_FILES})
 
 add_executable (freegemas
     ${SOURCE_FILES}
@@ -36,4 +36,14 @@ target_link_libraries(freegemas
   ${SDL2IMAGE_LIBRARIES}
   ${SDL2TTF_LIBRARIES}
   ${SDL2MIXER_LIBRARIES}
+)
+
+add_custom_target(
+  link_media_folder
+  COMMAND ln -s ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
+)
+
+add_dependencies(
+  freegemas
+  link_media_folder
 )
