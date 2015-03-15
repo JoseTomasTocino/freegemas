@@ -48,7 +48,8 @@ void GameIndicators::loadResources()
     mMusicButton.set(mGame, _("Turn off music"), "iconMusic.png");
 
     // Music
-    sfxSong.setSample("media/music2.ogg");
+    sfxSong.setSample("media/music.ogg");
+    sfxSong.play();
 }
 
 int GameIndicators::getScore()

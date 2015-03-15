@@ -13,12 +13,15 @@ void GoSDL::Music::setSample (std::string path)
 
     if (!mSample)
     {
-        printf("Mix_LoadMUS: %s\n", Mix_GetError());
+        printf("Mix_LoadMUS ERROR: %s\n", Mix_GetError());
     }
 }
 
 void GoSDL::Music::play (float vol)
 {
+    if (!mSample)
+        return;
+
     Mix_VolumeMusic(128 * vol);
     Mix_FadeInMusic(mSample, -1, 200);
 }
