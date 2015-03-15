@@ -37,3 +37,6 @@ Do an out-of-source compilation and run the program:
     ./freegemas
     
     
+## Music licensing
+The music in the game is [Easy Lemon by Kevin MacLeod](http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200076)
+Licensed under [Creative Commons: By Attribution 3.0](http://creativecommons.org/licenses/by/3.0/)
