@@ -18,7 +18,7 @@ __Freegemas__ is an open source version of the well known Bejeweled, for GNU/Lin
 
 These instructions are for debian-based GNU/Linux systems. First, you need to install git and gcc:
 
-    sudo apt-get install git build-essential
+    sudo apt-get install git build-essential cmake
 
 Next, install SDL2 from the repositories:
 
@@ -28,10 +28,12 @@ After that, clone the repo:
 
     git clone https://github.com/JoseTomasTocino/freegemas.git
     
-Finally, cd into the directory, compile and run
+Do an out-of-source compilation and run the program:
 
-    cd freegemas
-    make -j4
-    ./freegemas.out
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ./freegemas
     
     
