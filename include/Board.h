@@ -19,11 +19,9 @@ using namespace std;
  *
  */
 
-
 class Board{
 public:
     Board();
-    ~Board();
 
     /// Swaps squares x1,y1 and x2,y2
     void swap(int x1, int y1, int x2, int y2);
@@ -37,6 +35,7 @@ public:
     /// Calculates squares' positions after deleting the matching gems, also filling the new spaces
     void calcFallMovements();
 
+    /// Places all the gems out of the screen
     void dropAllGems();
 
     /// Checks if there are matching horizontal and/or vertical groups

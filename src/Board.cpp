@@ -11,11 +11,6 @@ Board::Board()
     generate();
 }
 
-Board::~Board()
-{
-    lDEBUG << Log::DES("Board");
-}
-
 void Board::generate()
 {
     std::srand((unsigned int) time(0));

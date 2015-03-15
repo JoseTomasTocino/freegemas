@@ -83,10 +83,6 @@ private:
     /// Loads the resources and intializes some variables
     void loadResources();
 
-    void loadSounds();
-    void loadImages();
-    void loadParameters();
-
     // Increases the score by the given amount
     void increaseScore (int amount);
 

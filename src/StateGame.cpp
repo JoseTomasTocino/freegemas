@@ -11,8 +11,10 @@ StateGame::StateGame(Game * p) : State(p)
 
     setState(eInitial);
 
-    // Initialise game indicator references
+    // Initialise game indicator
     mGameIndicators.setGame(p, this);
+
+    // Initialise game board
     mGameBoard.setGame(p, this);
 
     // Load the loading screen
@@ -161,44 +163,25 @@ void StateGame::setState (tState state)
 
 void StateGame::loadResources()
 {
-    loadParameters();
-    loadImages();
-    loadSounds();
+    // Load the background image
+    mImgBoard.setWindowAndPath(mGame, "media/board.png");
 
     mGameIndicators.loadResources();
     mGameBoard.loadResources();
 }
 
-void StateGame::loadSounds()
-{
-
-}
-void StateGame::loadImages()
-{
-    // Load the background image
-    mImgBoard.setWindowAndPath(mGame, "media/board.png");
-}
-
-void StateGame::loadParameters()
-{
-
-}
-
-/// Resets the game
 void StateGame::resetGame()
 {
     resetTime();
     mGameBoard.resetGame();
 }
 
-/// Resets the time
 void StateGame::resetTime()
 {
-    // mTimeStart = SDL_GetTicks() + 2 * 60 * 1000;
-    mTimeStart = SDL_GetTicks() + 2 * 1000;
+    // Default time is 2 minutes
+    mTimeStart = SDL_GetTicks() + 2 * 60 * 1000;
 }
 
-/// Shows a hint for a possible match
 void StateGame::showHint()
 {
     mGameBoard.showHint();
@@ -208,6 +191,4 @@ void StateGame::increaseScore (int amount)
 {
     mGameIndicators.increaseScore(amount);
 }
-
-
 
