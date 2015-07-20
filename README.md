@@ -11,9 +11,9 @@ __Freegemas__ is an open source version of the well known Bejeweled, for GNU/Lin
         
 
 
-## Installing
+## Installation on Debian-based GNU/Linux systems
 
-These instructions are for debian-based GNU/Linux systems. First, you need to install git and gcc:
+First, you need to install git and gcc:
 
     sudo apt-get install git build-essential cmake
 
@@ -32,8 +32,16 @@ Do an out-of-source compilation and run the program:
     cmake ..
     make
     ./freegemas
-    
-    
+
+## Installation on OS X
+
+This assumes that you are already using [Homebrew](http://brew.sh/). You will need CMake and a few libraries to compile Freegemas:
+
+    brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext
+
+Now follow the instructions above, starting with `git clone`.
+
 ## Music licensing
+
 The music in the game is [Easy Lemon by Kevin MacLeod](http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200076)
 Licensed under [Creative Commons: By Attribution 3.0](http://creativecommons.org/licenses/by/3.0/)
