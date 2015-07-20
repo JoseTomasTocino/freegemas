@@ -40,7 +40,7 @@ target_link_libraries(freegemas
 
 add_custom_target(
   link_media_folder
-  COMMAND ln -s ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
+  COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
 )
 
 add_dependencies(
