@@ -2,6 +2,7 @@
 
 #include "Game.h"
 #include "StateGame.h"
+#include <functional>
 
 using namespace std::placeholders;
 
