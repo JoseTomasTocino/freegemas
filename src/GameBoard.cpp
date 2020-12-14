@@ -466,23 +466,38 @@ void GameBoard::draw()
     }
 }
 
+void GameBoard::moveSelector(int x, int y) {
+    mSelectorX+=x;
+    mSelectorY+=y;
+
+    if (mSelectorX < 0) {
+        mSelectorX = 7;
+    } else if (mSelectorY < 0) {
+        mSelectorY = 7;
+    } else if (mSelectorX > 7) {
+        mSelectorX = 0;
+    } else if (mSelectorY > 7) {
+        mSelectorY = 0;
+    }
+}
+
 void GameBoard::buttonDown(SDL_Keycode button) {
     switch(button) {
     case SDLK_a:
         mGameBoardSounds.playSoundSelect();
-        mSelectorX-=1;
+        moveSelector(-1, 0);
         break;
     case SDLK_d:
         mGameBoardSounds.playSoundSelect();
-        mSelectorX+=1;
+        moveSelector(1, 0);
         break;
     case SDLK_w:
         mGameBoardSounds.playSoundSelect();
-        mSelectorY-=1;
+        moveSelector(0, -1);
         break;
     case SDLK_s:
         mGameBoardSounds.playSoundSelect();
-        mSelectorY+=1;
+        moveSelector(0, 1);
         break;
     case SDLK_SPACE:
         mGameBoardSounds.playSoundSelect();
