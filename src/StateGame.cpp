@@ -93,6 +93,10 @@ void StateGame::buttonDown(SDL_Keycode button)
     {
         showHint();
     }
+    
+    else {
+        mGameBoard.buttonDown(button);
+    }
 }
 
 void StateGame::mouseButtonDown(Uint8 button)

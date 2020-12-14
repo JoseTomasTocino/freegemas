@@ -281,6 +281,11 @@ void GameBoard::draw()
             241 + getCoord(mX, mY).x * 65,
             41 + getCoord(mX, mY).y * 65,
             4);
+    } else {
+        mImgSelector.draw(
+            241 + mSelectorX * 65,
+            41 + mSelectorY * 65,
+            4);
     }
 
     // Draw the selector if a gem has been selected
@@ -461,6 +466,57 @@ void GameBoard::draw()
     }
 }
 
+void GameBoard::buttonDown(SDL_Keycode button) {
+    switch(button) {
+    case SDLK_a:
+        mGameBoardSounds.playSoundSelect();
+        mSelectorX-=1;
+        break;
+    case SDLK_d:
+        mGameBoardSounds.playSoundSelect();
+        mSelectorX+=1;
+        break;
+    case SDLK_w:
+        mGameBoardSounds.playSoundSelect();
+        mSelectorY-=1;
+        break;
+    case SDLK_s:
+        mGameBoardSounds.playSoundSelect();
+        mSelectorY+=1;
+        break;
+    case SDLK_SPACE:
+        mGameBoardSounds.playSoundSelect();
+
+        if (mState == eSteady)
+        {
+            mState = eGemSelected;
+
+            mSelectedSquareFirst.x = mSelectorX;
+            mSelectedSquareFirst.y = mSelectorY;
+        }
+
+        // If there was previous a gem selected
+        else if (mState == eGemSelected)
+        {
+            // If the newly clicked gem is a winning one
+            if (checkSelectedSquare())
+            {
+                // Switch the state and reset the animation
+                mState = eGemSwitching;
+                mAnimationCurrentStep = 0;
+            }
+            else
+            {
+                mState = eSteady;
+                mSelectedSquareFirst.x = -1;
+                mSelectedSquareFirst.y = -1;
+            }
+        }
+        break;
+    }
+}
+
+
 void GameBoard::mouseButtonDown(int mouseX, int mouseY)
 {
     // A gem was clicked
@@ -583,6 +639,32 @@ bool GameBoard::checkClickedSquare(int mX, int mY)
 {
     // Get the selected square
     mSelectedSquareSecond = getCoord(mX, mY);
+
+    // If it's a contiguous square
+    if (abs(mSelectedSquareFirst.x - mSelectedSquareSecond.x) +
+        abs(mSelectedSquareFirst.y - mSelectedSquareSecond.y) == 1)
+    {
+        // Create a temporal board with the movement already performed
+        Board temporal = mBoard;
+        temporal.swap(mSelectedSquareFirst.x, mSelectedSquareFirst.y,
+                      mSelectedSquareSecond.x, mSelectedSquareSecond.y);
+
+        // Check if there are grouped gems in that new board
+        mGroupedSquares = temporal.check();
+
+        // If there are winning movements
+        if (! mGroupedSquares.empty())
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool GameBoard::checkSelectedSquare() {
+    // Get the selected square
+    mSelectedSquareSecond = getCoord(241 + mSelectorX * 65, 41 + mSelectorY * 65);
 
     // If it's a contiguous square
     if (abs(mSelectedSquareFirst.x - mSelectedSquareSecond.x) +
