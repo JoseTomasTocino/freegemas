@@ -133,8 +133,9 @@ private:
     /// Reference to the score table
     std::shared_ptr<ScoreTable> scoreTable;
 
-    int mSelectorX = 5;
-    int mSelectorY = 5;
+    // The position of the selector square on the board
+    int mSelectorX = 3;
+    int mSelectorY = 3;
 };
 
 #endif
