@@ -483,19 +483,19 @@ void GameBoard::moveSelector(int x, int y) {
 
 void GameBoard::buttonDown(SDL_Keycode button) {
     switch(button) {
-    case SDLK_a:
+    case SDLK_LEFT:
         mGameBoardSounds.playSoundSelect();
         moveSelector(-1, 0);
         break;
-    case SDLK_d:
+    case SDLK_RIGHT:
         mGameBoardSounds.playSoundSelect();
         moveSelector(1, 0);
         break;
-    case SDLK_w:
+    case SDLK_UP:
         mGameBoardSounds.playSoundSelect();
         moveSelector(0, -1);
         break;
-    case SDLK_s:
+    case SDLK_DOWN:
         mGameBoardSounds.playSoundSelect();
         moveSelector(0, 1);
         break;
