@@ -273,14 +273,15 @@ void GameBoard::draw()
     int mX = (int) mGame -> getMouseX();
     int mY = (int) mGame -> getMouseY();
 
-    // Draw the selector if the mouse is over a gem
+    // Move the selector to the mouse if it is over a gem
     if (overGem(mX, mY) )
     {
-        // Draw the selector over that gem
             Coord mouseCoords = getCoord(mX, mY);
             mSelectorX = mouseCoords.x;
             mSelectorY = mouseCoords.y;
     }
+
+    // Draw the selector over that gem
     mImgSelector.draw(
         241 + mSelectorX * 65,
         41 + mSelectorY * 65,
