@@ -274,7 +274,7 @@ void GameBoard::draw()
     int mY = (int) mGame -> getMouseY();
 
     // Move the selector to the mouse if it is over a gem
-    if (overGem(mX, mY) )
+    if (mMouseActive && overGem(mX, mY))
     {
             Coord mouseCoords = getCoord(mX, mY);
             mSelectorX = mouseCoords.x;
@@ -483,18 +483,22 @@ void GameBoard::moveSelector(int x, int y) {
 void GameBoard::buttonDown(SDL_Keycode button) {
     switch(button) {
     case SDLK_LEFT:
+        mMouseActive = false;
         mGameBoardSounds.playSoundSelect();
         moveSelector(-1, 0);
         break;
     case SDLK_RIGHT:
+        mMouseActive = false;
         mGameBoardSounds.playSoundSelect();
         moveSelector(1, 0);
         break;
     case SDLK_UP:
+        mMouseActive = false;
         mGameBoardSounds.playSoundSelect();
         moveSelector(0, -1);
         break;
     case SDLK_DOWN:
+        mMouseActive = false;
         mGameBoardSounds.playSoundSelect();
         moveSelector(0, 1);
         break;
@@ -510,6 +514,10 @@ void GameBoard::mouseButtonDown(int mouseX, int mouseY)
     // A gem was clicked
     if (overGem(mouseX, mouseY))
     {
+        mMouseActive = true;
+        Coord mouseCoords = getCoord(mouseX, mouseY);
+        mSelectorX = mouseCoords.x;
+        mSelectorY = mouseCoords.y;
         selectGem();
     }
 }

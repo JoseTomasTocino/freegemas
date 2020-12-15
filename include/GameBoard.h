@@ -136,6 +136,9 @@ private:
     // The position of the selector square on the board
     int mSelectorX = 3;
     int mSelectorY = 3;
+
+    // Whether the mouse is currently being used or the keyboard
+    bool mMouseActive = true;
 };
 
 #endif
