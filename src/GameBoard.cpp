@@ -277,16 +277,14 @@ void GameBoard::draw()
     if (overGem(mX, mY) )
     {
         // Draw the selector over that gem
-        mImgSelector.draw(
-            241 + getCoord(mX, mY).x * 65,
-            41 + getCoord(mX, mY).y * 65,
-            4);
-    } else {
-        mImgSelector.draw(
-            241 + mSelectorX * 65,
-            41 + mSelectorY * 65,
-            4);
+            Coord mouseCoords = getCoord(mX, mY);
+            mSelectorX = mouseCoords.x;
+            mSelectorY = mouseCoords.y;
     }
+    mImgSelector.draw(
+        241 + mSelectorX * 65,
+        41 + mSelectorY * 65,
+        4);
 
     // Draw the selector if a gem has been selected
     if (mState == eGemSelected)
