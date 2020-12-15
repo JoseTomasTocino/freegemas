@@ -9,7 +9,6 @@
 #include "ParticleSystem.h"
 #include "ScoreTable.h"
 
-#include "go_window.h"
 #include "go_image.h"
 
 class Game;
