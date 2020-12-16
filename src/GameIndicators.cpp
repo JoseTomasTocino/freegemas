@@ -168,5 +168,5 @@ void GameIndicators::disableTime() {
 }
 
 void GameIndicators::enableTime() {
-    mTimeEnabled = false;
+    mTimeEnabled = true;
 }
