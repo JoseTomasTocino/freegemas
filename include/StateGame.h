@@ -75,25 +75,18 @@ public:
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
 
-private:
-
+protected:
     friend class GameIndicators;
     friend class GameBoard;
 
     /// Loads the resources and intializes some variables
     void loadResources();
 
-    // Increases the score by the given amount
-    void increaseScore (int amount);
-
     /// Resets the game
     void resetGame();
 
     /// Resets the time
     void resetTime();
-
-    /// Shows a hint for a possible match
-    void showHint();
 
     /// Different states of the game
     enum tState
@@ -114,14 +107,24 @@ private:
     /// Right side of the UI
     GameBoard mGameBoard;
 
+    /// Starting time
+    double mTimeStart;
+
+private:
+
+    // Increases the score by the given amount
+    void increaseScore (int amount);
+
+
+    /// Shows a hint for a possible match
+    void showHint();
+
     /// Loading screen image
     GoSDL::Image mImgLoadingBanner;
 
     // Background image
     GoSDL::Image mImgBoard;
 
-    /// Starting time
-    double mTimeStart;
 
     /// Flag that indicates whether the user is clicking
     bool mMousePressed;
