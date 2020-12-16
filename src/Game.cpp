@@ -94,3 +94,7 @@ void Game::changeState(string S)
         close();
     }
 }
+
+string Game::getCurrentState() {
+    return mCurrentStateString;
+}

@@ -58,7 +58,7 @@ void GameBoard::endGame(int score)
     mState = eTimeFinished;
 
     // Generate the score table
-    scoreTable = std::make_shared<ScoreTable>(mGame, score);
+    scoreTable = std::make_shared<ScoreTable>(mGame, score, mGame->getCurrentState());
 }
 
 void GameBoard::loadResources()

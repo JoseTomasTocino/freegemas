@@ -28,6 +28,8 @@ public:
 
     void changeState(std::string S);
 
+    std::string getCurrentState();
+
 private:
 
     std::shared_ptr<State> mCurrentState = nullptr;

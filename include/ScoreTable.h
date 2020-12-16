@@ -46,7 +46,7 @@ class ScoreTable{
 public:
 
     /// Creates a new score table for the given amount of points
-    ScoreTable(Game * p, int);
+    ScoreTable(Game * p, int, string);
 
     /// Draws the score table at the given position
     void draw(int x, int y, int z);
