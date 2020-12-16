@@ -42,7 +42,7 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     mFont.setPathAndSize("media/fuenteMenu.ttf", 30);
 
     // Menu target states
-    mMenuTargets = {"stateGameTimed", "stateGameEndless", "stateHowtoplay", "stateQuit"};
+    mMenuTargets = {"stateGameTimetrial", "stateGameEndless", "stateHowtoplay", "stateQuit"};
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255};

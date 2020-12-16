@@ -67,7 +67,7 @@ public:
     StateGame(Game * p);
     ~StateGame();
 
-    void update();
+    virtual void update() = 0;
     void draw();
 
     void buttonDown(SDL_Keycode button);

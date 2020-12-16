@@ -1,10 +1,10 @@
-#include "StateGameTimed.h"
+#include "StateGameTimetrial.h"
 
-StateGameTimed::StateGameTimed(Game * p) : StateGame(p) {
+StateGameTimetrial::StateGameTimetrial(Game * p) : StateGame(p) {
 
 }
 
-void StateGameTimed::update()
+void StateGameTimetrial::update()
 {
     // On the eInitial state, don't do anything about logic
     if (mState == eInitial)

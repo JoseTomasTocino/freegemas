@@ -25,20 +25,20 @@
  */
 
 
-#ifndef _STATEGAMETIMED_H_
-#define _STATEGAMETIMED_H_
+#ifndef _STATEGAMETIMETRIAL_H_
+#define _STATEGAMETIMETRIAL_H_
 
 #include "StateGame.h"
 
 using namespace std;
 
 
-class StateGameTimed : public StateGame{
+class StateGameTimetrial : public StateGame{
 
 public:
-    StateGameTimed(Game * game);
+    StateGameTimetrial(Game * game);
 
     void update();
 };
 
-#endif /* _STATEGAMETIMED_H_ */
+#endif /* _STATEGAMETIMETRIAL_H_ */
