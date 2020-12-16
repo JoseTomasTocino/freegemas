@@ -26,16 +26,8 @@ void StateGameEndless::update()
         mGameIndicators.setScore(0);
     }
 
-    // Compute remaining time
-    //double remainingTime = 10;
-
-    mGameIndicators.updateTime(-1);
-
-    // if (remainingTime <= 0)
-    // {
-    //     // Tell the board that the game ended with the given score
-    //     mGameBoard.endGame(mGameIndicators.getScore());
-    // }
-
+    if (!mGameBoard.hasSolution()) {
+        mGameBoard.endGame(mGameIndicators.getScore());
+    }
     mGameBoard.update();
 }

@@ -31,6 +31,8 @@ public:
 
     void showHint();
 
+    bool hasSolution();
+
 private:
 
     /// Tests if the mouse is over a gem
