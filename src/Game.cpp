@@ -3,7 +3,8 @@
 
 #include "StateMainMenu.h"
 #include "StateHowToPlay.h"
-#include "StateGame.h"
+#include "StateGameTimetrial.h"
+#include "StateGameEndless.h"
 
 
 Game::Game ()
@@ -73,10 +74,15 @@ void Game::changeState(string S)
         mCurrentState = std::make_shared<StateMainMenu>(this);
         mCurrentStateString = "stateMainMenu";
     }
-    else if(S == "stateGame")
+    else if(S == "stateGameTimetrial")
     {
-        mCurrentState = std::make_shared<StateGame>(this);
-        mCurrentStateString = "estadoGame";
+        mCurrentState = std::make_shared<StateGameTimetrial>(this);
+        mCurrentStateString = "stateGameTimetrial";
+    }
+    else if(S == "stateGameEndless")
+    {
+        mCurrentState = std::make_shared<StateGameEndless>(this);
+        mCurrentStateString = "stateGameEndless";
     }
     else if(S == "stateHowtoplay")
     {
@@ -87,4 +93,8 @@ void Game::changeState(string S)
     {
         close();
     }
+}
+
+string Game::getCurrentState() {
+    return mCurrentStateString;
 }

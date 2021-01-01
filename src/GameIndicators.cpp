@@ -119,10 +119,12 @@ void GameIndicators::draw()
     mImgScore.draw(197 - mImgScore.getWidth(), 127, 2);
 
     // Draw the time
-    mImgTimeBackground.draw(17, 230, 2);
-    mImgTimeHeader . draw(17 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 190, 3);
-    mImgTimeHeaderShadow . draw(18 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 191, 2, 1, 1, 0, 128);
-    mImgTime.draw(190 - mImgTime.getWidth(), 232, 2);
+    if (mTimeEnabled) {
+        mImgTimeBackground.draw(17, 230, 2);
+        mImgTimeHeader . draw(17 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 190, 3);
+        mImgTimeHeaderShadow . draw(18 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 191, 2, 1, 1, 0, 128);
+        mImgTime.draw(190 - mImgTime.getWidth(), 232, 2);
+    }
 }
 
 void GameIndicators::click(int mouseX, int mouseY)
@@ -159,4 +161,12 @@ void GameIndicators::click(int mouseX, int mouseY)
             sfxSong.play();
         }
     }
+}
+
+void GameIndicators::disableTime() {
+    mTimeEnabled = false;
+}
+
+void GameIndicators::enableTime() {
+    mTimeEnabled = true;
 }

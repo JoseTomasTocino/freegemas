@@ -1,8 +1,10 @@
 /**
- * @file ScoreTable.h
+ * @file stateJuego.h
  *
  * @author José Tomás Tocino García
  * @date 2010
+ *
+ * Archivo para la clase de juego principal
  *
  * Copyright (C) 2010 José Tomás Tocino García <theom3ga@gmail.com>
  *
@@ -23,50 +25,20 @@
  */
 
 
-#ifndef _SCORETABLE_
-#define _SCORETABLE_
+#ifndef _STATEGAMETIMETRIAL_H_
+#define _STATEGAMETIMETRIAL_H_
+
+#include "StateGame.h"
+
+using namespace std;
 
 
-#include "go_image.h"
-
-
-class Game;
-
-/**
- * @class ScoreTable
- *
- * @brief Represents a table of scores that appears at the end of the game.
- *
- * @author José Tomás Tocino García <theom3ga@gmail.com>
- *
- */
-
-class ScoreTable{
+class StateGameTimetrial : public StateGame{
 
 public:
+    StateGameTimetrial(Game * game);
 
-    /// Creates a new score table for the given amount of points
-    ScoreTable(Game * p, int, string);
-
-    /// Draws the score table at the given position
-    void draw(int x, int y, int z);
-
-private:
-
-    /// Image for the rendered header
-    GoSDL::Image mRenderedHeader;
-
-    /// Image for the rendered score
-    GoSDL::Image mRenderedScore;
-
-    /// Image for the last high score
-    GoSDL::Image mRenderedLastScore;
-
-    /// Width of the score board
-    int scoreBoardWidth;
-
-    /// Reference to the main game
-    Game * mGame;
+    void update();
 };
 
-#endif
+#endif /* _STATEGAMETIMETRIAL_H_ */

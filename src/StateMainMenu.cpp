@@ -42,17 +42,19 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     mFont.setPathAndSize("media/fuenteMenu.ttf", 30);
 
     // Menu target states
-    mMenuTargets = {"stateGame", "stateHowtoplay", "stateQuit"};
+    mMenuTargets = {"stateGameTimetrial", "stateGameEndless", "stateHowtoplay", "stateQuit"};
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255};
     mMenuRenderedTexts.push_back(mFont.renderText(_("Timetrial mode"), menuTextColor));
+    mMenuRenderedTexts.push_back(mFont.renderText(_("Endless mode"), menuTextColor));
     mMenuRenderedTexts.push_back(mFont.renderText(_("How to play?"), menuTextColor));
     mMenuRenderedTexts.push_back(mFont.renderText(_("Exit"), menuTextColor));
 
     // Menu shadows
     menuTextColor = {0,0,0, 255};
     mMenuRenderedShadows.push_back(mFont.renderText(_("Timetrial mode"), menuTextColor));
+    mMenuRenderedShadows.push_back(mFont.renderText(_("Endless mode"), menuTextColor));
     mMenuRenderedShadows.push_back(mFont.renderText(_("How to play?"), menuTextColor));
     mMenuRenderedShadows.push_back(mFont.renderText(_("Exit"), menuTextColor));
 
