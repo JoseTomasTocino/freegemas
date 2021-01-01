@@ -33,6 +33,10 @@ public:
     /// Updates the remaining time, the argument is given in seconds
     void updateTime (double time);
 
+    void disableTime();
+
+    void enableTime();
+
     void draw();
     void click(int, int);
 
@@ -55,6 +59,8 @@ private:
 
     /// Remaining time in the previous frame
     double mRemainingTimePrevious = 0;
+
+    bool mTimeEnabled;
 
     /// Font for the timer
     GoSDL::Font mFontTime;

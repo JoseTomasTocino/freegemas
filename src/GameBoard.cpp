@@ -58,7 +58,7 @@ void GameBoard::endGame(int score)
     mState = eTimeFinished;
 
     // Generate the score table
-    scoreTable = std::make_shared<ScoreTable>(mGame, score);
+    scoreTable = std::make_shared<ScoreTable>(mGame, score, mGame->getCurrentState());
 }
 
 void GameBoard::loadResources()
@@ -204,7 +204,7 @@ void GameBoard::update()
             }
 
             // If there are neither current solutions nor possible future solutions
-            else if (mBoard.solutions().empty())
+            else if (!hasSolution())
             {
                 // Make the board disappear
                 mState = eBoardDisappearing;
@@ -657,4 +657,8 @@ bool GameBoard::checkSelectedSquare() {
     }
 
     return false;
+}
+
+bool GameBoard::hasSolution() {
+    return !mBoard.solutions().empty();
 }

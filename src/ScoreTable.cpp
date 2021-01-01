@@ -11,7 +11,7 @@
 
 using namespace std;
 
-ScoreTable::ScoreTable(Game * p, int score) : mGame(p)
+ScoreTable::ScoreTable(Game * p, int score, string gameMode) : mGame(p)
 {
     int lastScore;
 
@@ -26,6 +26,8 @@ ScoreTable::ScoreTable(Game * p, int score) : mGame(p)
     // Build the full path to the config file: $HOME/.freegemas
     std::string fullScoreFilePath(homedir);
     fullScoreFilePath += "/.freegemas";
+    fullScoreFilePath += "-";
+    fullScoreFilePath += gameMode;
 
     // Open the file
     fstream scoreFile (fullScoreFilePath.c_str(), fstream::in);
