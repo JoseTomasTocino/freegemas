@@ -273,15 +273,19 @@ void GameBoard::draw()
     int mX = (int) mGame -> getMouseX();
     int mY = (int) mGame -> getMouseY();
 
-    // Draw the selector if the mouse is over a gem
-    if (overGem(mX, mY) )
+    // Move the selector to the mouse if it is over a gem
+    if (mMouseActive && overGem(mX, mY))
     {
-        // Draw the selector over that gem
-        mImgSelector.draw(
-            241 + getCoord(mX, mY).x * 65,
-            41 + getCoord(mX, mY).y * 65,
-            4);
+            Coord mouseCoords = getCoord(mX, mY);
+            mSelectorX = mouseCoords.x;
+            mSelectorY = mouseCoords.y;
     }
+
+    // Draw the selector over that gem
+    mImgSelector.draw(
+        241 + mSelectorX * 65,
+        41 + mSelectorY * 65,
+        4);
 
     // Draw the selector if a gem has been selected
     if (mState == eGemSelected)
@@ -461,27 +465,96 @@ void GameBoard::draw()
     }
 }
 
+void GameBoard::moveSelector(int x, int y) {
+    mSelectorX+=x;
+    mSelectorY+=y;
+
+    if (mSelectorX < 0) {
+        mSelectorX = 7;
+    } else if (mSelectorY < 0) {
+        mSelectorY = 7;
+    } else if (mSelectorX > 7) {
+        mSelectorX = 0;
+    } else if (mSelectorY > 7) {
+        mSelectorY = 0;
+    }
+}
+
+void GameBoard::buttonDown(SDL_Keycode button) {
+    switch(button) {
+    case SDLK_LEFT:
+        mMouseActive = false;
+        mGameBoardSounds.playSoundSelect();
+        moveSelector(-1, 0);
+        break;
+    case SDLK_RIGHT:
+        mMouseActive = false;
+        mGameBoardSounds.playSoundSelect();
+        moveSelector(1, 0);
+        break;
+    case SDLK_UP:
+        mMouseActive = false;
+        mGameBoardSounds.playSoundSelect();
+        moveSelector(0, -1);
+        break;
+    case SDLK_DOWN:
+        mMouseActive = false;
+        mGameBoardSounds.playSoundSelect();
+        moveSelector(0, 1);
+        break;
+    case SDLK_SPACE:
+        selectGem();
+        break;
+    }
+}
+
+
 void GameBoard::mouseButtonDown(int mouseX, int mouseY)
 {
     // A gem was clicked
     if (overGem(mouseX, mouseY))
     {
-        mGameBoardSounds.playSoundSelect();
+        mMouseActive = true;
+        Coord mouseCoords = getCoord(mouseX, mouseY);
+        mSelectorX = mouseCoords.x;
+        mSelectorY = mouseCoords.y;
+        selectGem();
+    }
+}
 
-        // If there's no gem selected
+void GameBoard::mouseButtonUp(int mX, int mY)
+{
+    if (mState == eGemSelected)
+    {
+        // Get the coordinates where the mouse was released
+        Coord res = getCoord(mX, mY);
+
+        // If the square is different from the previously selected one
+        if (res != mSelectedSquareFirst && checkSelectedSquare())
+        {
+            // Switch the state and reset the animation
+            mState = eGemSwitching;
+            mAnimationCurrentStep = 0;
+        }
+    }
+}
+
+void GameBoard::selectGem() {
+    mGameBoardSounds.playSoundSelect();
+
         if (mState == eSteady)
         {
             mState = eGemSelected;
 
-            mSelectedSquareFirst.x = getCoord(mouseX, mouseY).x;
-            mSelectedSquareFirst.y = getCoord(mouseX, mouseY).y;
+            mSelectedSquareFirst.x = mSelectorX;
+            mSelectedSquareFirst.y = mSelectorY;
         }
 
         // If there was previous a gem selected
         else if (mState == eGemSelected)
         {
             // If the newly clicked gem is a winning one
-            if (checkClickedSquare(mouseX, mouseY))
+            if (checkSelectedSquare())
             {
                 // Switch the state and reset the animation
                 mState = eGemSwitching;
@@ -494,25 +567,6 @@ void GameBoard::mouseButtonDown(int mouseX, int mouseY)
                 mSelectedSquareFirst.y = -1;
             }
         }
-
-    } //*/
-}
-
-void GameBoard::mouseButtonUp(int mX, int mY)
-{
-    if (mState == eGemSelected)
-    {
-        // Get the coordinates where the mouse was released
-        Coord res = getCoord(mX, mY);
-
-        // If the square is different from the previously selected one
-        if (res != mSelectedSquareFirst && checkClickedSquare(mX, mY))
-        {
-            // Switch the state and reset the animation
-            mState = eGemSwitching;
-            mAnimationCurrentStep = 0;
-        }
-    }
 }
 
 void GameBoard::showHint ()
@@ -579,10 +633,9 @@ Coord GameBoard::getCoord (int mX, int mY)
        (mY - 41) / 65 );
 }
 
-bool GameBoard::checkClickedSquare(int mX, int mY)
-{
+bool GameBoard::checkSelectedSquare() {
     // Get the selected square
-    mSelectedSquareSecond = getCoord(mX, mY);
+    mSelectedSquareSecond = getCoord(241 + mSelectorX * 65, 41 + mSelectorY * 65);
 
     // If it's a contiguous square
     if (abs(mSelectedSquareFirst.x - mSelectedSquareSecond.x) +
