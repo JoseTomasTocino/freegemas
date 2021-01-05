@@ -18,10 +18,7 @@ ScoreTable::ScoreTable(Game * p, int score, string gameMode) : mGame(p)
     // Get user's HOME dir
     const char *homedir;
 
-    if ((homedir = getenv("HOME")) == NULL)
-    {
-        homedir = getpwuid(getuid())->pw_dir;
-    }
+    homedir = "ux0:/data/";
 
     // Build the full path to the config file: $HOME/.freegemas
     std::string fullScoreFilePath(homedir);

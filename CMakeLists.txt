@@ -28,15 +28,7 @@ if (CMAKE_HOST_APPLE)
     )
 endif()
 
-include_directories(
-    ${PROJECT_SOURCE_DIR}/include
 
-    ${SDL2_INCLUDE_DIRS}
-    ${SDL2IMAGE_INCLUDE_DIRS}
-    ${SDL2TTF_INCLUDE_DIRS}
-    ${SDL2MIXER_INCLUDE_DIRS}
-    ${LIBINTL_INCLUDE_DIRS}
-)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -O")
@@ -50,6 +42,88 @@ file(GLOB SOURCE_FILES
 
 add_executable (freegemas
     ${SOURCE_FILES}
+)
+if (VITA)
+	# DOLCESDK defines
+	if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+		if(DEFINED ENV{DOLCESDK})
+			set(CMAKE_TOOLCHAIN_FILE "$ENV{DOLCESDK}/share/dolce.toolchain.cmake" CACHE PATH "toolchain file")
+		    else()
+			message(FATAL_ERROR "Please define DOLCESDK to point to your SDK path!")
+		    endif()
+	endif()
+
+	include("$ENV{DOLCESDK}/share/dolce.cmake" REQUIRED)
+
+	# Project start
+	set(VITA_APPNAME Freegemas)
+	set(VITA_TITLEID "FGEM00001")
+	set(VITA_VERSION "00.01")
+
+	# Optional. You can specify more param.sfo flags this way.
+	set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
+
+	set(VITA_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/")
+	set(SDL2_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/SDL2")
+	set(PNG_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/libpng16")
+	set(FLAC_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/FLAC")
+
+	include_directories(${PROJECT_SOURCE_DIR}/include
+		    ${VITA_INCLUDE_DIR}
+		    ${SDL2_INCLUDE_DIR}
+		    ${PNG_INCLUDE_DIR}
+		    ${FLAC_INCLUDE_DIR}
+	)
+
+	target_link_libraries(freegemas
+		SDL2_image
+		SDL2_ttf
+		SDL2_mixer
+		SDL2
+		jsoncpp
+		stdc++
+		pthread
+		png16
+		freetype
+		vorbisfile
+		vorbis
+		ogg
+		jpeg
+		z
+		m
+		mikmod
+		mpg123
+		FLAC
+		pib
+		SceAppUtil_stub
+		SceAudio_stub
+		SceCommonDialog_stub
+		SceCtrl_stub
+		SceDisplay_stub
+		SceDisplayUser_stub
+		SceGxm_stub
+		SceHid_stub
+		SceSysmodule_stub
+		SceTouch_stub
+		SceMotion_stub
+	)
+	dolce_create_self(freegemas.self freegemas)
+
+	dolce_create_vpk(freegemas.vpk ${VITA_TITLEID} freegemas.self
+		    VERSION ${VITA_VERSION}
+		    NAME ${VITA_APPNAME}
+		    FILE platform/vita/sce_sys sce_sys
+		    FILE media media
+	)
+ELSE()
+include_directories(
+    ${PROJECT_SOURCE_DIR}/include
+
+    ${SDL2_INCLUDE_DIRS}
+    ${SDL2IMAGE_INCLUDE_DIRS}
+    ${SDL2TTF_INCLUDE_DIRS}
+    ${SDL2MIXER_INCLUDE_DIRS}
+    ${LIBINTL_INCLUDE_DIRS}
 )
 
 target_link_libraries(freegemas
@@ -69,3 +143,4 @@ add_dependencies(
   freegemas
   link_media_folder
 )
+ENDIF()
