@@ -139,17 +139,48 @@ void StateMainMenu::buttonDown(SDL_Keycode button)
             break;
 
         case SDLK_DOWN:
-            mMenuSelectedOption = (mMenuSelectedOption + 1) % mMenuTargets.size();
+            moveDown();
             break;
 
         case SDLK_UP:
-            mMenuSelectedOption = (mMenuSelectedOption - 1) % mMenuTargets.size();
+            moveUp();
             break;
 
         case SDLK_RETURN:
         case SDLK_KP_ENTER:
             optionChosen();
             break;
+    }
+}
+
+void StateMainMenu::joystickEvent(SDL_Event event)
+{
+    switch (event.type)
+    {
+        case SDL_JOYHATMOTION:
+            switch(event.jhat.value)
+            {
+                case SDL_HAT_UP:
+                    moveUp();
+                    break;
+
+                case SDL_HAT_DOWN:
+                    moveDown();
+                    break;
+            }
+            break;
+
+        case SDL_JOYBUTTONDOWN:
+            switch (event.jbutton.button)
+            {
+                case 0:
+                    optionChosen();
+                    break;
+      
+                default:
+                    printf("%i\n", event.jbutton.button);
+            }
+            break;   
     }
 }
 
@@ -166,6 +197,14 @@ void StateMainMenu::mouseButtonDown(Uint8 button)
             optionChosen();
         }
     }
+}
+
+void StateMainMenu::moveUp() {
+    mMenuSelectedOption = (mMenuSelectedOption - 1) % mMenuTargets.size();
+}
+
+void StateMainMenu::moveDown() {
+    mMenuSelectedOption = (mMenuSelectedOption + 1) % mMenuTargets.size();
 }
 
 void StateMainMenu::optionChosen()

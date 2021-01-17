@@ -63,6 +63,12 @@ void Game::mouseButtonUp (Uint8 button)
         mCurrentState -> mouseButtonUp(button);
 }
 
+void Game::joystickEvent (SDL_Event event)
+{
+    if (mCurrentState)
+        mCurrentState -> joystickEvent(event);
+}
+
 void Game::changeState(string S)
 {
     if(S == mCurrentStateString)
