@@ -204,7 +204,7 @@ void GameBoard::update()
             }
 
             // If there are neither current solutions nor possible future solutions
-            else if (!hasSolution())
+            else if (mBoard.solutions().empty())
             {
                 // Make the board disappear
                 mState = eBoardDisappearing;
@@ -705,5 +705,5 @@ bool GameBoard::checkSelectedSquare() {
 }
 
 bool GameBoard::hasSolution() {
-    return !mBoard.solutions().empty();
+    return mState != eBoardDisappearing;
 }
