@@ -51,6 +51,8 @@ public:
 
     void mouseButtonDown(Uint8 button);
 
+    void joystickEvent(SDL_Event event);
+
     ~StateMainMenu();
 
 private:
@@ -98,6 +100,9 @@ private:
     /// It gets executed when the user choses an option. It changes the state
     ///  to the proper one.
     void optionChosen();
+
+    void moveUp();
+    void moveDown();
 
     /// @{
     /// @name Coordinates of the menu elements
