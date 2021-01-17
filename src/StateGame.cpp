@@ -64,6 +64,15 @@ void StateGame::buttonDown(SDL_Keycode button)
     }
 }
 
+void StateGame::joystickEvent(SDL_Event event)
+{
+    if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.button == 7) {
+        mGame -> changeState("stateMainMenu");
+    } else {
+        mGameBoard.joystickEvent(event);
+    }
+}
+
 void StateGame::mouseButtonDown(Uint8 button)
 {
     // Left mouse button was pressed

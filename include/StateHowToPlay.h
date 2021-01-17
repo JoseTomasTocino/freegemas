@@ -20,6 +20,8 @@ public:
     void buttonDown (SDL_Keycode button);
     void mouseButtonDown (Uint8 button);
 
+    void joystickEvent(SDL_Event event);
+
     ~StateHowtoplay();
 
 private:

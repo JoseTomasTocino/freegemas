@@ -30,6 +30,8 @@ public:
     void mouseButtonUp(int, int);
     void buttonDown(SDL_Keycode button);
 
+    void joystickEvent(SDL_Event event);
+
     void showHint();
 
     bool hasSolution();
