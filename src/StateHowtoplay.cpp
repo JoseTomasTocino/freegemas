@@ -71,6 +71,14 @@ void StateHowtoplay::buttonDown(SDL_Keycode button)
     }
 }
 
+void StateHowtoplay::joystickEvent(SDL_Event event)
+{
+    if (event.type == SDL_JOYBUTTONDOWN)
+    {
+        mGame -> changeState("stateMainMenu");
+    }
+}
+
 void StateHowtoplay::mouseButtonDown(Uint8 button)
 {
     if (button == SDL_BUTTON_LEFT)

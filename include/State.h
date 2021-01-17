@@ -53,6 +53,9 @@ public:
 
     virtual void mouseButtonUp(Uint8) { }
 
+    virtual void joystickEvent(SDL_Event event) { }
+
+
     /// Default destructor
     virtual ~State();
 };

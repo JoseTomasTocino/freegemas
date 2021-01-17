@@ -75,6 +75,8 @@ public:
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
 
+    void joystickEvent(SDL_Event event);
+
 protected:
     friend class GameIndicators;
     friend class GameBoard;
