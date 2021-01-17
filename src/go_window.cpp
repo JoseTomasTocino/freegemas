@@ -12,6 +12,8 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     // Get starting ticks
     mLastTicks = SDL_GetTicks();
 
+    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
+
     // Init SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
     {

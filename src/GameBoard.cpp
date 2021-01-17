@@ -511,46 +511,45 @@ void GameBoard::buttonDown(SDL_Keycode button)
 
 void GameBoard::joystickEvent(SDL_Event event)
 {
-    switch (event.type)
-    {
-        case SDL_JOYHATMOTION:
-            if (event.jhat.value != SDL_HAT_CENTERED) {
-                mMouseActive = false;
-                mGameBoardSounds.playSoundSelect();
-            }
-            switch(event.jhat.value)
-            {
-                case SDL_HAT_LEFT:
-                    moveSelector(-1, 0);
-                    break;
-
-                case SDL_HAT_RIGHT:
-                    moveSelector(1, 0);
-                    break;
-                case SDL_HAT_UP:
-                    moveSelector(0, -1);
-                    break;
-
-                case SDL_HAT_DOWN:
-                    moveSelector(0, 1);
-                    break;
-            }
-            break;
-
-        case SDL_JOYBUTTONDOWN:
+    if (event.type ==  SDL_JOYBUTTONDOWN) {
             switch (event.jbutton.button)
             {
                 case 0:
-                    selectGem();
-                    break;
-                case 3:
                     showHint();
                     break;
+
+                case 2:
+                    selectGem();
+                    break;
+
                 case 6:
+                    mMouseActive = false;
+                    mGameBoardSounds.playSoundSelect();
+                    moveSelector(0, 1);
+                    break;
+
+                case 7:
+                    mMouseActive = false;
+                    mGameBoardSounds.playSoundSelect();
+                    moveSelector(-1, 0);
+                    break;
+
+                case 8:
+                    mMouseActive = false;
+                    mGameBoardSounds.playSoundSelect();
+                    moveSelector(0, -1);
+                    break;
+
+                case 9:
+                    mMouseActive = false;
+                    mGameBoardSounds.playSoundSelect();
+                    moveSelector(1, 0);
+                    break;
+
+                case 10:
                     resetGame();
                     break;
             }
-            break;   
     }
 }
 

@@ -66,7 +66,7 @@ void StateGame::buttonDown(SDL_Keycode button)
 
 void StateGame::joystickEvent(SDL_Event event)
 {
-    if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.button == 7) {
+    if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.button == 11) {
         mGame -> changeState("stateMainMenu");
     } else {
         mGameBoard.joystickEvent(event);
