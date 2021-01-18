@@ -62,7 +62,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
         throw std::runtime_error(IMG_GetError() );
     }
 
-    // Initialize game controllers
+    // Initialize game controller
     for (int i = 0; i < SDL_NumJoysticks(); ++i)
     {
         if (SDL_IsGameController(i)) {
