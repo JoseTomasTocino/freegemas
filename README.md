@@ -41,6 +41,23 @@ This assumes that you are already using [Homebrew](http://brew.sh/). You will ne
 
 Now follow the instructions above, starting with `git clone`.
 
+## Installation on Playstation Vita
+
+For installing on the Vita, the [DolceSDK](https://github.com/DolceSDK/doc) should be installed.
+
+After that, clone the repo:
+
+    git clone https://github.com/JoseTomasTocino/freegemas.git
+
+Do an out-of-source compilation:
+
+    mkdir vita
+    cd vita
+    cmake -DCMAKE_TOOLCHAIN_FILE="${DOLCESDK}/share/dolce.toolchain.cmake" ..
+    make
+
+Now transfer and install ``freegemas.vpk`` on your Vita.
+
 ## Music licensing
 
 The music in the game is [Easy Lemon by Kevin MacLeod](http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200076)
