@@ -153,34 +153,21 @@ void StateMainMenu::buttonDown(SDL_Keycode button)
     }
 }
 
-void StateMainMenu::joystickEvent(SDL_Event event)
+void StateMainMenu::controllerButtonDown(Uint8 button)
 {
-    switch (event.type)
+    switch (button)
     {
-        case SDL_JOYHATMOTION:
-            switch(event.jhat.value)
-            {
-                case SDL_HAT_UP:
-                    moveUp();
-                    break;
-
-                case SDL_HAT_DOWN:
-                    moveDown();
-                    break;
-            }
+        case SDL_CONTROLLER_BUTTON_A:
+            optionChosen();
             break;
 
-        case SDL_JOYBUTTONDOWN:
-            switch (event.jbutton.button)
-            {
-                case 0:
-                    optionChosen();
-                    break;
-      
-                default:
-                    printf("%i\n", event.jbutton.button);
-            }
-            break;   
+        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+            moveDown();
+            break;
+
+        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+            moveUp();
+            break;
     }
 }
 

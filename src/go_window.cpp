@@ -13,7 +13,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     mLastTicks = SDL_GetTicks();
 
     // Init SDL
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
     {
         throw std::runtime_error(SDL_GetError());
     }
@@ -62,10 +62,15 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
         throw std::runtime_error(IMG_GetError() );
     }
 
-    // Initialize joystick
-    if( SDL_NumJoysticks() > 0 )
+    // Initialize game controllers
+    for (int i = 0; i < SDL_NumJoysticks(); ++i)
     {
-        joystick = SDL_JoystickOpen(0);
+        if (SDL_IsGameController(i)) {
+            gameController = SDL_GameControllerOpen(i);
+            if (gameController != NULL) {
+                break;
+            }
+        }
     }
 }
 
@@ -77,8 +82,8 @@ GoSDL::Window::~Window()
 	mWindow = NULL;
 
     // Close joystick
-    SDL_JoystickClose(joystick);
-    joystick = NULL;
+    SDL_GameControllerClose(gameController);
+    gameController = NULL;
 
 	// Quit SDL subsystems
 	Mix_Quit();
@@ -138,11 +143,8 @@ void GoSDL::Window::show()
                 mouseButtonUp(e.button.button);
                 break;
 
-            case SDL_JOYBUTTONDOWN:
-            case SDL_JOYBUTTONUP:
-            case SDL_JOYAXISMOTION:
-            case SDL_JOYHATMOTION:
-                joystickEvent(e);
+            case SDL_CONTROLLERBUTTONDOWN:
+                controllerButtonDown(e.cbutton.button);
                 break;
             }
         }

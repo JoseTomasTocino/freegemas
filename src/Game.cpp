@@ -63,10 +63,10 @@ void Game::mouseButtonUp (Uint8 button)
         mCurrentState -> mouseButtonUp(button);
 }
 
-void Game::joystickEvent (SDL_Event event)
+void Game::controllerButtonDown (Uint8 button)
 {
     if (mCurrentState)
-        mCurrentState -> joystickEvent(event);
+        mCurrentState -> controllerButtonDown(button);
 }
 
 void Game::changeState(string S)

@@ -64,12 +64,12 @@ void StateGame::buttonDown(SDL_Keycode button)
     }
 }
 
-void StateGame::joystickEvent(SDL_Event event)
+void StateGame::controllerButtonDown(Uint8 button)
 {
-    if (event.type == SDL_JOYBUTTONDOWN && event.jbutton.button == 7) {
+    if (button == SDL_CONTROLLER_BUTTON_START) {
         mGame -> changeState("stateMainMenu");
     } else {
-        mGameBoard.joystickEvent(event);
+        mGameBoard.controllerButtonDown(button);
     }
 }
 

@@ -75,7 +75,7 @@ public:
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
 
-    void joystickEvent(SDL_Event event);
+    void controllerButtonDown(Uint8 button);
 
     int getScore();
 

@@ -51,7 +51,7 @@ public:
 
     void mouseButtonDown(Uint8 button);
 
-    void joystickEvent(SDL_Event event);
+    void controllerButtonDown(Uint8 button);
 
     ~StateMainMenu();
 

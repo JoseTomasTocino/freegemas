@@ -53,7 +53,7 @@ public:
 
     virtual void mouseButtonUp(Uint8) { }
 
-    virtual void joystickEvent(SDL_Event event) { }
+    virtual void controllerButtonDown(Uint8 button) { }
 
 
     /// Default destructor
