@@ -509,47 +509,45 @@ void GameBoard::buttonDown(SDL_Keycode button)
     }
 }
 
-void GameBoard::joystickEvent(SDL_Event event)
+void GameBoard::controllerButtonDown(Uint8 button)
 {
-    if (event.type ==  SDL_JOYBUTTONDOWN) {
-            switch (event.jbutton.button)
-            {
-                case 0:
-                    showHint();
-                    break;
+    switch (button)
+    {
+        case SDL_CONTROLLER_BUTTON_Y:
+            showHint();
+            break;
 
-                case 2:
-                    selectGem();
-                    break;
+        case SDL_CONTROLLER_BUTTON_A:
+            selectGem();
+            break;
 
-                case 6:
-                    mMouseActive = false;
-                    mGameBoardSounds.playSoundSelect();
-                    moveSelector(0, 1);
-                    break;
+        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(0, 1);
+            break;
 
-                case 7:
-                    mMouseActive = false;
-                    mGameBoardSounds.playSoundSelect();
-                    moveSelector(-1, 0);
-                    break;
+        case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(-1, 0);
+            break;
 
-                case 8:
-                    mMouseActive = false;
-                    mGameBoardSounds.playSoundSelect();
-                    moveSelector(0, -1);
-                    break;
+        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(0, -1);
+            break;
 
-                case 9:
-                    mMouseActive = false;
-                    mGameBoardSounds.playSoundSelect();
-                    moveSelector(1, 0);
-                    break;
+        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(1, 0);
+            break;
 
-                case 10:
-                    resetGame();
-                    break;
-            }
+        case SDL_CONTROLLER_BUTTON_BACK:
+            resetGame();
+            break;
     }
 }
 

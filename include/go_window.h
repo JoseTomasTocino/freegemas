@@ -85,10 +85,10 @@ namespace GoSDL {
         virtual void mouseButtonUp(Uint8) { }
 
         /**
-         * @brief Event for the mouse button release events
-         * @details It receives the released mouse button
+         * @brief Event for the game controller button release events
+         * @details It receives the released game controller button
          */
-        virtual void joystickEvent(SDL_Event event) { }
+        virtual void controllerButtonDown(Uint8 button) { }
 
         /**
          * @brief Returns the horizontal position of the mouse
@@ -138,7 +138,7 @@ namespace GoSDL {
         /// Ticks recorded in last frame
         Uint32 mLastTicks;
 
-        SDL_Joystick *joystick = NULL;
+        SDL_GameController *gameController = NULL;
 
         /// Main rendering window
         SDL_Window * mWindow = NULL;
