@@ -86,7 +86,7 @@ namespace GoSDL {
 
         /**
          * @brief Event for the game controller button press events
-         * @details It receives the released game controller button
+         * @details It receives the pressed game controller button
          */
         virtual void controllerButtonDown(Uint8 button) { }
 
