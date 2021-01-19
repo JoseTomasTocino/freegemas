@@ -150,6 +150,7 @@ void StateGame::loadResources()
 
 void StateGame::resetGame()
 {
+    mGameIndicators.setScore(0);
     resetTime();
     mGameBoard.resetGame();
 }
