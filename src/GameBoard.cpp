@@ -206,11 +206,15 @@ void GameBoard::update()
             // If there are neither current solutions nor possible future solutions
             else if (mBoard.solutions().empty())
             {
-                // Make the board disappear
-                mState = eBoardDisappearing;
+                if (mGame->getCurrentState() == "stateGameEndless") {
+                    endGame(mStateGame->getScore());
+                } else {
+                    // Make the board disappear
+                    mState = eBoardDisappearing;
 
-                // Make all the gems want to go outside the board
-                mBoard.dropAllGems();
+                    // Make all the gems want to go outside the board
+                    mBoard.dropAllGems();
+                }
             }
         }
     }
@@ -700,8 +704,4 @@ bool GameBoard::checkSelectedSquare() {
     }
 
     return false;
-}
-
-bool GameBoard::hasSolution() {
-    return mState != eBoardDisappearing;
 }
