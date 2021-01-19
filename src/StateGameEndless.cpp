@@ -26,8 +26,5 @@ void StateGameEndless::update()
         mGameIndicators.setScore(0);
     }
 
-    if (!mGameBoard.hasSolution()) {
-        mGameBoard.endGame(mGameIndicators.getScore());
-    }
     mGameBoard.update();
 }
