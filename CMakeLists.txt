@@ -58,7 +58,7 @@ if (VITA)
 	# Project start
 	set(VITA_APPNAME Freegemas)
 	set(VITA_TITLEID "FGEM00001")
-	set(VITA_VERSION "00.01")
+	set(VITA_VERSION "00.90")
 
 	# Optional. You can specify more param.sfo flags this way.
 	set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
