@@ -548,10 +548,6 @@ void GameBoard::controllerButtonDown(Uint8 button)
             mGameBoardSounds.playSoundSelect();
             moveSelector(1, 0);
             break;
-
-        case SDL_CONTROLLER_BUTTON_BACK:
-            resetGame();
-            break;
     }
 }
 
