@@ -44,35 +44,37 @@ add_executable (freegemas
     ${SOURCE_FILES}
 )
 if (VITA)
-	# DOLCESDK defines
+	# VITASDK defines
 	if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-		if(DEFINED ENV{DOLCESDK})
-			set(CMAKE_TOOLCHAIN_FILE "$ENV{DOLCESDK}/share/dolce.toolchain.cmake" CACHE PATH "toolchain file")
+		if(DEFINED ENV{VITASDK})
+			set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
 		    else()
-			message(FATAL_ERROR "Please define DOLCESDK to point to your SDK path!")
+			message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
 		    endif()
 	endif()
 
-	include("$ENV{DOLCESDK}/share/dolce.cmake" REQUIRED)
+	include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
 
 	# Project start
 	set(VITA_APPNAME Freegemas)
 	set(VITA_TITLEID "FGEM00001")
-	set(VITA_VERSION "00.90")
+	set(VITA_VERSION "01.00")
 
 	# Optional. You can specify more param.sfo flags this way.
 	set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
 
-	set(VITA_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/")
-	set(SDL2_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/SDL2")
-	set(PNG_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/libpng16")
-	set(FLAC_INCLUDE_DIR "$ENV{DOLCESDK}/arm-dolce-eabi/include/FLAC")
+	set(VITA_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/")
+	set(SDL2_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/SDL2")
+	set(WEBP_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/webp")
+	set(PNG_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/libpng16")
+	set(FLAC_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/FLAC")
 
 	include_directories(${PROJECT_SOURCE_DIR}/include
-		    ${VITA_INCLUDE_DIR}
-		    ${SDL2_INCLUDE_DIR}
-		    ${PNG_INCLUDE_DIR}
-		    ${FLAC_INCLUDE_DIR}
+			${VITA_INCLUDE_DIR}
+			${SDL2_INCLUDE_DIR}
+			${WEBP_INCLUDE_DIR}
+			${PNG_INCLUDE_DIR}
+			${FLAC_INCLUDE_DIR}
 	)
 
 	target_link_libraries(freegemas
@@ -82,6 +84,7 @@ if (VITA)
 		SDL2
 		jsoncpp
 		stdc++
+		webp
 		pthread
 		png16
 		freetype
@@ -94,22 +97,20 @@ if (VITA)
 		mikmod
 		mpg123
 		FLAC
-		pib
 		SceAppUtil_stub
 		SceAudio_stub
 		SceCommonDialog_stub
 		SceCtrl_stub
 		SceDisplay_stub
-		SceDisplayUser_stub
 		SceGxm_stub
 		SceHid_stub
 		SceSysmodule_stub
 		SceTouch_stub
 		SceMotion_stub
 	)
-	dolce_create_self(freegemas.self freegemas)
+	vita_create_self(freegemas.self freegemas)
 
-	dolce_create_vpk(freegemas.vpk ${VITA_TITLEID} freegemas.self
+	vita_create_vpk(freegemas.vpk ${VITA_TITLEID} freegemas.self
 		    VERSION ${VITA_VERSION}
 		    NAME ${VITA_APPNAME}
 		    FILE platform/vita/sce_sys sce_sys

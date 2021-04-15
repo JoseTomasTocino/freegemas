@@ -43,7 +43,7 @@ Now follow the instructions above, starting with `git clone`.
 
 ## Installation on Playstation Vita
 
-For installing on the Vita, the [DolceSDK](https://github.com/DolceSDK/doc) should be installed.
+For building for the Vita, the [Vita SDK](https://vitasdk.org) should be installed.
 
 After that, clone the repo:
 
@@ -53,10 +53,10 @@ Do an out-of-source compilation:
 
     mkdir vita
     cd vita
-    cmake -DCMAKE_TOOLCHAIN_FILE="${DOLCESDK}/share/dolce.toolchain.cmake" ..
+    cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
     make
 
-Now transfer and install ``freegemas.vpk`` on your Vita.
+Now ``freegemas.vpk`` can be tranfered and installed on a Vita.
 
 ## Music licensing
 
