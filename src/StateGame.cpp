@@ -68,6 +68,8 @@ void StateGame::controllerButtonDown(Uint8 button)
 {
     if (button == SDL_CONTROLLER_BUTTON_START) {
         mGame -> changeState("stateMainMenu");
+    } else if (button == SDL_CONTROLLER_BUTTON_BACK) {
+        resetGame();
     } else {
         mGameBoard.controllerButtonDown(button);
     }
