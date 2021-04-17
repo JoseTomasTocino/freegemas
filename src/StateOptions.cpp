@@ -49,7 +49,7 @@ StateOptions::StateOptions(Game * p) : State(p)
     mMenuSelectedOption = 0;
     mMenuYStart = 150;
     mMenuYGap = 42;
-    mMenuYEnd = 350 + (int) mMenuOptions.size() * mMenuYGap;
+    mMenuYEnd = mMenuYStart + (int) mMenuOptions.size() * mMenuYGap;
 
     mGameSounds.loadResources();
 }
@@ -148,7 +148,7 @@ void StateOptions::moveUp() {
     mMenuSelectedOption -= 1;
 
    if (mMenuSelectedOption < 0) {
-        mMenuSelectedOption = mMenuTargets.size() - 1;
+        mMenuSelectedOption = mMenuOptions.size() - 1;
     }
 }
 
@@ -156,7 +156,7 @@ void StateOptions::moveDown() {
     mGameSounds.playSoundSelect();
     mMenuSelectedOption += 1;
 
-   if (mMenuSelectedOption == mMenuTargets.size()) {
+   if (mMenuSelectedOption == mMenuOptions.size()) {
         mMenuSelectedOption = 0;
     }
 }
