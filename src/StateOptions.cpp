@@ -1,4 +1,4 @@
-#include "StateMainMenu.h"
+#include "StateOptions.h"
 
 #include "Game.h"
 #include "log.h"
@@ -19,19 +19,13 @@ T clamp(T v, R bottom, R top)
     return v;
 }
 
-StateMainMenu::StateMainMenu(Game * p) : State(p)
+StateOptions::StateOptions(Game * p) : State(p)
 {
-    lDEBUG << Log::CON("StateMainMenu");
-
-    mCurrentTransitionState = TransitionIn;
+    lDEBUG << Log::CON("StateOptions");
 
     // Init background image
     mImgBackground.setWindow(p);
     mImgBackground.setPath("media/stateMainMenu/mainMenuBackground.png");
-
-    // Init logo image
-    mImgLogo.setWindow(p);
-    mImgLogo.setPath("media/stateMainMenu/mainMenuLogo.png");
 
     // Init menu highlight image
     mImgHighl.setWindow(p);
@@ -42,53 +36,23 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     mFont.setPathAndSize("media/fuenteMenu.ttf", 30);
 
     // Menu target states
-    mMenuTargets = {"stateGameTimetrial", "stateGameEndless", "stateHowtoplay", "stateOptions", "stateQuit"};
+    mMenuTargets = {"stateMainMenu"};
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255};
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Timetrial mode"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Endless mode"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("How to play?"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Options"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Exit"), menuTextColor));
+    mMenuRenderedTexts.push_back(mFont.renderText(_("Back"), menuTextColor));
 
     // Menu shadows
     menuTextColor = {0,0,0, 255};
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Timetrial mode"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Endless mode"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("How to play?"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Options"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Exit"), menuTextColor));
-
-    // Jewel group animation
-    mJewelAnimation.loadResources(p);
-
-    mAnimationTotalSteps = 30;
-    mAnimationLogoSteps = 30;
-    mAnimationCurrentStep = 0;
+    mMenuRenderedShadows.push_back(mFont.renderText(_("Back"), menuTextColor));
 
     mMenuSelectedOption = 0;
-    mMenuYStart = 350;
+    mMenuYStart = 150;
     mMenuYGap = 42;
     mMenuYEnd = 350 + (int) mMenuTargets.size() * mMenuYGap;
 }
 
-void StateMainMenu::update(){
-
-    if(mCurrentTransitionState == TransitionIn)
-    {
-        mAnimationCurrentStep ++;
-
-        if(mAnimationCurrentStep == mAnimationTotalSteps)
-        {
-            mCurrentTransitionState = Active;
-        }
-
-    } else if(mCurrentTransitionState == Active){
-
-    } else if(mCurrentTransitionState == TransitionOut){
-
-    }
+void StateOptions::update(){
 
     // Update menu highlighting according to mouse position
     int mY = (int) mGame -> getMouseY();
@@ -99,17 +63,10 @@ void StateMainMenu::update(){
     }
 }
 
-void StateMainMenu::draw(){
+void StateOptions::draw(){
 
     // Draw the background
     mImgBackground.draw(0, 0, 1);
-
-    // Calculate the alpha value for the logo
-    int logoAlfa = clamp( (int)(255 * (float)mAnimationCurrentStep / mAnimationLogoSteps),
-                          0, 255);
-
-    // Draw the logo
-    mImgLogo.draw(86, 0, 2, 1, 1, 0, logoAlfa);
 
     // Loop to draw the menu items
     for(size_t i = 0, s = (int) mMenuTargets.size(); i < s; ++i)
@@ -126,18 +83,14 @@ void StateMainMenu::draw(){
 
     // Draw the menu highlighting
     mImgHighl.draw(266, mMenuYStart + 5 + mMenuSelectedOption * mMenuYGap, 2);
-
-    // Draw the jewel animation
-    mJewelAnimation.draw();
-    //*/
 }
 
-void StateMainMenu::buttonDown(SDL_Keycode button)
+void StateOptions::buttonDown(SDL_Keycode button)
 {
     switch (button)
     {
         case SDLK_ESCAPE:
-            mGame->close();
+            mGame -> changeState("stateMainMenu");
             break;
 
         case SDLK_DOWN:
@@ -155,7 +108,7 @@ void StateMainMenu::buttonDown(SDL_Keycode button)
     }
 }
 
-void StateMainMenu::controllerButtonDown(Uint8 button)
+void StateOptions::controllerButtonDown(Uint8 button)
 {
     switch (button)
     {
@@ -173,7 +126,7 @@ void StateMainMenu::controllerButtonDown(Uint8 button)
     }
 }
 
-void StateMainMenu::mouseButtonDown(Uint8 button)
+void StateOptions::mouseButtonDown(Uint8 button)
 {
     if (button == SDL_BUTTON_LEFT)
     {
@@ -188,20 +141,20 @@ void StateMainMenu::mouseButtonDown(Uint8 button)
     }
 }
 
-void StateMainMenu::moveUp() {
+void StateOptions::moveUp() {
     mMenuSelectedOption = (mMenuSelectedOption - 1) % mMenuTargets.size();
 }
 
-void StateMainMenu::moveDown() {
+void StateOptions::moveDown() {
     mMenuSelectedOption = (mMenuSelectedOption + 1) % mMenuTargets.size();
 }
 
-void StateMainMenu::optionChosen()
+void StateOptions::optionChosen()
 {
     mGame -> changeState(mMenuTargets[mMenuSelectedOption]);
 }
 
-StateMainMenu::~StateMainMenu()
+StateOptions::~StateOptions()
 {
-    lDEBUG << Log::DES("StateMainMenu");
+    lDEBUG << Log::DES("StateOptions");
 }
