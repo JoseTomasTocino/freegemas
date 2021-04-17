@@ -57,23 +57,6 @@ public:
 
 private:
 
-    /// Possible states of the transition
-    enum transitionState{ TransitionIn,
-			  Active,
-			  TransitionOut };
-
-    /// Current transition state
-    transitionState mCurrentTransitionState;
-
-    /// Current step of the animation
-    int mAnimationCurrentStep;
-
-    /// Logo animation's total steps
-    int mAnimationLogoSteps;
-
-    /// General animation's total steps
-    int mAnimationTotalSteps;
-
     /// Image for the background
     GoSDL::Image mImgBackground;
 
@@ -85,9 +68,6 @@ private:
 
     /// Font for the menu entries
     GoSDL::Font mFont;
-
-    /// Class for the animation of the decorating jewels
-    JewelGroupAnim mJewelAnimation;
 
     /// Current highlighted option
     int mMenuSelectedOption;
