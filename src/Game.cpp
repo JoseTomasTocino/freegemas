@@ -2,6 +2,7 @@
 #include "State.h"
 
 #include "StateMainMenu.h"
+#include "StateOptions.h"
 #include "StateHowToPlay.h"
 #include "StateGameTimetrial.h"
 #include "StateGameEndless.h"
@@ -96,6 +97,11 @@ void Game::changeState(string S)
     {
         mCurrentState = std::make_shared<StateHowtoplay>(this);
         mCurrentStateString = "stateHowtoplay";
+    }
+    else if(S == "stateOptions")
+    {
+        mCurrentState = std::make_shared<StateOptions>(this);
+        mCurrentStateString = "stateOptions";
     }
     else if(S == "stateQuit")
     {
