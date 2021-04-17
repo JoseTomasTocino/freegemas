@@ -26,11 +26,7 @@ StateHowtoplay::StateHowtoplay(Game * p) : State(p)
     fontSubtitle.setWindow(p);
     fontSubtitle.setPathAndSize("media/fuenteMenu.ttf", 23);
 
-    #ifdef __vita__
-        std::string subtitleText = _("Press any button to go back");
-    #else
-        std::string subtitleText = _("Press escape to go back");
-    #endif
+    std::string subtitleText = _("Press any button to go back");
 
     mImgSubtitle = fontSubtitle.renderText(subtitleText.c_str(), {255, 255, 255, 255});
     mImgSubtitleShadow = fontSubtitle.renderText(subtitleText.c_str(), {0, 0, 0, 255});
@@ -71,10 +67,7 @@ void StateHowtoplay::draw()
 
 void StateHowtoplay::buttonDown(SDL_Keycode button)
 {
-    if (button == SDLK_ESCAPE)
-    {
         mGame -> changeState("stateMainMenu");
-    }
 }
 
 void StateHowtoplay::controllerButtonDown(Uint8 button)
@@ -84,10 +77,7 @@ void StateHowtoplay::controllerButtonDown(Uint8 button)
 
 void StateHowtoplay::mouseButtonDown(Uint8 button)
 {
-    if (button == SDL_BUTTON_LEFT)
-    {
         mGame -> changeState("stateMainMenu");
-    }
 }
 
 StateHowtoplay::~StateHowtoplay()
