@@ -70,7 +70,7 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     mMenuSelectedOption = 0;
     mMenuYStart = 350;
     mMenuYGap = 42;
-    mMenuYEnd = 350 + (int) mMenuTargets.size() * mMenuYGap;
+    mMenuYEnd = mMenuYStart + (int) mMenuTargets.size() * mMenuYGap;
 
     mGameSounds.loadResources();
 }
