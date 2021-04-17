@@ -178,6 +178,9 @@ void GameBoard::update()
             // Switch to the normal state
             mState = eSteady;
 
+            // Allow getting points again if a hint was used
+            mHintUsed = false;
+
             // Reset the animation
             mAnimationCurrentStep = 0;
 
@@ -615,6 +618,9 @@ void GameBoard::selectGem() {
 void GameBoard::showHint ()
 {
     if (mState == eSteady) {
+        // Make sure no points can be earned next turn
+        mHintUsed = true;
+
         // Get possible hint locations
         vector<Coord> hintLocations = mBoard.solutions();
 
@@ -625,12 +631,20 @@ void GameBoard::showHint ()
 
 void GameBoard::createFloatingScores()
 {
+    //Do not grant points if a hint was used
+    int pointsPerGem = 5;
+    if (mHintUsed) {
+        pointsPerGem = 0;
+    }
+
     // For each match in the group of matched squares
     for (Match & m : mGroupedSquares)
     {
+        int score = m.size() * pointsPerGem * mMultiplier;
+
         // Create a new floating score image
         mFloatingScores.emplace_back(FloatingScore(mGame,
-           m.size() * 5 * mMultiplier,
+           score,
            m.midSquare().x,
            m.midSquare().y, 80));
 
@@ -644,7 +658,7 @@ void GameBoard::createFloatingScores()
 
         }
 
-        mStateGame->increaseScore(m.size() * 5 * mMultiplier);
+        mStateGame->increaseScore(score);
     }
 }
 
