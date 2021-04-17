@@ -1,10 +1,10 @@
-#ifndef GAME_BOARD_SOUNDS_H
-#define GAME_BOARD_SOUNDS_H
+#ifndef GAME_SOUNDS_H
+#define GAME_SOUNDS_H
 
 #include "go_sound.h"
 
 
-class GameBoardSounds
+class GameSounds
 {
 
 public:

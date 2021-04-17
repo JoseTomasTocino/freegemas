@@ -3,6 +3,7 @@
 
 #include "State.h"
 #include "JewelGroupAnim.h"
+#include "GameSounds.h"
 
 #include "go_image.h"
 #include "go_font.h"
@@ -91,6 +92,8 @@ private:
 
     /// Current highlighted option
     int mMenuSelectedOption;
+
+    GameSounds mGameSounds;
 
     /// List of menu options.
     vector<string> mMenuTargets;

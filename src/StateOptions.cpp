@@ -36,7 +36,7 @@ StateOptions::StateOptions(Game * p) : State(p)
     mFont.setPathAndSize("media/fuenteMenu.ttf", 30);
 
     // Menu target states
-    mMenuTargets = {"stateMainMenu"};
+    mMenuOptions = {"back"};
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255};
@@ -49,7 +49,9 @@ StateOptions::StateOptions(Game * p) : State(p)
     mMenuSelectedOption = 0;
     mMenuYStart = 150;
     mMenuYGap = 42;
-    mMenuYEnd = 350 + (int) mMenuTargets.size() * mMenuYGap;
+    mMenuYEnd = 350 + (int) mMenuOptions.size() * mMenuYGap;
+
+    mGameSounds.loadResources();
 }
 
 void StateOptions::update(){
@@ -69,7 +71,7 @@ void StateOptions::draw(){
     mImgBackground.draw(0, 0, 1);
 
     // Loop to draw the menu items
-    for(size_t i = 0, s = (int) mMenuTargets.size(); i < s; ++i)
+    for(size_t i = 0, s = (int) mMenuOptions.size(); i < s; ++i)
     {
         // Calculate the horizontal and vertical positions
 		int posX = std::round(800 / 2 - mMenuRenderedTexts[i].getWidth() / 2),
@@ -142,16 +144,29 @@ void StateOptions::mouseButtonDown(Uint8 button)
 }
 
 void StateOptions::moveUp() {
-    mMenuSelectedOption = (mMenuSelectedOption - 1) % mMenuTargets.size();
+    mGameSounds.playSoundSelect();
+    mMenuSelectedOption -= 1;
+
+   if (mMenuSelectedOption < 0) {
+        mMenuSelectedOption = mMenuTargets.size() - 1;
+    }
 }
 
 void StateOptions::moveDown() {
-    mMenuSelectedOption = (mMenuSelectedOption + 1) % mMenuTargets.size();
+    mGameSounds.playSoundSelect();
+    mMenuSelectedOption += 1;
+
+   if (mMenuSelectedOption == mMenuTargets.size()) {
+        mMenuSelectedOption = 0;
+    }
 }
 
 void StateOptions::optionChosen()
 {
-    mGame -> changeState(mMenuTargets[mMenuSelectedOption]);
+    string option = mMenuOptions[mMenuSelectedOption];
+    if (option == "back") {
+        mGame -> changeState("stateMainMenu");
+    }
 }
 
 StateOptions::~StateOptions()

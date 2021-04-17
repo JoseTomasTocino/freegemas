@@ -1,6 +1,6 @@
-#include "GameBoardSounds.h"
+#include "GameSounds.h"
 
-void GameBoardSounds::loadResources()
+void GameSounds::loadResources()
 {
     mSfxMatch1.setSample("media/match1.ogg");
     mSfxMatch2.setSample("media/match2.ogg");
@@ -9,27 +9,27 @@ void GameBoardSounds::loadResources()
     mSfxFall.setSample("media/fall.ogg");
 }
 
-void GameBoardSounds::playSoundSelect()
+void GameSounds::playSoundSelect()
 {
     mSfxSelect.play(0.3);
 }
 
-void GameBoardSounds::playSoundFall()
+void GameSounds::playSoundFall()
 {
     mSfxFall.play(0.3);
 }
 
-void GameBoardSounds::playSoundMatch1()
+void GameSounds::playSoundMatch1()
 {
     mSfxMatch1.play(0.25);
 }
 
-void GameBoardSounds::playSoundMatch2()
+void GameSounds::playSoundMatch2()
 {
     mSfxMatch2.play(0.25);
 }
 
-void GameBoardSounds::playSoundMatch3()
+void GameSounds::playSoundMatch3()
 {
     mSfxMatch3.play(0.25);
 }
