@@ -2,7 +2,7 @@
 #define _STATEOPTIONS_H_
 
 #include "State.h"
-#include "JewelGroupAnim.h"
+#include "GameSounds.h"
 
 #include "go_image.h"
 #include "go_font.h"
@@ -69,11 +69,13 @@ private:
     /// Font for the menu entries
     GoSDL::Font mFont;
 
+    GameSounds mGameSounds;
+
     /// Current highlighted option
     int mMenuSelectedOption;
 
     /// List of menu options.
-    vector<string> mMenuTargets;
+    vector<string> mMenuOptions;
     vector<GoSDL::Image> mMenuRenderedTexts;
     vector<GoSDL::Image> mMenuRenderedShadows;
 
