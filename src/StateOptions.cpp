@@ -36,14 +36,18 @@ StateOptions::StateOptions(Game * p) : State(p)
     mFont.setPathAndSize("media/fuenteMenu.ttf", 30);
 
     // Menu target states
-    mMenuOptions = {"back"};
+    mMenuOptions = {"setMusic", "setSound", "back"};
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255};
+    mMenuRenderedTexts.push_back(mFont.renderText(_("Music"), menuTextColor));
+    mMenuRenderedTexts.push_back(mFont.renderText(_("Sound"), menuTextColor));
     mMenuRenderedTexts.push_back(mFont.renderText(_("Back"), menuTextColor));
 
     // Menu shadows
     menuTextColor = {0,0,0, 255};
+    mMenuRenderedShadows.push_back(mFont.renderText(_("Music"), menuTextColor));
+    mMenuRenderedShadows.push_back(mFont.renderText(_("Sound"), menuTextColor));
     mMenuRenderedShadows.push_back(mFont.renderText(_("Back"), menuTextColor));
 
     mMenuSelectedOption = 0;
