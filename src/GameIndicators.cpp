@@ -45,7 +45,6 @@ void GameIndicators::loadResources()
     std::string mHintButtonText = _("Show hint");
     std::string mResetButtonText = _("Reset game");
     std::string mExitButtonText = _("Exit");
-    std::string mMusicButtonText = _("Turn off music");
 
     #ifdef __vita__
         mHintButtonText += std::string(" (/\\)");
@@ -56,11 +55,14 @@ void GameIndicators::loadResources()
     mHintButton.set(mGame,  mHintButtonText.c_str(), "iconHint.png");
     mResetButton.set(mGame, mResetButtonText.c_str(), "iconRestart.png");
     mExitButton.set(mGame, mExitButtonText.c_str(), "iconExit.png");
-    mMusicButton.set(mGame, mMusicButtonText.c_str(), "iconMusic.png");
 
     // Music
-    sfxSong.setSample("media/music.ogg");
-    sfxSong.play();
+    options.loadResources();
+
+    if (options.getMusicEnabled()) {
+        sfxSong.setSample("media/music.ogg");
+        sfxSong.play();
+    }
 }
 
 int GameIndicators::getScore()
@@ -120,9 +122,6 @@ void GameIndicators::draw()
     // Draw the buttons
     mHintButton.draw(17, vertButStart, 2);
     mResetButton.draw(17, vertButStart + 47, 2);
-    #ifndef __vita__
-        mMusicButton.draw(17, vertButStart + 47 * 2, 2);
-    #endif
     mExitButton.draw(17, 538, 2);
 
     // Draw the score
@@ -158,21 +157,6 @@ void GameIndicators::click(int mouseX, int mouseY)
     else if (mResetButton.clicked(mouseX, mouseY))
     {
         mStateGame -> resetGame();
-    }
-
-    // Music button was clicked
-    else if (mMusicButton.clicked(mouseX, mouseY))
-    {
-        if (sfxSong.isPlaying())
-        {
-            mMusicButton.setText(_("Turn on music"));
-            sfxSong.stop();
-        }
-        else
-        {
-            mMusicButton.setText(_("Turn off music"));
-            sfxSong.play();
-        }
     }
 }
 
