@@ -6,6 +6,11 @@
 #include <sys/stat.h>
 #include <json/json.h>
 
+#ifdef __vita__
+    #include <psp2/io/stat.h>
+    #define mkdir(x, y) sceIoMkdir(x, y)
+#endif
+
 class OptionsManager
 {
     public:

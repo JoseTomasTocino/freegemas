@@ -14,17 +14,22 @@ std::string OptionsManager::getOptionsDir()
 {
     std::string optionsPath;
 
-    char *xdgConfHome = getenv("XDG_CONFIG_HOME");
-    if (xdgConfHome) {
-        optionsPath = std::string(xdgConfHome) + "/freegemas/";
-    } else {
-        char *home = getenv("HOME");
-        if (home) {
-            optionsPath = std::string(home) + "/.config/freegemas/";
+    #ifdef __vita__
+        optionsPath = "ux0:/data/freegemas/";
+    #else
+        char *xdgConfHome = getenv("XDG_CONFIG_HOME");
+        if (xdgConfHome) {
+            optionsPath = std::string(xdgConfHome) + "/freegemas/";
         } else {
-            optionsPath = "./";
+            char *home = getenv("HOME");
+            if (home) {
+                optionsPath = std::string(home) + "/.config/freegemas/";
+            } else {
+                optionsPath = "./";
+            }
         }
-    }
+    #endif
+
     return optionsPath;
 }
 
