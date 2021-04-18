@@ -7,6 +7,7 @@ pkg_search_module(SDL2 REQUIRED sdl2)
 pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
 pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
+pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
 # Append custom gettext path to CMAKE_PREFIX_PATH - only necessary on OS X.
 if (CMAKE_HOST_APPLE)
@@ -68,6 +69,7 @@ if (VITA)
 	set(WEBP_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/webp")
 	set(PNG_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/libpng16")
 	set(FLAC_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/FLAC")
+	set(JSON_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/jsoncpp")
 
 	include_directories(${PROJECT_SOURCE_DIR}/include
 			${VITA_INCLUDE_DIR}
@@ -75,6 +77,7 @@ if (VITA)
 			${WEBP_INCLUDE_DIR}
 			${PNG_INCLUDE_DIR}
 			${FLAC_INCLUDE_DIR}
+			${JSON_INCLUDE_DIR}
 	)
 
 	target_link_libraries(freegemas
@@ -125,6 +128,7 @@ include_directories(
     ${SDL2TTF_INCLUDE_DIRS}
     ${SDL2MIXER_INCLUDE_DIRS}
     ${LIBINTL_INCLUDE_DIRS}
+	${JSONCPP_INCLUDE_DIRS}
 )
 
 target_link_libraries(freegemas
@@ -133,6 +137,7 @@ target_link_libraries(freegemas
   ${SDL2TTF_LIBRARIES}
   ${SDL2MIXER_LIBRARIES}
   ${LIBINTL_LIBRARIES}
+  ${JSONCPP_LIBRARIES}
 )
 
 add_custom_target(
