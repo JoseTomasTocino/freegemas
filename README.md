@@ -19,7 +19,7 @@ First, you need to install git and gcc:
 
 Next, install SDL2 from the repositories:
 
-    sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
+    sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev
     
 After that, clone the repo:
 
@@ -37,7 +37,7 @@ Do an out-of-source compilation and run the program:
 
 This assumes that you are already using [Homebrew](http://brew.sh/). You will need CMake and a few libraries to compile Freegemas:
 
-    brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext
+    brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
 
 Now follow the instructions above, starting with `git clone`.
 
