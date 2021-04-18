@@ -23,6 +23,8 @@ StateOptions::StateOptions(Game * p) : State(p)
 {
     lDEBUG << Log::CON("StateOptions");
 
+    mOptions.loadResources();
+
     // Init background image
     mImgBackground.setWindow(p);
     mImgBackground.setPath("media/stateMainMenu/mainMenuBackground.png");
@@ -38,17 +40,7 @@ StateOptions::StateOptions(Game * p) : State(p)
     // Menu target states
     mMenuOptions = {"setMusic", "setSound", "back"};
 
-    // Menu text items
-    SDL_Color menuTextColor = {255, 255, 255, 255};
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Music"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Sound"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Back"), menuTextColor));
-
-    // Menu shadows
-    menuTextColor = {0,0,0, 255};
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Music"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Sound"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Back"), menuTextColor));
+    updateButtonTexts();
 
     mMenuSelectedOption = 0;
     mMenuYStart = 150;
@@ -165,9 +157,45 @@ void StateOptions::moveDown() {
     }
 }
 
+void StateOptions::updateButtonTexts()
+{
+    vector<GoSDL::Image> renderedTexts;
+    vector<GoSDL::Image> renderedShadows;
+
+    // Option strings
+    std::string musicText = _("Music: ");
+    std::string soundText = _("Sound: ");
+
+    musicText += std::string(mOptions.getMusicEnabled() ? _("On") : _("Off"));
+    soundText += std::string(mOptions.getSoundEnabled() ? _("On") : _("Off"));
+
+    // Menu text items
+    SDL_Color menuTextColor = {255, 255, 255, 255};
+    renderedTexts.push_back(mFont.renderText(musicText, menuTextColor));
+    renderedTexts.push_back(mFont.renderText(soundText, menuTextColor));
+    renderedTexts.push_back(mFont.renderText(_("Back"), menuTextColor));
+
+    // Menu shadows
+    menuTextColor = {0,0,0, 255};
+    renderedShadows.push_back(mFont.renderText(_("Music"), menuTextColor));
+    renderedShadows.push_back(mFont.renderText(_("Sound"), menuTextColor));
+    renderedShadows.push_back(mFont.renderText(_("Back"), menuTextColor));
+
+    mMenuRenderedTexts.swap(renderedTexts);
+    mMenuRenderedShadows.swap(renderedShadows);
+}
+
 void StateOptions::optionChosen()
 {
     string option = mMenuOptions[mMenuSelectedOption];
+    if (option == "setMusic") {
+        mOptions.setMusicEnabled(!mOptions.getMusicEnabled());
+        updateButtonTexts();
+    }
+    if (option == "setSound") {
+        mOptions.setSoundEnabled(!mOptions.getSoundEnabled());
+        updateButtonTexts();
+    }
     if (option == "back") {
         mGame -> changeState("stateMainMenu");
     }
