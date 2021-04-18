@@ -2,6 +2,7 @@
 #define GAME_SOUNDS_H
 
 #include "go_sound.h"
+#include "OptionsManager.h"
 
 
 class GameSounds
@@ -25,6 +26,8 @@ private:
     GoSDL::Sound mSfxSelect;
     GoSDL::Sound mSfxFall;
     /// @}
+
+    OptionsManager options;
 };
 
 #endif

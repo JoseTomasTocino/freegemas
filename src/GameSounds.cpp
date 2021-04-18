@@ -2,16 +2,21 @@
 
 void GameSounds::loadResources()
 {
-    mSfxMatch1.setSample("media/match1.ogg");
-    mSfxMatch2.setSample("media/match2.ogg");
-    mSfxMatch3.setSample("media/match3.ogg");
-    mSfxSelect.setSample("media/select.ogg");
-    mSfxFall.setSample("media/fall.ogg");
+    options.loadResources();
+
+    if (options.getSoundEnabled()) {
+        mSfxMatch1.setSample("media/match1.ogg");
+        mSfxMatch2.setSample("media/match2.ogg");
+        mSfxMatch3.setSample("media/match3.ogg");
+        mSfxSelect.setSample("media/select.ogg");
+        mSfxFall.setSample("media/fall.ogg");
+    }
+
 }
 
 void GameSounds::playSoundSelect()
 {
-    mSfxSelect.play(0.3);
+        mSfxSelect.play(0.3);
 }
 
 void GameSounds::playSoundFall()

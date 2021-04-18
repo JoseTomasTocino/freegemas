@@ -7,6 +7,8 @@
 
 #include "BaseButton.h"
 
+#include "OptionsManager.h"
+
 #include <string>
 
 class Game;
@@ -89,11 +91,12 @@ private:
     BaseButton mHintButton;
     BaseButton mResetButton;
     BaseButton mExitButton;
-    BaseButton mMusicButton;
     /// @}
 
     /// Game music
     GoSDL::Music sfxSong;
+
+    OptionsManager options;
 };
 
 #endif
