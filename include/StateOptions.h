@@ -3,6 +3,7 @@
 
 #include "State.h"
 #include "GameSounds.h"
+#include "OptionsManager.h"
 
 #include "go_image.h"
 #include "go_font.h"
@@ -86,10 +87,14 @@ private:
     void moveUp();
     void moveDown();
 
+    void updateButtonTexts();
+
     /// @{
     /// @name Coordinates of the menu elements
     int mMenuYStart, mMenuYEnd, mMenuYGap;
     /// @}
+
+    OptionsManager mOptions;
 
 };
 
