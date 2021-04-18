@@ -28,6 +28,7 @@
 
 
 #include "go_image.h"
+#include "OptionsManager.h"
 
 
 class Game;
@@ -67,6 +68,8 @@ private:
 
     /// Reference to the main game
     Game * mGame;
+
+    OptionsManager options;
 };
 
 #endif

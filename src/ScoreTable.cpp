@@ -13,49 +13,19 @@ using namespace std;
 
 ScoreTable::ScoreTable(Game * p, int score, string gameMode) : mGame(p)
 {
+    options.loadResources();
+
     int lastScore;
-
-    // Get user's HOME dir
-    const char *homedir;
-
-    #ifdef __vita__
-        homedir = "ux0:/data/";
-    #else
-        if ((homedir = getenv("HOME")) == NULL)
-        {
-            homedir = getpwuid(getuid())->pw_dir;
+    if (gameMode == "stateGameTimetrial") {
+        lastScore = options.getHighscoreTimetrial();
+        if (lastScore < score) {
+            options.setHighscoreTimetrial(score);
         }
-    #endif
-
-    // Build the full path to the config file: $HOME/.freegemas
-    std::string fullScoreFilePath(homedir);
-    fullScoreFilePath += "/.freegemas";
-    fullScoreFilePath += "-";
-    fullScoreFilePath += gameMode;
-
-    // Open the file
-    fstream scoreFile (fullScoreFilePath.c_str(), fstream::in);
-
-    // Read last high score
-    if (!scoreFile)
-    {
-        lastScore = 0;
-    }
-
-    else
-    {
-        scoreFile >> lastScore;
-    }
-
-    scoreFile.close();
-
-    // Reopen the file to save the new highest score
-    if (lastScore < score)
-    {
-        scoreFile.open (fullScoreFilePath.c_str(), fstream::out);
-
-        if (scoreFile)
-            scoreFile << std::to_string(score);
+    } else if (gameMode == "stateGameEndless") {
+        lastScore = options.getHighscoreEndless();
+        if (lastScore < score) {
+            options.setHighscoreEndless(score);
+        }
     }
 
     scoreBoardWidth = 300;
