@@ -75,6 +75,8 @@ public:
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
 
+    int getScore();
+
 protected:
     friend class GameIndicators;
     friend class GameBoard;
@@ -114,7 +116,6 @@ private:
 
     // Increases the score by the given amount
     void increaseScore (int amount);
-
 
     /// Shows a hint for a possible match
     void showHint();

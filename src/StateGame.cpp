@@ -161,3 +161,6 @@ void StateGame::increaseScore (int amount)
     mGameIndicators.increaseScore(amount);
 }
 
+int StateGame::getScore() {
+    return mGameIndicators.getScore();
+}
