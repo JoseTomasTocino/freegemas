@@ -12,6 +12,8 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     // Get starting ticks
     mLastTicks = SDL_GetTicks();
 
+    SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS, "0");
+
     // Init SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
     {
@@ -62,7 +64,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
         throw std::runtime_error(IMG_GetError() );
     }
 
-    // Initialize game controller
+    // Initialize game controllers
     for (int i = 0; i < SDL_NumJoysticks(); ++i)
     {
         if (SDL_IsGameController(i)) {

@@ -26,8 +26,14 @@ StateHowtoplay::StateHowtoplay(Game * p) : State(p)
     fontSubtitle.setWindow(p);
     fontSubtitle.setPathAndSize("media/fuenteMenu.ttf", 23);
 
-    mImgSubtitle = fontSubtitle.renderText(_("Press escape to go back"), {255, 255, 255, 255});
-    mImgSubtitleShadow = fontSubtitle.renderText(_("Press escape to go back"), {0, 0, 0, 255});
+    #ifdef __vita__
+        std::string subtitleText = _("Press any button to go back");
+    #else
+        std::string subtitleText = _("Press escape to go back");
+    #endif
+
+    mImgSubtitle = fontSubtitle.renderText(subtitleText.c_str(), {255, 255, 255, 255});
+    mImgSubtitleShadow = fontSubtitle.renderText(subtitleText.c_str(), {0, 0, 0, 255});
 
     // Build the main text
     GoSDL::Font fontText;

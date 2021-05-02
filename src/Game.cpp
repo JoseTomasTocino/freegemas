@@ -33,7 +33,9 @@ void Game::update ()
 
 void Game::draw ()
 {
-    mMouseCursor.draw(getMouseX(), getMouseY(), 999);
+    #ifndef __vita__
+        mMouseCursor.draw(getMouseX(), getMouseY(), 999);
+    #endif
 
     if (mCurrentState)
         mCurrentState -> draw();

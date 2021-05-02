@@ -42,10 +42,21 @@ void GameIndicators::loadResources()
     mImgScoreBackground.setWindowAndPath(mGame, "media/scoreBackground.png");
 
     // Buttons
-    mHintButton.set(mGame, _("Show hint"), "iconHint.png");
-    mResetButton.set(mGame, _("Reset game"), "iconRestart.png");
-    mExitButton.set(mGame, _("Exit"), "iconExit.png");
-    mMusicButton.set(mGame, _("Turn off music"), "iconMusic.png");
+    std::string mHintButtonText = _("Show hint");
+    std::string mResetButtonText = _("Reset game");
+    std::string mExitButtonText = _("Exit");
+    std::string mMusicButtonText = _("Turn off music");
+
+    #ifdef __vita__
+        mHintButtonText += std::string(" (/\\)");
+        mResetButtonText += std::string(" (SEL)");
+        mExitButtonText += std::string(" (START)");
+    #endif
+
+    mHintButton.set(mGame,  mHintButtonText.c_str(), "iconHint.png");
+    mResetButton.set(mGame, mResetButtonText.c_str(), "iconRestart.png");
+    mExitButton.set(mGame, mExitButtonText.c_str(), "iconExit.png");
+    mMusicButton.set(mGame, mMusicButtonText.c_str(), "iconMusic.png");
 
     // Music
     sfxSong.setSample("media/music.ogg");
@@ -109,7 +120,9 @@ void GameIndicators::draw()
     // Draw the buttons
     mHintButton.draw(17, vertButStart, 2);
     mResetButton.draw(17, vertButStart + 47, 2);
-    mMusicButton.draw(17, vertButStart + 47 * 2, 2);
+    #ifndef __vita__
+        mMusicButton.draw(17, vertButStart + 47 * 2, 2);
+    #endif
     mExitButton.draw(17, 538, 2);
 
     // Draw the score

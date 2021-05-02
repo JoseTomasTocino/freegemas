@@ -85,6 +85,7 @@ namespace GoSDL {
         virtual void mouseButtonUp(Uint8) { }
 
         /**
+
          * @brief Event for the game controller button press events
          * @details It receives the pressed game controller button
          */
