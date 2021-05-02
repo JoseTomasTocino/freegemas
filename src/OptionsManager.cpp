@@ -73,6 +73,11 @@ void OptionsManager::setSoundEnabled(bool value) {
     writeOptions();
 }
 
+void OptionsManager::setFullscreenEnabled(bool value) {
+    options["fullscreenEnabled"] = value;
+    writeOptions();
+}
+
 int OptionsManager::getHighscoreTimetrial() {
     return options.get("highscoreTimetrial", 0).asInt();
 }
@@ -81,10 +86,14 @@ int OptionsManager::getHighscoreEndless() {
     return options.get("highscoreEndless", 0).asInt();
 }
 
-int OptionsManager::getMusicEnabled() {
+bool OptionsManager::getMusicEnabled() {
     return options.get("musicEnabled", true).asBool();
 }
 
-int OptionsManager:: getSoundEnabled() {
+bool OptionsManager:: getSoundEnabled() {
     return options.get("soundEnabled", true).asBool();
+}
+
+bool OptionsManager:: getFullscreenEnabled() {
+    return options.get("fullscreenEnabled", false).asBool();
 }

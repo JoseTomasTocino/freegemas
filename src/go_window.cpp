@@ -74,6 +74,10 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
             }
         }
     }
+
+    // Set full screen mode
+    mOptions.loadResources();
+    setFullscreen(mOptions.getFullscreenEnabled());
 }
 
 GoSDL::Window::~Window()
@@ -252,4 +256,13 @@ void GoSDL::Window::showCursor ()
 void GoSDL::Window::hideCursor ()
 {
     SDL_ShowCursor(0);
+}
+
+void GoSDL::Window::setFullscreen(bool value)
+{
+    if (value) {
+        SDL_SetWindowFullscreen(mWindow, SDL_WINDOW_FULLSCREEN);
+    } else {
+        SDL_SetWindowFullscreen(mWindow, 0);
+    }
 }

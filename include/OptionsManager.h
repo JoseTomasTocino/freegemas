@@ -20,11 +20,14 @@ class OptionsManager
         void setHighscoreEndless(int score);
         void setMusicEnabled(bool value);
         void setSoundEnabled(bool value);
+        void setFullscreenEnabled(bool value);
 
         int getHighscoreTimetrial();
         int getHighscoreEndless();
-        int getMusicEnabled();
-        int getSoundEnabled();
+        bool getMusicEnabled();
+        bool getSoundEnabled();
+        bool getFullscreenEnabled();
+
 
     private:
         const std::string optionsFile = "options.json";

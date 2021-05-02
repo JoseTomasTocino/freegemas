@@ -38,7 +38,7 @@ StateOptions::StateOptions(Game * p) : State(p)
     mFont.setPathAndSize("media/fuenteMenu.ttf", 30);
 
     // Menu target states
-    mMenuOptions = {"setMusic", "setSound", "back"};
+    mMenuOptions = {"setMusic", "setSound", "setFullscreen", "back"};
 
     updateButtonTexts();
 
@@ -165,20 +165,24 @@ void StateOptions::updateButtonTexts()
     // Option strings
     std::string musicText = _("Music: ");
     std::string soundText = _("Sound: ");
+    std::string fullscreenText = _("Fullscreen: ");
 
     musicText += std::string(mOptions.getMusicEnabled() ? _("On") : _("Off"));
     soundText += std::string(mOptions.getSoundEnabled() ? _("On") : _("Off"));
+    fullscreenText += std::string(mOptions.getFullscreenEnabled() ? _("On") : _("Off"));
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255};
     renderedTexts.push_back(mFont.renderText(musicText, menuTextColor));
     renderedTexts.push_back(mFont.renderText(soundText, menuTextColor));
+    renderedTexts.push_back(mFont.renderText(fullscreenText, menuTextColor));
     renderedTexts.push_back(mFont.renderText(_("Back"), menuTextColor));
 
     // Menu shadows
     menuTextColor = {0,0,0, 255};
-    renderedShadows.push_back(mFont.renderText(_("Music"), menuTextColor));
-    renderedShadows.push_back(mFont.renderText(_("Sound"), menuTextColor));
+    renderedShadows.push_back(mFont.renderText(musicText, menuTextColor));
+    renderedShadows.push_back(mFont.renderText(soundText, menuTextColor));
+    renderedShadows.push_back(mFont.renderText(fullscreenText, menuTextColor));
     renderedShadows.push_back(mFont.renderText(_("Back"), menuTextColor));
 
     mMenuRenderedTexts.swap(renderedTexts);
@@ -188,16 +192,18 @@ void StateOptions::updateButtonTexts()
 void StateOptions::optionChosen()
 {
     string option = mMenuOptions[mMenuSelectedOption];
-    if (option == "setMusic") {
-        mOptions.setMusicEnabled(!mOptions.getMusicEnabled());
-        updateButtonTexts();
-    }
-    if (option == "setSound") {
-        mOptions.setSoundEnabled(!mOptions.getSoundEnabled());
-        updateButtonTexts();
-    }
     if (option == "back") {
         mGame -> changeState("stateMainMenu");
+    } else {
+        if (option == "setMusic") {
+            mOptions.setMusicEnabled(!mOptions.getMusicEnabled());
+        } else if (option == "setSound") {
+            mOptions.setSoundEnabled(!mOptions.getSoundEnabled());
+        } else if (option == "setFullscreen") {
+            mOptions.setFullscreenEnabled(!mOptions.getFullscreenEnabled());
+            mGame->setFullscreen(mOptions.getFullscreenEnabled());
+        }
+        updateButtonTexts();
     }
 }
 
