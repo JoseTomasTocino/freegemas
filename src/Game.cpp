@@ -63,6 +63,12 @@ void Game::mouseButtonUp (Uint8 button)
         mCurrentState -> mouseButtonUp(button);
 }
 
+void Game::controllerButtonDown (Uint8 button)
+{
+    if (mCurrentState)
+        mCurrentState -> controllerButtonDown(button);
+}
+
 void Game::changeState(string S)
 {
     if(S == mCurrentStateString)

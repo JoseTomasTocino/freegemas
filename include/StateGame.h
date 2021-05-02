@@ -75,6 +75,8 @@ public:
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
 
+    void controllerButtonDown(Uint8 button);
+
     int getScore();
 
 protected:

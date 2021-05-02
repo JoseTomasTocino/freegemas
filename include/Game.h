@@ -25,6 +25,7 @@ public:
     void buttonUp(SDL_Keycode button);
     void mouseButtonDown(Uint8 button);
     void mouseButtonUp(Uint8 button);
+    void controllerButtonDown(Uint8 button);
 
     void changeState(std::string S);
 

@@ -71,6 +71,11 @@ void StateHowtoplay::buttonDown(SDL_Keycode button)
     }
 }
 
+void StateHowtoplay::controllerButtonDown(Uint8 button)
+{
+    mGame -> changeState("stateMainMenu");
+}
+
 void StateHowtoplay::mouseButtonDown(Uint8 button)
 {
     if (button == SDL_BUTTON_LEFT)

@@ -484,7 +484,8 @@ void GameBoard::moveSelector(int x, int y) {
     }
 }
 
-void GameBoard::buttonDown(SDL_Keycode button) {
+void GameBoard::buttonDown(SDL_Keycode button)
+{
     switch(button) {
     case SDLK_LEFT:
         mMouseActive = false;
@@ -509,6 +510,44 @@ void GameBoard::buttonDown(SDL_Keycode button) {
     case SDLK_SPACE:
         selectGem();
         break;
+    }
+}
+
+void GameBoard::controllerButtonDown(Uint8 button)
+{
+    switch (button)
+    {
+        case SDL_CONTROLLER_BUTTON_Y:
+            showHint();
+            break;
+
+        case SDL_CONTROLLER_BUTTON_A:
+            selectGem();
+            break;
+
+        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(0, 1);
+            break;
+
+        case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(-1, 0);
+            break;
+
+        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(0, -1);
+            break;
+
+        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+            mMouseActive = false;
+            mGameBoardSounds.playSoundSelect();
+            moveSelector(1, 0);
+            break;
     }
 }
 

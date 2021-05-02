@@ -29,6 +29,7 @@ public:
     void mouseButtonDown(int, int);
     void mouseButtonUp(int, int);
     void buttonDown(SDL_Keycode button);
+    void controllerButtonDown(Uint8 button);
 
     void showHint();
 

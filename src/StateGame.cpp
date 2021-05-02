@@ -64,6 +64,17 @@ void StateGame::buttonDown(SDL_Keycode button)
     }
 }
 
+void StateGame::controllerButtonDown(Uint8 button)
+{
+    if (button == SDL_CONTROLLER_BUTTON_START) {
+        mGame -> changeState("stateMainMenu");
+    } else if (button == SDL_CONTROLLER_BUTTON_BACK) {
+        resetGame();
+    } else {
+        mGameBoard.controllerButtonDown(button);
+    }
+}
+
 void StateGame::mouseButtonDown(Uint8 button)
 {
     // Left mouse button was pressed
