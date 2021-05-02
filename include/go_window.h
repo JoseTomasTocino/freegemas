@@ -8,6 +8,7 @@
 #include <string>
 
 #include "go_drawingqueue.h"
+#include "OptionsManager.h"
 
 
 namespace GoSDL {
@@ -111,6 +112,11 @@ namespace GoSDL {
          */
         void hideCursor();
 
+        /**
+         * @brief Allows setting the fullscreen mode
+         */
+        void setFullscreen(bool value);
+
     private:
         friend class Image;
         friend class Font;
@@ -149,6 +155,9 @@ namespace GoSDL {
 
         /// Rendering queue
         DrawingQueue mDrawingQueue;
+
+        // Options manager to get full screen setting
+        OptionsManager mOptions;
     };
 
 }
