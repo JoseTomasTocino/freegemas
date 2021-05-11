@@ -117,7 +117,7 @@ void GameIndicators::updateTime (double time)
 void GameIndicators::draw()
 {
     // Vertical initial position for the buttons
-    int vertButStart = 360;
+    int vertButStart = 407;
 
     // Draw the buttons
     mHintButton.draw(17, vertButStart, 2);
