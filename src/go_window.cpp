@@ -38,7 +38,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
                                 SDL_WINDOW_SHOWN );
 
     // Set window icon
-    SDL_Surface* icon = IMG_Load("../media/freegemas.png");
+    SDL_Surface* icon = IMG_Load("../media/freegemas.ico");
     SDL_SetWindowIcon(mWindow, icon);
     SDL_FreeSurface(icon);
 
