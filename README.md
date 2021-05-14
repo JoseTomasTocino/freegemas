@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/JoseTomasTocino/freegemas/static/images/header_gems.png"><br>
 </p>
 
-__Freegemas__ is an open source version of the well known Bejeweled, for GNU/Linux, Windows, Mac and the Playstation Vita. It's written in C++ using [SDL2](https://www.libsdl.org/). In the past it used Gosu instead of SDL2, and the old repository can be found at [Google Code](http://freegemas.googlecode.com)
+__Freegemas__ is an open source version of the well known Bejeweled, for GNU/Linux, Windows, Mac and the Playstation Vita. It's written in C++ using [SDL2](https://www.libsdl.org/). In the past it used Gosu instead of SDL2, and the old repository can be found at [Google Code](https://freegemas.googlecode.com)
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/JoseTomasTocino/freegemas/static/images/screenshot_1.png">
@@ -27,6 +27,7 @@ After that, clone the repo:
     
 Do an out-of-source compilation and run the program:
 
+    cd freegemas
     mkdir build
     cd build
     cmake ..
@@ -35,7 +36,7 @@ Do an out-of-source compilation and run the program:
 
 ## Installation on OS X
 
-This assumes that you are already using [Homebrew](http://brew.sh/). You will need CMake and a few libraries to compile Freegemas:
+This assumes that you are already using [Homebrew](https://brew.sh/). You will need CMake and a few libraries to compile Freegemas:
 
     brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
 
@@ -60,5 +61,5 @@ Now ``freegemas.vpk`` can be tranfered and installed on a Vita.
 
 ## Music licensing
 
-The music in the game is [Easy Lemon by Kevin MacLeod](http://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200076)
-Licensed under [Creative Commons: By Attribution 3.0](http://creativecommons.org/licenses/by/3.0/)
+The music in the game is [Easy Lemon by Kevin MacLeod](https://incompetech.com/music/royalty-free/index.html?isrc=USUAN1200076)
+Licensed under [Creative Commons: By Attribution 3.0](https://creativecommons.org/licenses/by/3.0/)
