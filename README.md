@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/JoseTomasTocino/freegemas/static/images/header_gems.png"><br>
 </p>
 
-__Freegemas__ is an open source version of the well known Bejeweled, for GNU/Linux, Windows, Mac and the Playstation Vita. It's written in C++ using [SDL2](https://www.libsdl.org/). In the past it used Gosu instead of SDL2, and the old repository can be found at [Google Code](https://freegemas.googlecode.com)
+__Freegemas__ is an open source version of the well known Bejeweled, for GNU/Linux, Windows, Mac and the Playstation Vita. It's written in C++ using [SDL2](https://www.libsdl.org/). In the past it used Gosu instead of SDL2, and the old repository can be found at [Google Code](https://code.google.com/archive/p/freegemas/)
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/JoseTomasTocino/freegemas/static/images/screenshot_1.png">
@@ -52,6 +52,7 @@ After that, clone the repo:
 
 Do an out-of-source compilation:
 
+    cd freegemas
     mkdir vita
     cd vita
     cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
