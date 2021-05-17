@@ -3,7 +3,7 @@
     <img src="https://raw.githubusercontent.com/JoseTomasTocino/freegemas/static/images/header_gems.png"><br>
 </p>
 
-__Freegemas__ is an open source version of the well known Bejeweled, for GNU/Linux, Windows, Mac and the Playstation Vita. It's written in C++ using [SDL2](https://www.libsdl.org/). In the past it used Gosu instead of SDL2, and the old repository can be found at [Google Code](https://code.google.com/archive/p/freegemas/)
+__Freegemas__ is an open source version of the well known Bejeweled, for GNU/Linux, Windows, Mac and Playstation Vita. It's written in C++ using [SDL2](https://www.libsdl.org/). In the past it used Gosu instead of SDL2, and the old repository can be found at [Google Code](https://code.google.com/archive/p/freegemas/).
 
 <p align="center">
     <img src="https://raw.githubusercontent.com/JoseTomasTocino/freegemas/static/images/screenshot_1.png">
@@ -44,7 +44,7 @@ Now follow the instructions above, starting with `git clone`.
 
 ## Installation on Playstation Vita
 
-For building for the Vita, the [Vita SDK](https://vitasdk.org) should be installed.
+For building for Vita, the [Vita SDK](https://vitasdk.org) should be installed.
 
 After that, clone the repo:
 
@@ -58,7 +58,7 @@ Do an out-of-source compilation:
     cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
     make
 
-Now ``freegemas.vpk`` can be tranfered and installed on a Vita.
+Now ``freegemas.vpk`` can be tranfered and installed on Vita.
 
 ## Music licensing
 
