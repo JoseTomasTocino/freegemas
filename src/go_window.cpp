@@ -70,15 +70,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     }
 
     // Initialize game controllers
-    for (int i = 0; i < SDL_NumJoysticks(); ++i)
-    {
-        if (SDL_IsGameController(i)) {
-            gameController = SDL_GameControllerOpen(i);
-            if (gameController != NULL) {
-                break;
-            }
-        }
-    }
+    detectControllers();
 
     // Set full screen mode
     mOptions.loadResources();
@@ -156,6 +148,10 @@ void GoSDL::Window::show()
 
             case SDL_CONTROLLERBUTTONDOWN:
                 controllerButtonDown(e.cbutton.button);
+                break;
+
+            case SDL_CONTROLLERDEVICEADDED:
+                detectControllers();
                 break;
             }
         }
@@ -235,6 +231,19 @@ void GoSDL::Window::enqueueDraw(SDL_Texture * texture, SDL_Rect destRect, double
 
     // Store it in the container, sorted by depth
     mDrawingQueue.draw(z, op);
+}
+
+void GoSDL::Window::detectControllers()
+{
+    for (int i = 0; i < SDL_NumJoysticks(); ++i)
+    {
+        if (SDL_IsGameController(i)) {
+            gameController = SDL_GameControllerOpen(i);
+            if (gameController != NULL) {
+                break;
+            }
+        }
+    }
 }
 
 int GoSDL::Window::getMouseX ()
