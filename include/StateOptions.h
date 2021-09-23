@@ -73,7 +73,7 @@ private:
     GameSounds mGameSounds;
 
     /// Current highlighted option
-    int mMenuSelectedOption;
+    unsigned int mMenuSelectedOption;
 
     /// List of menu options.
     vector<string> mMenuOptions;
