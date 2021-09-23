@@ -90,7 +90,7 @@ namespace GoSDL {
          * @brief Event for the game controller button press events
          * @details It receives the pressed game controller button
          */
-        virtual void controllerButtonDown(Uint8 button) { }
+        virtual void controllerButtonDown(Uint8) { }
 
         /**
          * @brief Returns the horizontal position of the mouse
