@@ -1,4 +1,5 @@
 #include "go_window.h"
+#include "Util.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -38,7 +39,8 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
                                 SDL_WINDOW_SHOWN );
 
     // Set window icon
-    SDL_Surface* icon = IMG_Load("../media/freegemas.ico");
+    std::string iconPath = getBasePath() + "media/freegemas.ico";
+    SDL_Surface* icon = IMG_Load(iconPath.c_str());
     SDL_SetWindowIcon(mWindow, icon);
     SDL_FreeSurface(icon);
 
