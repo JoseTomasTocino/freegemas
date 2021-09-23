@@ -91,7 +91,7 @@ private:
     JewelGroupAnim mJewelAnimation;
 
     /// Current highlighted option
-    int mMenuSelectedOption;
+    unsigned int mMenuSelectedOption;
 
     GameSounds mGameSounds;
 

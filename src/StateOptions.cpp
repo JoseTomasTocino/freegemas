@@ -141,19 +141,21 @@ void StateOptions::mouseButtonDown(Uint8 button)
 
 void StateOptions::moveUp() {
     mGameSounds.playSoundSelect();
-    mMenuSelectedOption -= 1;
 
-   if (mMenuSelectedOption < 0) {
+    if (mMenuSelectedOption == 0) {
         mMenuSelectedOption = mMenuOptions.size() - 1;
+    } else {
+        mMenuSelectedOption -= 1;
     }
 }
 
 void StateOptions::moveDown() {
     mGameSounds.playSoundSelect();
-    mMenuSelectedOption += 1;
 
-   if (mMenuSelectedOption == mMenuOptions.size()) {
+    if (mMenuSelectedOption == mMenuOptions.size() - 1) {
         mMenuSelectedOption = 0;
+    } else {
+        mMenuSelectedOption += 1;
     }
 }
 
