@@ -20,11 +20,14 @@ public:
 
 private:
 
+    /// The number of milliseconds since the animation started
+    unsigned int mAnimationStartTime = 0;
+
     /// Total initial animation steps
     int mAnimationCurrentStep = 0;
 
     /// Steps for the hint animation
-    int mAnimationTotalSteps = 40;
+    int mAnimationTotalSteps = 1333;
 
     /// Hint flag
     int mShowingHint = false;

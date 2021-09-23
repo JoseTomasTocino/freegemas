@@ -15,6 +15,8 @@ void GameBoard::setGame(Game * game, StateGame * stateGame)
     mBoard.generate();
 
     mState = eBoardAppearing;
+
+    mAnimationStartTime = 0;
     mAnimationCurrentStep = 0;
 }
 
@@ -26,6 +28,7 @@ void GameBoard::resetGame()
 
     // Reset the variables
     mMultiplier = 0;
+    mAnimationStartTime = 0;
     mAnimationCurrentStep = 0;
 
     // If there's a board on screen, make it disappear first
@@ -91,6 +94,7 @@ void GameBoard::update()
     if (mState == eSteady)
     {
         mMultiplier = 0;
+        mAnimationStartTime = 0;
         mAnimationCurrentStep = 0;
     }
 
@@ -98,11 +102,16 @@ void GameBoard::update()
     else if (mState == eBoardAppearing)
     {
         // Update the animation frame
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
+
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
 
         // If the Animation.has finished, switch to steady state
-        if (mAnimationCurrentStep == mAnimationLongTotalSteps)
+        if (mAnimationCurrentStep >= mAnimationLongTotalSteps)
         {
+            mAnimationCurrentStep = mAnimationLongTotalSteps;
             mState = eSteady;
         }
     }
@@ -111,15 +120,20 @@ void GameBoard::update()
     else if (mState == eGemSwitching)
     {
         // Update the animation frame
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
+
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
 
         // If the Animation.has finished, matching gems should disappear
-        if (mAnimationCurrentStep == mAnimationShortTotalSteps)
+        if (mAnimationCurrentStep >= mAnimationShortTotalSteps)
         {
             // Winning games should disappear
             mState = eGemDisappearing;
 
             // Reset the animation
+            mAnimationStartTime = 0;
             mAnimationCurrentStep = 0;
 
             // Swap the gems in the board
@@ -141,10 +155,14 @@ void GameBoard::update()
     else if (mState == eGemDisappearing)
     {
         // Update the animation frame
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
+
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
 
         // If the Animation.has finished
-        if (mAnimationCurrentStep == mAnimationShortTotalSteps)
+        if (mAnimationCurrentStep >= mAnimationShortTotalSteps)
         {
             // Empty spaces should be filled with new gems
             mState = eBoardFilling;
@@ -162,6 +180,7 @@ void GameBoard::update()
             mBoard.calcFallMovements();
 
             // Reset the animation
+            mAnimationStartTime = 0;
             mAnimationCurrentStep = 0;
         }
     }
@@ -170,10 +189,14 @@ void GameBoard::update()
     else if (mState == eBoardFilling)
     {
         // Update the animation frame
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
+
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
 
         // If the Animation.has finished
-        if (mAnimationCurrentStep == mAnimationShortTotalSteps)
+        if (mAnimationCurrentStep >= mAnimationShortTotalSteps)
         {
             // Play the fall sound
             mGame->getGameSounds()->playSoundFall();
@@ -185,6 +208,7 @@ void GameBoard::update()
             mHintUsed = false;
 
             // Reset the animation
+            mAnimationStartTime = 0;
             mAnimationCurrentStep = 0;
 
             // Reset animations in the board
@@ -229,12 +253,17 @@ void GameBoard::update()
     else if (mState == eBoardDisappearing)
     {
         // Update the animation frame
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
+
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
 
         // If the Animation.has finished
-        if (mAnimationCurrentStep == mAnimationLongTotalSteps)
+        if (mAnimationCurrentStep >= mAnimationLongTotalSteps)
         {
             // Reset animation counter
+            mAnimationStartTime = 0;
             mAnimationCurrentStep = 0;
 
             // Generate a brand new board
@@ -249,12 +278,17 @@ void GameBoard::update()
     else if (mState == eTimeFinished)
     {
         // Update the animation frame
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
+
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
 
         // If the Animation.has finished
-        if (mAnimationCurrentStep == mAnimationLongTotalSteps)
+        if (mAnimationCurrentStep >= mAnimationLongTotalSteps)
         {
             // Reset animation counter
+            mAnimationStartTime = 0;
             mAnimationCurrentStep = 0;
 
             // Switch state
@@ -576,6 +610,7 @@ void GameBoard::mouseButtonUp(int mX, int mY)
         {
             // Switch the state and reset the animation
             mState = eGemSwitching;
+            mAnimationStartTime = 0;
             mAnimationCurrentStep = 0;
         }
     }
@@ -600,6 +635,7 @@ void GameBoard::selectGem() {
             {
                 // Switch the state and reset the animation
                 mState = eGemSwitching;
+                mAnimationStartTime = 0;
                 mAnimationCurrentStep = 0;
             }
             else
@@ -648,7 +684,7 @@ void GameBoard::createFloatingScores()
         for(size_t i = 0, s = m.size(); i < s; ++i)
         {
             mParticleSet.emplace_back(ParticleSystem(&mImgParticle1, &mImgParticle2,
-                50, 50,
+                50, 1667,
                 241 + m[i].x * 65 + 32,
                 41 + m[i].y * 65 + 32, 60, 0.5));
 

@@ -111,14 +111,17 @@ private:
     GoSDL::Image mImgYellow;
     GoSDL::Image mImgBlue;
 
+    /// The number of milliseconds since the animation started
+    unsigned int mAnimationStartTime = 0;
+
     /// Animation current step
     int mAnimationCurrentStep = 0;
 
     /// Long animation total steps
-    int mAnimationLongTotalSteps = 50;
+    int mAnimationLongTotalSteps = 1667;
 
     /// Short animation total steps
-    int mAnimationShortTotalSteps = 17;
+    int mAnimationShortTotalSteps = 567;
 
     /// Current score multiplier
     int mMultiplier = 1;

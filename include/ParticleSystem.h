@@ -20,12 +20,17 @@ namespace GoSDL {
 struct Particle{
 
     Particle(float angle, float distance, float size, int totalSteps, GoSDL::Image *img, SDL_Color color) :
-        mAngle(angle), mDistance(distance), mSize(size), mTotalSteps(totalSteps), mImage(img), mColor(color), mCurrentStep(0), mPosX(0), mPosY(0)
+        mAngle(angle), mDistance(distance), mSize(size), mTotalSteps(totalSteps), mImage(img), mColor(color), mCurrentStep(0), mPosX(0), mPosY(0), mStartTime(0)
     { }
 
     void update() {
-        if (mCurrentStep != mTotalSteps) {
-            mCurrentStep ++;
+        if (mStartTime == 0) {
+            mStartTime = SDL_GetTicks();
+        }
+
+        mCurrentStep = SDL_GetTicks() - mStartTime;
+        if (mCurrentStep > mTotalSteps) {
+            mCurrentStep = mTotalSteps;
         }
 
         float tempPos = Animacion::easeOutQuart(mCurrentStep, 0, 1, mTotalSteps);
@@ -74,6 +79,8 @@ struct Particle{
     float mPosY;
 
     float mSizeCoef;
+
+    unsigned int mStartTime;
 };
 
 
@@ -91,6 +98,7 @@ public:
                       SDL_Color color = {255, 255, 255, 255}) :
 
         mParticleQuantity(particleQuantity),
+        mStartTime(0),
         mTotalSteps(totalSteps),
         mCurrentStep(0),
         mDistance(distance),
@@ -121,8 +129,14 @@ public:
     }
 
     void draw(){
+        // Update the animation frame
+        if (mStartTime == 0) {
+            mStartTime = SDL_GetTicks();
+        }
 
-        if (++mCurrentStep < mTotalSteps){
+        mCurrentStep = SDL_GetTicks() - mStartTime;
+
+        if (mCurrentStep < mTotalSteps){
             for (unsigned i = 0; i < mParticleQuantity; ++i){
                 mParticleVector[i].update();
                 mParticleVector[i].draw(mPosX, mPosY);
@@ -136,11 +150,13 @@ private:
 
     unsigned mParticleQuantity;
 
+    unsigned int mStartTime;
+
     /// Duración del efecto
-    float mTotalSteps;
+    unsigned int mTotalSteps;
 
     /// Posición de la animación
-    float mCurrentStep;
+    unsigned int mCurrentStep;
 
     /// Distancia del efecto
     float mDistance;
