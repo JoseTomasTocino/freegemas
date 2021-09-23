@@ -53,7 +53,7 @@ public:
 
     virtual void mouseButtonUp(Uint8) { }
 
-    virtual void controllerButtonDown(Uint8 button) { }
+    virtual void controllerButtonDown(Uint8) { }
 
 
     /// Default destructor

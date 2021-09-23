@@ -65,17 +65,17 @@ void StateHowtoplay::draw()
     mImgBodyTextShadow.draw(311, 112, 0.9,  1, 1, 0, 128);
 }
 
-void StateHowtoplay::buttonDown(SDL_Keycode button)
+void StateHowtoplay::buttonDown(SDL_Keycode)
 {
         mGame -> changeState("stateMainMenu");
 }
 
-void StateHowtoplay::controllerButtonDown(Uint8 button)
+void StateHowtoplay::controllerButtonDown(Uint8)
 {
     mGame -> changeState("stateMainMenu");
 }
 
-void StateHowtoplay::mouseButtonDown(Uint8 button)
+void StateHowtoplay::mouseButtonDown(Uint8)
 {
         mGame -> changeState("stateMainMenu");
 }
