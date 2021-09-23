@@ -26,22 +26,27 @@ public:
             posX[i] = 800 / 2 - (65 * 7) / 2 + i * 65;
         }
 
+        animationStartTime = 0;
         animationCurrentStep = 0;
-        animationTotalSteps = 30;
+        animationTotalSteps = 600;
         posFinalY = 265;
     }
 
     void draw(){
 
+        if (animationStartTime == 0) {
+            animationStartTime = SDL_GetTicks();
+        }
+
         // Step the animation
         if(animationCurrentStep < 7 * 5 + animationTotalSteps) {
-            ++animationCurrentStep;
+            animationCurrentStep = SDL_GetTicks() - animationStartTime;
         }
 
         // Draw the jewels
         for(int i = 0; i < 7; ++i)
         {
-            int composedStep = animationCurrentStep - i * 5;
+            int composedStep = animationCurrentStep - i * 15;
             if(composedStep < 0) continue;
 
             if(composedStep < animationTotalSteps){
@@ -63,6 +68,7 @@ private:
 
     int posX[7], posFinalY;
 
+    unsigned int animationStartTime;
     int animationCurrentStep;
     int animationTotalSteps;
 
