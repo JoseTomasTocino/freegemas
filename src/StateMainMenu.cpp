@@ -72,7 +72,7 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     mMenuYGap = 42;
     mMenuYEnd = mMenuYStart + (int) mMenuTargets.size() * mMenuYGap;
 
-    mGameSounds.loadResources();
+    mGame->getGameSounds()->loadResources();
 }
 
 void StateMainMenu::update(){
@@ -191,7 +191,7 @@ void StateMainMenu::mouseButtonDown(Uint8 button)
 }
 
 void StateMainMenu::moveUp() {
-    mGameSounds.playSoundSelect();
+    mGame->getGameSounds()->playSoundSelect();
 
     if (mMenuSelectedOption == 0) {
         mMenuSelectedOption = mMenuTargets.size() - 1;
@@ -201,7 +201,7 @@ void StateMainMenu::moveUp() {
 }
 
 void StateMainMenu::moveDown() {
-    mGameSounds.playSoundSelect();
+    mGame->getGameSounds()->playSoundSelect();
 
     if (mMenuSelectedOption == mMenuTargets.size() - 1) {
         mMenuSelectedOption = 0;

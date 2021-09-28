@@ -79,7 +79,7 @@ void GameBoard::loadResources()
     mHint.setWindow(mGame);
 
     // Initialise the sounds
-    mGameBoardSounds.loadResources();
+    mGame->getGameSounds()->loadResources();
 }
 
 void GameBoard::update()
@@ -173,7 +173,7 @@ void GameBoard::update()
         if (mAnimationCurrentStep == mAnimationShortTotalSteps)
         {
             // Play the fall sound
-            mGameBoardSounds.playSoundFall();
+            mGame->getGameSounds()->playSoundFall();
 
             // Switch to the normal state
             mState = eSteady;
@@ -492,22 +492,22 @@ void GameBoard::buttonDown(SDL_Keycode button)
     switch(button) {
     case SDLK_LEFT:
         mMouseActive = false;
-        mGameBoardSounds.playSoundSelect();
+        mGame->getGameSounds()->playSoundSelect();
         moveSelector(-1, 0);
         break;
     case SDLK_RIGHT:
         mMouseActive = false;
-        mGameBoardSounds.playSoundSelect();
+        mGame->getGameSounds()->playSoundSelect();
         moveSelector(1, 0);
         break;
     case SDLK_UP:
         mMouseActive = false;
-        mGameBoardSounds.playSoundSelect();
+        mGame->getGameSounds()->playSoundSelect();
         moveSelector(0, -1);
         break;
     case SDLK_DOWN:
         mMouseActive = false;
-        mGameBoardSounds.playSoundSelect();
+        mGame->getGameSounds()->playSoundSelect();
         moveSelector(0, 1);
         break;
     case SDLK_SPACE:
@@ -530,25 +530,25 @@ void GameBoard::controllerButtonDown(Uint8 button)
 
         case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
             mMouseActive = false;
-            mGameBoardSounds.playSoundSelect();
+            mGame->getGameSounds()->playSoundSelect();
             moveSelector(0, 1);
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
             mMouseActive = false;
-            mGameBoardSounds.playSoundSelect();
+            mGame->getGameSounds()->playSoundSelect();
             moveSelector(-1, 0);
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_UP:
             mMouseActive = false;
-            mGameBoardSounds.playSoundSelect();
+            mGame->getGameSounds()->playSoundSelect();
             moveSelector(0, -1);
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
             mMouseActive = false;
-            mGameBoardSounds.playSoundSelect();
+            mGame->getGameSounds()->playSoundSelect();
             moveSelector(1, 0);
             break;
     }
@@ -586,7 +586,7 @@ void GameBoard::mouseButtonUp(int mX, int mY)
 }
 
 void GameBoard::selectGem() {
-    mGameBoardSounds.playSoundSelect();
+    mGame->getGameSounds()->playSoundSelect();
 
         if (mState == eSteady)
         {
@@ -666,15 +666,15 @@ void GameBoard::playMatchSound()
 {
     if (mMultiplier == 1)
     {
-        mGameBoardSounds.playSoundMatch1();
+        mGame->getGameSounds()->playSoundMatch1();
     }
     else if (mMultiplier == 2)
     {
-        mGameBoardSounds.playSoundMatch2();
+        mGame->getGameSounds()->playSoundMatch2();
     }
     else
     {
-        mGameBoardSounds.playSoundMatch3();
+        mGame->getGameSounds()->playSoundMatch3();
     }
 }
 

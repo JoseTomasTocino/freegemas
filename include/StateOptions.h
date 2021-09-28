@@ -2,7 +2,6 @@
 #define _STATEOPTIONS_H_
 
 #include "State.h"
-#include "GameSounds.h"
 #include "OptionsManager.h"
 
 #include "go_image.h"
@@ -69,8 +68,6 @@ private:
 
     /// Font for the menu entries
     GoSDL::Font mFont;
-
-    GameSounds mGameSounds;
 
     /// Current highlighted option
     unsigned int mMenuSelectedOption;

@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+#include "GameSounds.h"
 #include "go_window.h"
 #include "go_image.h"
 
@@ -31,12 +32,19 @@ public:
 
     std::string getCurrentState();
 
+    GameSounds *getGameSounds() {
+        return &mGameSounds;
+    }
+
 private:
 
     std::shared_ptr<State> mCurrentState = nullptr;
     std::string mCurrentStateString;
 
     GoSDL::Image mMouseCursor;
+
+    /// Sounds controller
+    GameSounds mGameSounds;
 
 };
 

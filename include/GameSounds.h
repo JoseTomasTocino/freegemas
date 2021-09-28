@@ -27,6 +27,8 @@ private:
     GoSDL::Sound mSfxFall;
     /// @}
 
+    bool soundsLoaded = false;
+
     OptionsManager options;
 };
 
