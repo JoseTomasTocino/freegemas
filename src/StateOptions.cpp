@@ -47,7 +47,7 @@ StateOptions::StateOptions(Game * p) : State(p)
     mMenuYGap = 42;
     mMenuYEnd = mMenuYStart + (int) mMenuOptions.size() * mMenuYGap;
 
-    mGameSounds.loadResources();
+    mGame->getGameSounds()->loadResources();
 }
 
 void StateOptions::update(){
@@ -140,7 +140,7 @@ void StateOptions::mouseButtonDown(Uint8 button)
 }
 
 void StateOptions::moveUp() {
-    mGameSounds.playSoundSelect();
+    mGame->getGameSounds()->playSoundSelect();
 
     if (mMenuSelectedOption == 0) {
         mMenuSelectedOption = mMenuOptions.size() - 1;
@@ -150,7 +150,7 @@ void StateOptions::moveUp() {
 }
 
 void StateOptions::moveDown() {
-    mGameSounds.playSoundSelect();
+    mGame->getGameSounds()->playSoundSelect();
 
     if (mMenuSelectedOption == mMenuOptions.size() - 1) {
         mMenuSelectedOption = 0;
@@ -201,6 +201,7 @@ void StateOptions::optionChosen()
             mOptions.setMusicEnabled(!mOptions.getMusicEnabled());
         } else if (option == "setSound") {
             mOptions.setSoundEnabled(!mOptions.getSoundEnabled());
+            mGame->getGameSounds()->loadResources();
         } else if (option == "setFullscreen") {
             mOptions.setFullscreenEnabled(!mOptions.getFullscreenEnabled());
             mGame->setFullscreen(mOptions.getFullscreenEnabled());

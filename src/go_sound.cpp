@@ -3,8 +3,7 @@
 
 GoSDL::Sound::~Sound ()
 {
-    if (mSample != nullptr)
-        Mix_FreeChunk(mSample);
+    unload();
 }
 
 void GoSDL::Sound::setSample (std::string path)
@@ -14,6 +13,14 @@ void GoSDL::Sound::setSample (std::string path)
     if(!mSample)
     {
         printf("Mix_LoadWAV: %s\n", Mix_GetError());
+    }
+}
+
+void GoSDL::Sound::unload ()
+{
+    if (mSample != nullptr) {
+        Mix_FreeChunk(mSample);
+        mSample = nullptr;
     }
 }
 

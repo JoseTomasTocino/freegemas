@@ -2,7 +2,6 @@
 #define GAME_BOARD_H
 
 #include "GameHint.h"
-#include "GameSounds.h"
 
 #include "Board.h"
 #include "FloatingScore.h"
@@ -97,9 +96,6 @@ private:
 
     /// Hint
     GameHint mHint;
-
-    /// Sounds controller
-    GameSounds mGameBoardSounds;
 
     /// Image for the gem selector
     GoSDL::Image mImgSelector;
