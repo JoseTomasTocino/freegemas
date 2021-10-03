@@ -1,4 +1,5 @@
 #include "go_sound.h"
+#include "Util.h"
 #include <cstdio>
 
 GoSDL::Sound::~Sound ()
@@ -8,7 +9,8 @@ GoSDL::Sound::~Sound ()
 
 void GoSDL::Sound::setSample (std::string path)
 {
-    mSample = Mix_LoadWAV(path.c_str());
+    std::string mPath = getBasePath() + path;
+    mSample = Mix_LoadWAV(mPath.c_str());
 
     if(!mSample)
     {

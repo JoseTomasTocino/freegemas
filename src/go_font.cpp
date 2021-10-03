@@ -5,6 +5,7 @@
 #include <stdexcept>
 
 #include "go_font.h"
+#include "Util.h"
 
 GoSDL::Font::Font()
 {
@@ -29,7 +30,7 @@ void GoSDL::Font::checkInit ()
 }
 
 void GoSDL::Font::setPathAndSize(std::string path, unsigned size) {
-    mPath = path;
+    mPath = getBasePath() + path;
     mSize = size;
 
     if (mFont != nullptr) {

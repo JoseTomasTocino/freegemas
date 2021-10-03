@@ -2,12 +2,13 @@
 #include "go_window.h"
 
 #include "log.h"
+#include "Util.h"
 
 GoSDL::Image::Image() : mParentWindow(NULL), mWidth(0), mHeight(0)
 { }
 
 GoSDL::Image::Image(GoSDL::Window * parentWindow, string path) :
-    mParentWindow(parentWindow), mPath(path)
+    mParentWindow(parentWindow), mPath(getBasePath() + path)
 {
     loadTexture();
 }
@@ -59,14 +60,14 @@ void GoSDL::Image::setWindow(GoSDL::Window * parentWindow)
 
 void GoSDL::Image::setPath(std::string path)
 {
-    mPath = path;
+    mPath = getBasePath() + path;
     loadTexture();
 }
 
 bool GoSDL::Image::setWindowAndPath(GoSDL::Window * parentWindow, std::string path)
 {
     mParentWindow = parentWindow;
-    mPath = path;
+    mPath = getBasePath() + path;
     return loadTexture();
 }
 
