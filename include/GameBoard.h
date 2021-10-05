@@ -134,9 +134,6 @@ private:
     int mSelectorX = 3;
     int mSelectorY = 3;
 
-    // Whether the mouse is currently being used or the keyboard
-    bool mMouseActive = true;
-
     // Track if a hint is used, to prevent score increases when so
     bool mHintUsed = false;
 };

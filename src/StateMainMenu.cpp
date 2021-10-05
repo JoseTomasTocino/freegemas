@@ -92,12 +92,14 @@ void StateMainMenu::update(){
 
     }
 
-    // Update menu highlighting according to mouse position
-    int mY = (int) mGame -> getMouseY();
+    if (mGame->isCursorVisible()) {
+        // Update menu highlighting according to mouse position
+        int mY = (int) mGame -> getMouseY();
 
-    if(mY >= mMenuYStart && mY < mMenuYEnd)
-    {
-        mMenuSelectedOption = (mY - mMenuYStart) / mMenuYGap;
+        if(mY >= mMenuYStart && mY < mMenuYEnd)
+        {
+            mMenuSelectedOption = (mY - mMenuYStart) / mMenuYGap;
+        }
     }
 }
 

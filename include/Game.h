@@ -36,6 +36,8 @@ public:
         return &mGameSounds;
     }
 
+    bool isCursorVisible() {return mMouseActive;}
+
 private:
 
     std::shared_ptr<State> mCurrentState = nullptr;
@@ -45,6 +47,13 @@ private:
 
     /// Sounds controller
     GameSounds mGameSounds;
+
+    bool mMouseActive = true;
+    int mLastMouseX;
+    int mLastMouseY;
+
+    void hideCursor();
+    void showCursor();
 
 };
 
