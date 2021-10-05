@@ -276,16 +276,18 @@ void GameBoard::update()
 
 void GameBoard::draw()
 {
-    // Get mouse position
-    int mX = (int) mGame -> getMouseX();
-    int mY = (int) mGame -> getMouseY();
+    if (mGame->isCursorVisible()) {
+        // Get mouse position
+        int mX = (int) mGame -> getMouseX();
+        int mY = (int) mGame -> getMouseY();
 
-    // Move the selector to the mouse if it is over a gem
-    if (mMouseActive && overGem(mX, mY))
-    {
-            Coord mouseCoords = getCoord(mX, mY);
-            mSelectorX = mouseCoords.x;
-            mSelectorY = mouseCoords.y;
+        // Move the selector to the mouse if it is over a gem
+        if (overGem(mX, mY))
+        {
+                Coord mouseCoords = getCoord(mX, mY);
+                mSelectorX = mouseCoords.x;
+                mSelectorY = mouseCoords.y;
+        }
     }
 
     // Draw the selector over that gem
@@ -491,22 +493,18 @@ void GameBoard::buttonDown(SDL_Keycode button)
 {
     switch(button) {
     case SDLK_LEFT:
-        mMouseActive = false;
         mGame->getGameSounds()->playSoundSelect();
         moveSelector(-1, 0);
         break;
     case SDLK_RIGHT:
-        mMouseActive = false;
         mGame->getGameSounds()->playSoundSelect();
         moveSelector(1, 0);
         break;
     case SDLK_UP:
-        mMouseActive = false;
         mGame->getGameSounds()->playSoundSelect();
         moveSelector(0, -1);
         break;
     case SDLK_DOWN:
-        mMouseActive = false;
         mGame->getGameSounds()->playSoundSelect();
         moveSelector(0, 1);
         break;
@@ -529,25 +527,21 @@ void GameBoard::controllerButtonDown(Uint8 button)
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-            mMouseActive = false;
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(0, 1);
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-            mMouseActive = false;
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(-1, 0);
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_UP:
-            mMouseActive = false;
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(0, -1);
             break;
 
         case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-            mMouseActive = false;
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(1, 0);
             break;
@@ -560,7 +554,6 @@ void GameBoard::mouseButtonDown(int mouseX, int mouseY)
     // A gem was clicked
     if (overGem(mouseX, mouseY))
     {
-        mMouseActive = true;
         Coord mouseCoords = getCoord(mouseX, mouseY);
         mSelectorX = mouseCoords.x;
         mSelectorY = mouseCoords.y;

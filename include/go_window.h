@@ -103,16 +103,6 @@ namespace GoSDL {
         int getMouseY();
 
         /**
-         * @brief Shows the OS mouse cursor
-         */
-        void showCursor();
-
-        /**
-         * @brief Hides the OS mouse cursor
-         */
-        void hideCursor();
-
-        /**
          * @brief Allows setting the fullscreen mode
          */
         void setFullscreen(bool value);

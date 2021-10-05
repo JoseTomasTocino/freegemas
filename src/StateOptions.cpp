@@ -52,12 +52,14 @@ StateOptions::StateOptions(Game * p) : State(p)
 
 void StateOptions::update(){
 
-    // Update menu highlighting according to mouse position
-    int mY = (int) mGame -> getMouseY();
+    if (mGame->isCursorVisible()) {
+        // Update menu highlighting according to mouse position
+        int mY = (int) mGame -> getMouseY();
 
-    if(mY >= mMenuYStart && mY < mMenuYEnd)
-    {
-        mMenuSelectedOption = (mY - mMenuYStart) / mMenuYGap;
+        if(mY >= mMenuYStart && mY < mMenuYEnd)
+        {
+            mMenuSelectedOption = (mY - mMenuYStart) / mMenuYGap;
+        }
     }
 }
 
@@ -76,7 +78,6 @@ void StateOptions::draw(){
         // Draw the text and the shadow
         mMenuRenderedTexts[i].draw(posX, posY, 3);
         mMenuRenderedShadows[i].draw(posX, posY + 2, 2.9, 1, 1, 0, 128);
-
     }
 
     // Draw the menu highlighting
@@ -129,7 +130,6 @@ void StateOptions::mouseButtonDown(Uint8 button)
 {
     if (button == SDL_BUTTON_LEFT)
     {
-
         // Get mouse vertical position
         int mY = mGame->getMouseY();
 
