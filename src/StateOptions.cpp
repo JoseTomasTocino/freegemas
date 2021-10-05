@@ -101,6 +101,7 @@ void StateOptions::buttonDown(SDL_Keycode button)
 
         case SDLK_RETURN:
         case SDLK_KP_ENTER:
+        case SDLK_SPACE:
             optionChosen();
             break;
     }
