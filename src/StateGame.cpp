@@ -18,6 +18,7 @@ StateGame::StateGame(Game * p) : State(p)
     // Initialise game board
     mGameBoard.setGame(p, this);
 
+    // Load the loading screen
     GoSDL::Font tempLoadingFont;
     tempLoadingFont.setAll(mGame, "media/fuenteMenu.ttf", 64);
 
