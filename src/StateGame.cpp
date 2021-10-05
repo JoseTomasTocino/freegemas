@@ -1,6 +1,7 @@
 #include "StateGame.h"
 
 #include "Game.h"
+#include "inter.h"
 
 #include <map>
 #include <string>
@@ -17,8 +18,10 @@ StateGame::StateGame(Game * p) : State(p)
     // Initialise game board
     mGameBoard.setGame(p, this);
 
-    // Load the loading screen
-    mImgLoadingBanner.setWindowAndPath(p, "media/loadingBanner.png");
+    GoSDL::Font tempLoadingFont;
+    tempLoadingFont.setAll(mGame, "media/fuenteMenu.ttf", 64);
+
+    mImgLoadingBanner = tempLoadingFont.renderText(_("Loading..."), {255, 255, 255, 255});
 }
 
 StateGame::~StateGame ()
@@ -31,7 +34,7 @@ void StateGame::draw()
     // On this state, show the loading screen and switch the state
     if (mState == eInitial)
     {
-        mImgLoadingBanner.draw(156, 200, 2);
+        mImgLoadingBanner.draw(280, 250, 2);
         setState(eStartLoading);
 
         return;
