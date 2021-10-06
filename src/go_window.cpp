@@ -35,7 +35,11 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     // Create window
     mWindow = SDL_CreateWindow( mCaption.c_str(),
                                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                                mWidth, mHeight,
+                                #ifdef __vita__
+                                    960, 544,
+                                #else
+                                    mWidth, mHeight,
+                                #endif
                                 SDL_WINDOW_RESIZABLE );
 
     // Set window icon
