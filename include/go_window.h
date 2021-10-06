@@ -115,6 +115,9 @@ namespace GoSDL {
         void enqueueDraw(SDL_Texture * texture, SDL_Rect destRect, double angle, float z, Uint8 alpha, SDL_Color color);
         void detectControllers();
 
+        // Texture used as render target
+        SDL_Texture * mScreen;
+
         /// Window width
         unsigned mWidth;
 

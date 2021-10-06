@@ -36,7 +36,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     mWindow = SDL_CreateWindow( mCaption.c_str(),
                                 SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                 mWidth, mHeight,
-                                SDL_WINDOW_SHOWN );
+                                SDL_WINDOW_RESIZABLE );
 
     // Set window icon
     std::string iconPath = getBasePath() + "media/freegemas.ico";
@@ -59,6 +59,10 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     {
         throw std::runtime_error(SDL_GetError());
     }
+
+    // Initialize texture to draw to
+    mScreen = SDL_CreateTexture(mRenderer, SDL_PIXELFORMAT_RGBA8888,
+                                 SDL_TEXTUREACCESS_TARGET, mWidth, mHeight);
 
     // Initialize renderer color
     SDL_SetRenderDrawColor( mRenderer, 0, 0, 0, 255 );
@@ -117,6 +121,9 @@ void GoSDL::Window::show()
 
         // Get ticks
         newTicks = SDL_GetTicks();
+
+        // Render to a texture first instead of directly to the window
+        SDL_SetRenderTarget(mRenderer, mScreen);
 
         // Get ticks from last frame and compare with framerate
         if (newTicks - mLastTicks < mUpdateInterval)
@@ -204,6 +211,10 @@ void GoSDL::Window::show()
 
         // Empty the drawing queue
         mDrawingQueue.clear();
+
+        // Render screen texture stretched out over the window
+        SDL_SetRenderTarget(mRenderer, NULL);
+        SDL_RenderCopy(mRenderer, mScreen, NULL, NULL);
 
         // Update the screen
         SDL_RenderPresent (mRenderer);
