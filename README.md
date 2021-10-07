@@ -17,7 +17,7 @@ First, you need to install git and gcc:
 
     sudo apt-get install git build-essential cmake
 
-Next, install SDL2 from the repositories:
+Next, install SDL2 and JsonCpp from the repositories:
 
     sudo apt-get install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev
     
