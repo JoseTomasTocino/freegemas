@@ -79,12 +79,10 @@ private:
     /// Image for the clock
     GoSDL::Image mImgTime;
     GoSDL::Image mImgTimeHeader;
-    GoSDL::Image mImgTimeHeaderShadow;
 
     /// Image for the current-score
     GoSDL::Image mImgScore;
     GoSDL::Image mImgScoreHeader;
-    GoSDL::Image mImgScoreHeaderShadow;
 
     /// @{
     /// @name Buttons of the interface

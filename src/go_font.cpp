@@ -72,10 +72,24 @@ GoSDL::Image GoSDL::Font::renderText (std::string text, SDL_Color color) {
     return surfaceToImage(tempSurface);
 }
 
+GoSDL::Image GoSDL::Font::renderTextWithShadow (std::string text, SDL_Color color, int shadowX, int shadowY, SDL_Color shadowColor) {
+
+    SDL_Surface * textSurface = TTF_RenderUTF8_Blended(mFont, text.c_str(), color);
+    SDL_Surface * shadowSurface = TTF_RenderUTF8_Blended(mFont, text.c_str(), shadowColor);
+    return surfaceToImageWithShadow(textSurface, shadowSurface, shadowX, shadowY);
+}
+
 GoSDL::Image GoSDL::Font::renderBlock (std::string text, SDL_Color color, unsigned width) {
 
     SDL_Surface * tempSurface = TTF_RenderUTF8_Blended_Wrapped(mFont, text.c_str(), color, width);
     return surfaceToImage(tempSurface);
+}
+
+GoSDL::Image GoSDL::Font::renderBlockWithShadow (std::string text, SDL_Color color, unsigned width, int shadowX, int shadowY, SDL_Color shadowColor) {
+
+    SDL_Surface * textSurface = TTF_RenderUTF8_Blended_Wrapped(mFont, text.c_str(), color, width);
+    SDL_Surface * shadowSurface = TTF_RenderUTF8_Blended_Wrapped(mFont, text.c_str(), shadowColor, width);
+    return surfaceToImageWithShadow(textSurface, shadowSurface, shadowX, shadowY);
 }
 
 GoSDL::Image GoSDL::Font::surfaceToImage (SDL_Surface * tempSurface) {
@@ -88,4 +102,28 @@ GoSDL::Image GoSDL::Font::surfaceToImage (SDL_Surface * tempSurface) {
     img.setTexture(tempTexture);
 
     return img;
+}
+
+GoSDL::Image GoSDL::Font::surfaceToImageWithShadow (SDL_Surface * textSurface, SDL_Surface * shadowSurface, int shadowX, int shadowY) {
+    SDL_Rect rect;
+
+    SDL_Surface * tempSurface = SDL_CreateRGBSurfaceWithFormat(0, shadowX + shadowSurface->w, shadowY + shadowSurface->h, 32, SDL_PIXELFORMAT_RGBA32);
+
+    rect.x = shadowX;
+    rect.y = shadowY;
+    rect.w = shadowSurface->w;
+    rect.w = shadowSurface->h;
+    SDL_SetSurfaceBlendMode(shadowSurface, SDL_BLENDMODE_NONE);
+    SDL_BlitSurface(shadowSurface, NULL, tempSurface, &rect);
+    SDL_FreeSurface(shadowSurface);
+
+    rect.x = 0;
+    rect.y = 0;
+    rect.w = textSurface->w;
+    rect.w = textSurface->h;
+    SDL_SetSurfaceBlendMode(textSurface, SDL_BLENDMODE_BLEND);
+    SDL_BlitSurface(textSurface, NULL, tempSurface, &rect);
+    SDL_FreeSurface(textSurface);
+
+    return surfaceToImage(tempSurface);
 }

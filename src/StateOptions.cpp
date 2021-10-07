@@ -81,7 +81,6 @@ void StateOptions::draw(){
 
         // Draw the text and the shadow
         mMenuRenderedTexts[i].draw(posX, posY, 3);
-        mMenuRenderedShadows[i].draw(posX, posY + 2, 2.9, 1, 1, 0, 128);
     }
 
     // Draw the menu highlighting
@@ -167,7 +166,6 @@ void StateOptions::moveDown() {
 void StateOptions::updateButtonTexts()
 {
     vector<GoSDL::Image> renderedTexts;
-    vector<GoSDL::Image> renderedShadows;
 
     // Option strings
     std::string musicText = _("Music: ");
@@ -179,25 +177,15 @@ void StateOptions::updateButtonTexts()
     fullscreenText += std::string(mOptions.getFullscreenEnabled() ? _("On") : _("Off"));
 
     // Menu text items
-    SDL_Color menuTextColor = {255, 255, 255, 255};
-    renderedTexts.push_back(mFont.renderText(musicText, menuTextColor));
-    renderedTexts.push_back(mFont.renderText(soundText, menuTextColor));
+    SDL_Color menuTextColor = {255, 255, 255, 255}, menuShadowColor = {0,0,0, 128};
+    renderedTexts.push_back(mFont.renderTextWithShadow(musicText, menuTextColor, 0, 2, menuShadowColor));
+    renderedTexts.push_back(mFont.renderTextWithShadow(soundText, menuTextColor, 0, 2, menuShadowColor));
     #ifndef __vita__
-        renderedTexts.push_back(mFont.renderText(fullscreenText, menuTextColor));
+        renderedTexts.push_back(mFont.renderTextWithShadow(fullscreenText, menuTextColor, 0, 2, menuShadowColor));
     #endif
-    renderedTexts.push_back(mFont.renderText(_("Back"), menuTextColor));
-
-    // Menu shadows
-    menuTextColor = {0,0,0, 255};
-    renderedShadows.push_back(mFont.renderText(musicText, menuTextColor));
-    renderedShadows.push_back(mFont.renderText(soundText, menuTextColor));
-    #ifndef __vita__
-        renderedShadows.push_back(mFont.renderText(fullscreenText, menuTextColor));
-    #endif
-    renderedShadows.push_back(mFont.renderText(_("Back"), menuTextColor));
+    renderedTexts.push_back(mFont.renderTextWithShadow(_("Back"), menuTextColor, 0, 2, menuShadowColor));
 
     mMenuRenderedTexts.swap(renderedTexts);
-    mMenuRenderedShadows.swap(renderedShadows);
 }
 
 void StateOptions::optionChosen()

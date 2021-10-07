@@ -45,20 +45,12 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     mMenuTargets = {"stateGameTimetrial", "stateGameEndless", "stateHowtoplay", "stateOptions", "stateQuit"};
 
     // Menu text items
-    SDL_Color menuTextColor = {255, 255, 255, 255};
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Timetrial mode"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Endless mode"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("How to play?"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Options"), menuTextColor));
-    mMenuRenderedTexts.push_back(mFont.renderText(_("Exit"), menuTextColor));
-
-    // Menu shadows
-    menuTextColor = {0,0,0, 255};
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Timetrial mode"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Endless mode"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("How to play?"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Options"), menuTextColor));
-    mMenuRenderedShadows.push_back(mFont.renderText(_("Exit"), menuTextColor));
+    SDL_Color menuTextColor = {255, 255, 255, 255}, menuShadowColor = {0, 0, 0, 128};
+    mMenuRenderedTexts.push_back(mFont.renderTextWithShadow(_("Timetrial mode"), menuTextColor, 0, 2, menuShadowColor));
+    mMenuRenderedTexts.push_back(mFont.renderTextWithShadow(_("Endless mode"), menuTextColor, 0, 2, menuShadowColor));
+    mMenuRenderedTexts.push_back(mFont.renderTextWithShadow(_("How to play?"), menuTextColor, 0, 2, menuShadowColor));
+    mMenuRenderedTexts.push_back(mFont.renderTextWithShadow(_("Options"), menuTextColor, 0, 2, menuShadowColor));
+    mMenuRenderedTexts.push_back(mFont.renderTextWithShadow(_("Exit"), menuTextColor, 0, 2, menuShadowColor));
 
     // Jewel group animation
     mJewelAnimation.loadResources(p);
@@ -124,8 +116,6 @@ void StateMainMenu::draw(){
 
         // Draw the text and the shadow
         mMenuRenderedTexts[i].draw(posX, posY, 3);
-        mMenuRenderedShadows[i].draw(posX, posY + 2, 2.9, 1, 1, 0, 128);
-
     }
 
     // Draw the menu highlighting
