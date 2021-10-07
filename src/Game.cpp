@@ -9,7 +9,7 @@
 
 
 Game::Game ()
-    : GoSDL::Window(800, 600, "FreeGemas")
+    : GoSDL::Window(800, 600, "Freegemas")
 {
     lDEBUG << Log::CON("Game");
 
