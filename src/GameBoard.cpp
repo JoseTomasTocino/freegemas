@@ -63,7 +63,6 @@ void GameBoard::endGame(int score)
 
 void GameBoard::loadResources()
 {
-    mImgBoard.setWindowAndPath(mGame, "media/gemBoard.png");
     mImgWhite.setWindowAndPath(mGame, "media/gemWhite.png");
     mImgRed.setWindowAndPath(mGame, "media/gemRed.png");
     mImgPurple.setWindowAndPath(mGame, "media/gemPurple.png");

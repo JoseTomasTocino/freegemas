@@ -103,7 +103,6 @@ private:
     /// Image for the gem selector
     GoSDL::Image mImgSelector;
 
-    GoSDL::Image mImgBoard;
     GoSDL::Image mImgWhite;
     GoSDL::Image mImgRed;
     GoSDL::Image mImgPurple;
