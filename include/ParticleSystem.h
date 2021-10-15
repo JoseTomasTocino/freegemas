@@ -19,7 +19,7 @@ namespace GoSDL {
 
 struct Particle{
 
-    Particle(float angle, float distance, float size, int totalSteps, GoSDL::Image img, SDL_Color color) :
+    Particle(float angle, float distance, float size, int totalSteps, GoSDL::Image *img, SDL_Color color) :
         mAngle(angle), mDistance(distance), mSize(size), mTotalSteps(totalSteps), mImage(img), mColor(color), mCurrentStep(0), mPosX(0), mPosY(0)
     { }
 
@@ -38,14 +38,14 @@ struct Particle{
 
         mSizeCoef = mSize * (1 - tempPos);
 
-        mPosX = tempPos * mDistance * std::cos(mAngle * 3.141592 / 180) - mImage.getWidth() * mSizeCoef / 2;
-        mPosY = tempPos * mDistance * std::sin(mAngle * 3.141592 / 180) - mImage.getHeight() * mSizeCoef / 2;
+        mPosX = tempPos * mDistance * std::cos(mAngle * 3.141592 / 180) - mImage->getWidth() * mSizeCoef / 2;
+        mPosY = tempPos * mDistance * std::sin(mAngle * 3.141592 / 180) - mImage->getHeight() * mSizeCoef / 2;
 
 
     }
 
     void draw(int oX, int oY){
-        mImage.draw(oX + mPosX, oY + mPosY, 7, mSizeCoef, mSizeCoef, 0, 255, mColor);
+        mImage->draw(oX + mPosX, oY + mPosY, 7, mSizeCoef, mSizeCoef, 0, 255, mColor);
     }
 
     float estado(){
@@ -61,7 +61,7 @@ struct Particle{
 
     int mTotalSteps;
 
-    GoSDL::Image mImage;
+    GoSDL::Image *mImage;
 
     SDL_Color mColor;
 
@@ -80,7 +80,8 @@ struct Particle{
 class ParticleSystem{
 
 public:
-    ParticleSystem(GoSDL::Window * parentWindow,
+    ParticleSystem(GoSDL::Image *imgParticle1,
+                      GoSDL::Image *imgParticle2,
                       unsigned particleQuantity,
                       unsigned totalSteps,
                       int x,
@@ -99,10 +100,6 @@ public:
         mPosY(y),
         mActive(true)
     {
-        // Load the images for the particles
-        mImgParticle1.setWindowAndPath(parentWindow, "media/partc1.png");
-        mImgParticle2.setWindowAndPath(parentWindow, "media/partc2.png");
-
         // Reserve the space for the particles
         mParticleVector.reserve(mParticleQuantity);
 
@@ -113,7 +110,7 @@ public:
                                     getRandomFloat(0, 1) * mDistance,
                                     getRandomFloat(0, mScale) + 1,
                                     getRandomFloat(0.1, 1) * mTotalSteps,
-                                    (rand() > RAND_MAX / 2 ? mImgParticle1 : mImgParticle2),
+                                    (rand() > RAND_MAX / 2 ? imgParticle1 : imgParticle2),
                                     mColor));
         }
 
@@ -153,9 +150,6 @@ private:
 
     /// Color de las partículas
     SDL_Color mColor;
-
-    /// Imágenes de las partículas
-    GoSDL::Image mImgParticle1, mImgParticle2;
 
     /// Contenedor para las partículas
     vector<Particle> mParticleVector;
