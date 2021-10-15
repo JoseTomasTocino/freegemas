@@ -80,7 +80,7 @@ private:
     bool mHasIcon;
 
     /// Font used for the button's label
-    GoSDL::Image mImgCaption, mImgCaptionShadow;
+    GoSDL::Image mImgCaption;
 
     /// Position of the label within the button
     int mTextHorizontalPosition;

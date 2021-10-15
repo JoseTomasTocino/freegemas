@@ -29,11 +29,9 @@ void GameIndicators::loadResources()
     GoSDL::Font tempHeaderFont;
     tempHeaderFont.setAll(mGame, "media/fuenteNormal.ttf", 37);
 
-    mImgScoreHeader = tempHeaderFont.renderText(_("score"), {160, 169, 255, 255});
-    mImgScoreHeaderShadow = tempHeaderFont.renderText(_("score"), {0,0,0, 255});
+    mImgScoreHeader = tempHeaderFont.renderTextWithShadow(_("score"), {160, 169, 255, 255}, 1, 1, {0, 0, 0, 128});
 
-    mImgTimeHeader = tempHeaderFont.renderText(_("time left"), {160, 169, 255, 255});
-    mImgTimeHeaderShadow = tempHeaderFont.renderText(_("time left"), {0,0,0, 255});
+    mImgTimeHeader = tempHeaderFont.renderTextWithShadow(_("time left"), {160, 169, 255, 255}, 1, 1, {0, 0, 0, 128});
 
     // Load the background image for the time
     mImgTimeBackground.setWindowAndPath(mGame, "media/timeBackground.png");
@@ -127,14 +125,12 @@ void GameIndicators::draw()
     // Draw the score
     mImgScoreBackground.draw(17, 124, 2);
     mImgScoreHeader.draw(17 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 84, 3);
-    mImgScoreHeaderShadow.draw(18 + mImgScoreBackground.getWidth() / 2 - mImgScoreHeader.getWidth() / 2, 85, 2.95,  1, 1, 0, 128);
     mImgScore.draw(197 - mImgScore.getWidth(), 127, 2);
 
     // Draw the time
     if (mTimeEnabled) {
         mImgTimeBackground.draw(17, 230, 2);
         mImgTimeHeader . draw(17 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 190, 3);
-        mImgTimeHeaderShadow . draw(18 + mImgTimeBackground.getWidth() / 2 - mImgTimeHeader.getWidth() / 2, 191, 2, 1, 1, 0, 128);
         mImgTime.draw(190 - mImgTime.getWidth(), 232, 2);
     }
 }

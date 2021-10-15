@@ -95,7 +95,6 @@ private:
     /// List of menu options.
     vector<string> mMenuTargets;
     vector<GoSDL::Image> mMenuRenderedTexts;
-    vector<GoSDL::Image> mMenuRenderedShadows;
 
     /// It gets executed when the user choses an option. It changes the state
     ///  to the proper one.
