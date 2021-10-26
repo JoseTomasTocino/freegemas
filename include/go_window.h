@@ -107,6 +107,11 @@ namespace GoSDL {
          */
         void setFullscreen(bool value);
 
+        /**
+         * @brief Allows setting the scale quality
+         */
+        void setFiltering(bool value);
+
     private:
         friend class Image;
         friend class Font;
