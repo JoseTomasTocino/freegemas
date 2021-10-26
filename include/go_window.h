@@ -95,12 +95,12 @@ namespace GoSDL {
         /**
          * @brief Returns the horizontal position of the mouse
          */
-        int getMouseX();
+        int getMouseX() { return mMouseX; }
 
         /**
          * @brief Returns the vertical position of the mouse
          */
-        int getMouseY();
+        int getMouseY() { return mMouseY; }
 
         /**
          * @brief Allows setting the fullscreen mode
@@ -118,11 +118,17 @@ namespace GoSDL {
         // Texture used as render target
         SDL_Texture * mScreen;
 
-        /// Window width
+        /// Screen width
         unsigned mWidth;
 
-        /// Window height
+        /// Screen height
         unsigned mHeight;
+
+        /// Window width
+        int mWindowWidth;
+
+        /// Window height
+        int mWindowHeight;
 
         /// Window's caption
         std::string mCaption;
@@ -140,6 +146,9 @@ namespace GoSDL {
         Uint32 mLastTicks;
 
         SDL_GameController *gameController = NULL;
+
+        /// Mouse coordinates
+        int mMouseX, mMouseY;
 
         /// Main rendering window
         SDL_Window * mWindow = NULL;
