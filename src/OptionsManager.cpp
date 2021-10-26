@@ -78,6 +78,11 @@ void OptionsManager::setFullscreenEnabled(bool value) {
     writeOptions();
 }
 
+void OptionsManager::setFilteringEnabled(bool value) {
+    options["filteringEnabled"] = value;
+    writeOptions();
+}
+
 int OptionsManager::getHighscoreTimetrial() {
     return options.get("highscoreTimetrial", 0).asInt();
 }
@@ -96,4 +101,8 @@ bool OptionsManager:: getSoundEnabled() {
 
 bool OptionsManager:: getFullscreenEnabled() {
     return options.get("fullscreenEnabled", false).asBool();
+}
+
+bool OptionsManager:: getFilteringEnabled() {
+    return options.get("filteringEnabled", true).asBool();
 }

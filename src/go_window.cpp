@@ -8,7 +8,7 @@ using namespace std;
 
 
 GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, bool fullscreen, double updateInterval) :
-    mWidth(width), mHeight(height), mCaption(caption), mFullscreen(fullscreen), mUpdateInterval(updateInterval)
+    mScreen(nullptr), mWidth(width), mHeight(height), mCaption(caption), mFullscreen(fullscreen), mUpdateInterval(updateInterval)
 {
     // Get starting ticks
     mLastTicks = SDL_GetTicks();
@@ -19,12 +19,6 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) < 0)
     {
         throw std::runtime_error(SDL_GetError());
-    }
-
-    // Set texture filtering to linear
-    if (!SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
-    {
-        cerr << "Warning: Linear texture filtering not enabled!" << endl;
     }
 
     if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
@@ -54,6 +48,10 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
         throw std::runtime_error(SDL_GetError());
     }
 
+    // Load options
+    mOptions.loadResources();
+    setFullscreen(mOptions.getFullscreenEnabled());
+    setFiltering(mOptions.getFilteringEnabled());
 
     // Create renderer for the window
     mRenderer = SDL_CreateRenderer( mWindow, -1, SDL_RENDERER_ACCELERATED );
@@ -81,11 +79,6 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
 
     // Initialize game controllers
     detectControllers();
-
-    // Set full screen mode
-    mOptions.loadResources();
-    setFullscreen(mOptions.getFullscreenEnabled());
-
     // Hide cursor
     SDL_ShowCursor(0);
 }
@@ -289,4 +282,14 @@ void GoSDL::Window::setFullscreen(bool value)
     } else {
         SDL_SetWindowFullscreen(mWindow, 0);
     }
+}
+
+void GoSDL::Window::setFiltering(bool value)
+{
+#if SDL_VERSION_ATLEAST(2, 0, 12)
+    if (mScreen) {
+        SDL_SetTextureScaleMode(mScreen, value ? SDL_ScaleModeLinear : SDL_ScaleModeNearest);
+    }
+#endif
+    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, value ? "1" : "0");
 }
