@@ -21,12 +21,14 @@ class OptionsManager
         void setMusicEnabled(bool value);
         void setSoundEnabled(bool value);
         void setFullscreenEnabled(bool value);
+        void setFilteringEnabled(bool value);
 
         int getHighscoreTimetrial();
         int getHighscoreEndless();
         bool getMusicEnabled();
         bool getSoundEnabled();
         bool getFullscreenEnabled();
+        bool getFilteringEnabled();
 
 
     private:

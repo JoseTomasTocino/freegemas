@@ -39,9 +39,9 @@ StateOptions::StateOptions(Game * p) : State(p)
 
     // Menu target states
     #ifdef __vita__
-        mMenuOptions = {"setMusic", "setSound", "back"};
+        mMenuOptions = {"setMusic", "setSound", "setFiltering", "back"};
     #else
-        mMenuOptions = {"setMusic", "setSound", "setFullscreen", "back"};
+        mMenuOptions = {"setMusic", "setSound", "setFullscreen", "setFiltering", "back"};
     #endif
 
     updateButtonTexts();
@@ -171,10 +171,12 @@ void StateOptions::updateButtonTexts()
     std::string musicText = _("Music: ");
     std::string soundText = _("Sound: ");
     std::string fullscreenText = _("Fullscreen: ");
+    std::string filteringText = _("Scale quality: ");
 
     musicText += std::string(mOptions.getMusicEnabled() ? _("On") : _("Off"));
     soundText += std::string(mOptions.getSoundEnabled() ? _("On") : _("Off"));
     fullscreenText += std::string(mOptions.getFullscreenEnabled() ? _("On") : _("Off"));
+    filteringText += std::string(mOptions.getFilteringEnabled() ? _("Linear") : _("Nearest"));
 
     // Menu text items
     SDL_Color menuTextColor = {255, 255, 255, 255}, menuShadowColor = {0,0,0, 128};
@@ -183,6 +185,7 @@ void StateOptions::updateButtonTexts()
     #ifndef __vita__
         renderedTexts.push_back(mFont.renderTextWithShadow(fullscreenText, menuTextColor, 0, 2, menuShadowColor));
     #endif
+    renderedTexts.push_back(mFont.renderTextWithShadow(filteringText, menuTextColor, 0, 2, menuShadowColor));
     renderedTexts.push_back(mFont.renderTextWithShadow(_("Back"), menuTextColor, 0, 2, menuShadowColor));
 
     mMenuRenderedTexts.swap(renderedTexts);
@@ -202,6 +205,9 @@ void StateOptions::optionChosen()
         } else if (option == "setFullscreen") {
             mOptions.setFullscreenEnabled(!mOptions.getFullscreenEnabled());
             mGame->setFullscreen(mOptions.getFullscreenEnabled());
+        } else if (option == "setFiltering") {
+            mOptions.setFilteringEnabled(!mOptions.getFilteringEnabled());
+            mGame->setFiltering(mOptions.getFilteringEnabled());
         }
         updateButtonTexts();
     }
