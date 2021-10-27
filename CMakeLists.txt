@@ -1,16 +1,6 @@
 project(freegemas_project)
 cmake_minimum_required(VERSION 2.6)
 
-if (!VITA)
-	include(FindPkgConfig)
-
-	pkg_search_module(SDL2 REQUIRED sdl2)
-	pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
-	pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
-	pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
-	pkg_search_module(JSONCPP REQUIRED jsoncpp)
-ENDIF()
-
 # Append custom gettext path to CMAKE_PREFIX_PATH - only necessary on OS X.
 if (CMAKE_HOST_APPLE)
     find_program(HOMEBREW_PROG brew)
@@ -122,33 +112,41 @@ if (VITA)
 		    FILE media media
 	)
 ELSE()
-include_directories(
-    ${PROJECT_SOURCE_DIR}/include
+	find_package(PkgConfig REQUIRED)
 
-    ${SDL2_INCLUDE_DIRS}
-    ${SDL2IMAGE_INCLUDE_DIRS}
-    ${SDL2TTF_INCLUDE_DIRS}
-    ${SDL2MIXER_INCLUDE_DIRS}
-    ${LIBINTL_INCLUDE_DIRS}
-	${JSONCPP_INCLUDE_DIRS}
-)
+	pkg_search_module(SDL2 REQUIRED sdl2)
+	pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+	pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+	pkg_search_module(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
+	pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
-target_link_libraries(freegemas
-  ${SDL2_LIBRARIES}
-  ${SDL2IMAGE_LIBRARIES}
-  ${SDL2TTF_LIBRARIES}
-  ${SDL2MIXER_LIBRARIES}
-  ${LIBINTL_LIBRARIES}
-  ${JSONCPP_LIBRARIES}
-)
+	include_directories(
+		${PROJECT_SOURCE_DIR}/include
 
-add_custom_target(
-  link_media_folder
-  COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
-)
+		${SDL2_INCLUDE_DIRS}
+		${SDL2IMAGE_INCLUDE_DIRS}
+		${SDL2TTF_INCLUDE_DIRS}
+		${SDL2MIXER_INCLUDE_DIRS}
+		${LIBINTL_INCLUDE_DIRS}
+		${JSONCPP_INCLUDE_DIRS}
+	)
 
-add_dependencies(
-  freegemas
-  link_media_folder
-)
+	target_link_libraries(freegemas
+	${SDL2_LIBRARIES}
+	${SDL2IMAGE_LIBRARIES}
+	${SDL2TTF_LIBRARIES}
+	${SDL2MIXER_LIBRARIES}
+	${LIBINTL_LIBRARIES}
+	${JSONCPP_LIBRARIES}
+	)
+
+	add_custom_target(
+	link_media_folder
+	COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
+	)
+
+	add_dependencies(
+	freegemas
+	link_media_folder
+	)
 ENDIF()
