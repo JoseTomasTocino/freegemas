@@ -63,7 +63,6 @@ void GameBoard::endGame(int score)
 
 void GameBoard::loadResources()
 {
-    mImgBoard.setWindowAndPath(mGame, "media/gemBoard.png");
     mImgWhite.setWindowAndPath(mGame, "media/gemWhite.png");
     mImgRed.setWindowAndPath(mGame, "media/gemRed.png");
     mImgPurple.setWindowAndPath(mGame, "media/gemPurple.png");
@@ -74,6 +73,10 @@ void GameBoard::loadResources()
 
     // Load the image for the square selector
     mImgSelector.setWindowAndPath(mGame, "media/selector.png");
+
+    // Load the images for the particles
+    mImgParticle1.setWindowAndPath(mGame, "media/partc1.png");
+    mImgParticle2.setWindowAndPath(mGame, "media/partc2.png");
 
     // Initialise the hint
     mHint.setWindow(mGame);
@@ -644,7 +647,7 @@ void GameBoard::createFloatingScores()
         // Create a new particle system for it to appear over the square
         for(size_t i = 0, s = m.size(); i < s; ++i)
         {
-            mParticleSet.emplace_back(ParticleSystem(mGame,
+            mParticleSet.emplace_back(ParticleSystem(&mImgParticle1, &mImgParticle2,
                 50, 50,
                 241 + m[i].x * 65 + 32,
                 41 + m[i].y * 65 + 32, 60, 0.5));

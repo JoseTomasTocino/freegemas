@@ -97,10 +97,12 @@ private:
     /// Hint
     GameHint mHint;
 
+    /// Imágenes de las partículas
+    GoSDL::Image mImgParticle1, mImgParticle2;
+
     /// Image for the gem selector
     GoSDL::Image mImgSelector;
 
-    GoSDL::Image mImgBoard;
     GoSDL::Image mImgWhite;
     GoSDL::Image mImgRed;
     GoSDL::Image mImgPurple;
