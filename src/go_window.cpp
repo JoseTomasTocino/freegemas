@@ -54,6 +54,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
         throw std::runtime_error(SDL_GetError());
     }
 
+    SDL_GetWindowSize(mWindow, &mWindowWidth, &mWindowHeight);
 
     // Create renderer for the window
     mRenderer = SDL_CreateRenderer( mWindow, -1, SDL_RENDERER_ACCELERATED );
@@ -154,6 +155,11 @@ void GoSDL::Window::show()
                 buttonUp(e.key.keysym.sym);
                 break;
 
+            case SDL_MOUSEMOTION:
+                mMouseX = (e.motion.x * mWidth) / mWindowWidth;
+                mMouseY = (e.motion.y * mHeight) / mWindowHeight;
+                break;
+
             case SDL_MOUSEBUTTONDOWN:
                 mouseButtonDown(e.button.button);
                 break;
@@ -168,6 +174,17 @@ void GoSDL::Window::show()
 
             case SDL_CONTROLLERDEVICEADDED:
                 detectControllers();
+                break;
+
+            case SDL_WINDOWEVENT:
+                switch (e.window.event)
+                {
+
+                case SDL_WINDOWEVENT_RESIZED:
+                    mWindowWidth = e.window.data1;
+                    mWindowHeight = e.window.data2;
+                    break;
+                }
                 break;
             }
         }
@@ -264,22 +281,6 @@ void GoSDL::Window::detectControllers()
             }
         }
     }
-}
-
-int GoSDL::Window::getMouseX ()
-{
-    int x;
-    SDL_GetMouseState(&x, NULL);
-
-    return x;
-}
-
-int GoSDL::Window::getMouseY ()
-{
-    int y;
-    SDL_GetMouseState(NULL, &y);
-
-    return y;
 }
 
 void GoSDL::Window::setFullscreen(bool value)
