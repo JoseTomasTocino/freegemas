@@ -55,8 +55,9 @@ StateMainMenu::StateMainMenu(Game * p) : State(p)
     // Jewel group animation
     mJewelAnimation.loadResources(p);
 
-    mAnimationTotalSteps = 30;
-    mAnimationLogoSteps = 30;
+    mAnimationStartTime = 0;
+    mAnimationTotalSteps = 500;
+    mAnimationLogoSteps = 500;
     mAnimationCurrentStep = 0;
 
     mMenuSelectedOption = 0;
@@ -71,10 +72,15 @@ void StateMainMenu::update(){
 
     if(mCurrentTransitionState == TransitionIn)
     {
-        mAnimationCurrentStep ++;
+        if (mAnimationStartTime == 0) {
+            mAnimationStartTime = SDL_GetTicks();
+        }
 
-        if(mAnimationCurrentStep == mAnimationTotalSteps)
+        mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
+
+        if(mAnimationCurrentStep >= mAnimationTotalSteps)
         {
+            mAnimationCurrentStep = mAnimationTotalSteps;
             mCurrentTransitionState = Active;
         }
 
@@ -121,8 +127,9 @@ void StateMainMenu::draw(){
     // Draw the menu highlighting
     mImgHighl.draw(266, mMenuYStart + 5 + mMenuSelectedOption * mMenuYGap, 2);
 
-    // Draw the jewel animation
-    mJewelAnimation.draw();
+    // Draw the jewel animation after an initial delay
+    if(mAnimationCurrentStep >= mAnimationTotalSteps / 5)
+        mJewelAnimation.draw();
     //*/
 }
 

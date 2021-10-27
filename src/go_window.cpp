@@ -8,10 +8,11 @@ using namespace std;
 
 
 GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, bool fullscreen, double updateInterval) :
-    mWidth(width), mHeight(height), mCaption(caption), mFullscreen(fullscreen), mUpdateInterval(updateInterval)
+    mWidth(width), mHeight(height), mCaption(caption), mFullscreen(fullscreen), mUpdateInterval(updateInterval), mFPSFrames(0)
 {
     // Get starting ticks
     mLastTicks = SDL_GetTicks();
+    mFPSLastTicks = mLastTicks;
 
     #ifdef __vita__
         SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS_DIRECT_ONLY, "1");
@@ -138,6 +139,15 @@ void GoSDL::Window::show()
             continue;
         }
 
+        // Get ticks from last frame and compare with framerate
+        if (newTicks - mFPSLastTicks > 1000)
+        {
+            std::string caption = mCaption + " (" + std::to_string(mFPSFrames) + " fps)";
+            SDL_SetWindowTitle(mWindow, caption.c_str());
+            mFPSFrames = 0;
+            mFPSLastTicks = newTicks;
+        }
+
         // Event loop
         while (SDL_PollEvent (&e))
         {
@@ -244,6 +254,9 @@ void GoSDL::Window::show()
 
         // Update the ticks
         mLastTicks = newTicks;
+
+        // Update the number of frames per second
+        mFPSFrames++;
     }
 
     // Exit point for goto within switch

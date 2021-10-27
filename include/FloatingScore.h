@@ -40,7 +40,7 @@ namespace GoSDL {
 class FloatingScore{
 public:
     FloatingScore(GoSDL::Window * parentWindow, int score, float x, float y, float z) :
-        x_(x), y_(y), z_(z), mCurrentStep(0), mTotalSteps(50) {
+        x_(x), y_(y), z_(z), mStartTime(0), mCurrentStep(0), mTotalSteps(1667) {
 
         // Load the font
         GoSDL::Font tempFont;
@@ -58,7 +58,14 @@ public:
     void draw(){
         if(mCurrentStep >= mTotalSteps) return;
 
-        mCurrentStep += 1;
+        if (mStartTime == 0) {
+            mStartTime = SDL_GetTicks();
+        }
+
+        mCurrentStep = SDL_GetTicks() - mStartTime;
+        if (mCurrentStep >= mTotalSteps) {
+            mCurrentStep = mTotalSteps;
+        }
 
         float p = 1.f - (float)mCurrentStep/mTotalSteps;
 
@@ -80,6 +87,7 @@ private:
     float y_;
     float z_;
 
+    unsigned int mStartTime;
     int mCurrentStep;
     int mTotalSteps;
 

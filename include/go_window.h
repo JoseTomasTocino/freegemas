@@ -145,6 +145,12 @@ namespace GoSDL {
         /// Ticks recorded in last frame
         Uint32 mLastTicks;
 
+        /// Time when the FPS was last displayed
+        Uint32 mFPSLastTicks;
+
+        /// Number of frames in the last second
+        Uint32 mFPSFrames;
+
         SDL_GameController *gameController = NULL;
 
         /// Mouse coordinates

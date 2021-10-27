@@ -65,6 +65,9 @@ private:
     /// Current transition state
     transitionState mCurrentTransitionState;
 
+    /// The number of milliseconds since the animation started
+    unsigned int mAnimationStartTime;
+
     /// Current step of the animation
     int mAnimationCurrentStep;
 

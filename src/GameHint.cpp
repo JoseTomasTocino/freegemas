@@ -11,6 +11,7 @@ void GameHint::showHint(Coord location)
     mHintLocation = location;
 
     // Reset the animation
+    mAnimationStartTime = 0;
     mAnimationCurrentStep = 0;
 
     // Set the flag
@@ -23,8 +24,15 @@ void GameHint::draw()
     if (!mShowingHint)
         return;
 
+    // Update the animation frame
+    if (mAnimationStartTime == 0) {
+        mAnimationStartTime = SDL_GetTicks();
+    }
+
+    mAnimationCurrentStep = SDL_GetTicks() - mAnimationStartTime;
+
     // Step the animation and check if it's finished
-    if (mAnimationCurrentStep++ == mAnimationTotalSteps)
+    if (mAnimationCurrentStep >= mAnimationTotalSteps)
     {
         mShowingHint = false;
     }
