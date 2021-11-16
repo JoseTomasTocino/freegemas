@@ -92,14 +92,12 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
 
 GoSDL::Window::~Window()
 {
+    closeAllGameControllers();
+
 	SDL_DestroyRenderer( mRenderer );
 	SDL_DestroyWindow( mWindow );
     mRenderer = NULL;
 	mWindow = NULL;
-
-    // Close joystick
-    SDL_GameControllerClose(gameController);
-    gameController = NULL;
 
 	// Quit SDL subsystems
 	Mix_Quit();
@@ -283,13 +281,13 @@ void GoSDL::Window::openGameController(Sint32 index) {
 
 void GoSDL::Window::closeDisconnectedGameControllers() {
     std::vector<SDL_GameController*> currentControllers;
-    for(SDL_GameController * controller : gameControllers) {
-        if (!SDL_GameControllerGetAttached(controller)) {
-            SDL_Log("Removing controller: %s", SDL_GameControllerName(controller));
-            SDL_GameControllerClose(controller);
-            controller = NULL;
+    for (int i = 0; i < gameControllers.size(); i++) {
+        if (!SDL_GameControllerGetAttached(gameControllers[i])) {
+            SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
+            SDL_GameControllerClose(gameControllers[i]);
+            gameControllers[i] = NULL;
         } else {
-            currentControllers.push_back(controller);
+            currentControllers.push_back(gameControllers[i]);
         }
     }
 
