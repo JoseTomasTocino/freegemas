@@ -153,8 +153,6 @@ namespace GoSDL {
         /// Ticks recorded in last frame
         Uint32 mLastTicks;
 
-        SDL_GameController *gameController = NULL;
-
         /// Mouse coordinates
         int mMouseX, mMouseY;
 
