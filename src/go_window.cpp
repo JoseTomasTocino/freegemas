@@ -281,7 +281,7 @@ void GoSDL::Window::openGameController(Sint32 index) {
 
 void GoSDL::Window::closeDisconnectedGameControllers() {
     std::vector<SDL_GameController*> currentControllers;
-    for (int i = 0; i < gameControllers.size(); i++) {
+    for (int i = 0; i < int(gameControllers.size()); i++) {
         if (!SDL_GameControllerGetAttached(gameControllers[i])) {
             SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
             SDL_GameControllerClose(gameControllers[i]);
@@ -295,7 +295,7 @@ void GoSDL::Window::closeDisconnectedGameControllers() {
 }
 
 void GoSDL::Window::closeAllGameControllers() {
-    for (int i = 0; i < gameControllers.size(); i++) {
+    for (int i = 0; i < int(gameControllers.size()); i++) {
         SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
         SDL_GameControllerClose(gameControllers[i]);
         gameControllers[i] = NULL;
