@@ -18,7 +18,7 @@ std::string OptionsManager::getOptionsDir()
 
     #ifdef __vita__
         optionsPath = "ux0:/data/freegemas/";
-    #elseif defined(WIN32)
+    #elif defined(WIN32)
          optionsPath = optionsPath = ".\\";
     #else
         char *xdgConfHome = getenv("XDG_CONFIG_HOME");
