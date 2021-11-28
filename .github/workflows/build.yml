@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
+        run: |
+          cmake .
+          make
+      - name: publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: freegemas-ubuntu
+          path: |
+            freegemas
+            media
+            LICENSE
+            README.md
+
+  Windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Install dependencies
+        run: |
+          vcpkg install --triplet x64-windows sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[libvorbis,mpg123] jsoncpp
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D-DVCPKG_TARGET_TRIPLET=x64-windows -A x64 .
+          cmake --build . --config Release
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: freegemas-windows
+          path: |
+            Release
+            LICENSE
+            README.md
