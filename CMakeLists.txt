@@ -33,8 +33,14 @@ file(GLOB SOURCE_FILES
 
 # MESSAGE(STATUS "SOURCE FILES: " ${SOURCE_FILES})
 
-add_executable (freegemas
-    ${SOURCE_FILES}
+if(WIN32)
+	add_executable (freegemas
+		${SOURCE_FILES}
+else()
+	add_executable (freegemas WIN32
+		${SOURCE_FILES}
+endif()
+
 )
 if (VITA)
 	# VITASDK defines
@@ -111,6 +117,38 @@ if (VITA)
 		    FILE platform/vita/sce_sys sce_sys
 		    FILE media media
 	)
+ELSEIF(WIN32)
+	find_package(SDL2 CONFIG REQUIRED)
+	find_package(sdl2-image CONFIG REQUIRED)
+	find_package(sdl2-ttf CONFIG REQUIRED)
+	find_package(sdl2-mixer CONFIG REQUIRED)
+	find_package(jsoncpp CONFIG REQUIRED)
+
+	target_link_libraries(freegemas PRIVATE
+		SDL2::SDL2
+		SDL2::SDL2main
+		SDL2::SDL2_image
+		SDL2::SDL2_ttf
+		SDL2::SDL2_mixer
+		jsoncpp_lib
+		jsoncpp_object
+		JsonCpp::JsonCpp
+	)
+	target_include_directories(freegemas PRIVATE
+		${PROJECT_SOURCE_DIR}/include
+
+		${SDL2_INCLUDE_DIRS}
+		${SDL2_IMAGE_INCLUDE_DIRS}
+		${SDL2_TTF_INCLUDE_DIRS}
+		${SDL2_MIXER_INCLUDE_DIRS}
+		${JSONCPP_INCLUDE_DIRS}
+	)
+	IF(NOT CMAKE_BUILD_TYPE MATCHES "Release")
+		set(CMAKE_BUILD_TYPE "Debug")
+	ENDIF()
+
+	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/media
+		DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/)
 ELSE()
 	find_package(PkgConfig REQUIRED)
 
@@ -141,12 +179,12 @@ ELSE()
 	)
 
 	add_custom_target(
-	link_media_folder
-	COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
+		link_media_folder
+		COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
 	)
 
 	add_dependencies(
-	freegemas
-	link_media_folder
+		freegemas
+		link_media_folder
 	)
 ENDIF()

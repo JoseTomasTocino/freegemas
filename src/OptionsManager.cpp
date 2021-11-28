@@ -5,7 +5,9 @@ void OptionsManager::loadResources()
     std::string optionsDir = getOptionsDir();
 
     // Make sure the directory exists
-    mkdir(optionsDir.c_str(), 0755);
+    #ifndef WIN32
+        mkdir(optionsDir.c_str(), 0755);
+    #endif
 
     loadOptions();
 }
@@ -16,6 +18,8 @@ std::string OptionsManager::getOptionsDir()
 
     #ifdef __vita__
         optionsPath = "ux0:/data/freegemas/";
+    #elseif defined(WIN32)
+         optionsPath = optionsPath = ".\\";
     #else
         char *xdgConfHome = getenv("XDG_CONFIG_HOME");
         if (xdgConfHome) {

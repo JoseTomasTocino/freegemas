@@ -1,7 +1,7 @@
 #ifndef _INTER_H_
 #define _INTER_H_
 
-#ifdef __vita__
+#if defined(__vita__) || defined(WIN32)
  #define _(x) x
 #else
  #include <libintl.h>

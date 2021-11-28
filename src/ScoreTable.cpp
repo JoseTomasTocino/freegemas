@@ -6,8 +6,14 @@
 #include "Game.h"
 
 #include <fstream>
-#include <unistd.h>
-#include <pwd.h>
+
+#ifdef WIN32
+    #include <io.h>
+    #include <process.h>
+#else
+    #include <pwd.h>
+    #include <unistd.h>
+#endif
 
 using namespace std;
 
