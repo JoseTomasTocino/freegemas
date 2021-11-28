@@ -36,12 +36,13 @@ file(GLOB SOURCE_FILES
 if(WIN32)
 	add_executable (freegemas
 		${SOURCE_FILES}
+	)
 else()
 	add_executable (freegemas WIN32
 		${SOURCE_FILES}
+	)
 endif()
 
-)
 if (VITA)
 	# VITASDK defines
 	if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
