@@ -51,3 +51,23 @@ jobs:
             Release
             LICENSE
             README.md
+
+  Vita:
+    runs-on: ubuntu-latest
+    container: gnuton/vitasdk-docker:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
+          make
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: freegemas-vita
+          path: |
+            freegemas.vpk
+            LICENSE
+            README.md
