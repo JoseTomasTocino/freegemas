@@ -1,5 +1,6 @@
 #include "go_window.h"
 #include "Util.h"
+#include "log.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -274,7 +275,7 @@ void GoSDL::Window::enqueueDraw(SDL_Texture * texture, SDL_Rect destRect, double
 void GoSDL::Window::openGameController(Sint32 index) {
      if (SDL_IsGameController(index)) {
         SDL_GameController * controller = SDL_GameControllerOpen(index);
-        SDL_Log("Adding controller: %s", SDL_GameControllerName(controller));
+        lDEBUG << "Adding controller: " << SDL_GameControllerName(controller);
         gameControllers.push_back(controller);
     }
 }
@@ -283,7 +284,7 @@ void GoSDL::Window::closeDisconnectedGameControllers() {
     std::vector<SDL_GameController*> currentControllers;
     for (int i = 0; i < int(gameControllers.size()); i++) {
         if (!SDL_GameControllerGetAttached(gameControllers[i])) {
-            SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
+            lDEBUG << "Removing controller: " << SDL_GameControllerName(gameControllers[i]);
             SDL_GameControllerClose(gameControllers[i]);
             gameControllers[i] = NULL;
         } else {
@@ -296,7 +297,7 @@ void GoSDL::Window::closeDisconnectedGameControllers() {
 
 void GoSDL::Window::closeAllGameControllers() {
     for (int i = 0; i < int(gameControllers.size()); i++) {
-        SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
+        lDEBUG << "Removing controller: " << SDL_GameControllerName(gameControllers[i]);
         SDL_GameControllerClose(gameControllers[i]);
         gameControllers[i] = NULL;
     }
