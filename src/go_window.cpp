@@ -1,5 +1,6 @@
 #include "go_window.h"
 #include "Util.h"
+#include "log.h"
 
 #include <iostream>
 #include <stdexcept>
@@ -82,9 +83,6 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
         throw std::runtime_error(IMG_GetError() );
     }
 
-    // Initialize game controllers
-    detectControllers();
-
     // Set full screen mode
     mOptions.loadResources();
     setFullscreen(mOptions.getFullscreenEnabled());
@@ -95,14 +93,12 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
 
 GoSDL::Window::~Window()
 {
+    closeAllGameControllers();
+
 	SDL_DestroyRenderer( mRenderer );
 	SDL_DestroyWindow( mWindow );
     mRenderer = NULL;
 	mWindow = NULL;
-
-    // Close joystick
-    SDL_GameControllerClose(gameController);
-    gameController = NULL;
 
 	// Quit SDL subsystems
 	Mix_Quit();
@@ -175,7 +171,11 @@ void GoSDL::Window::show()
                 break;
 
             case SDL_CONTROLLERDEVICEADDED:
-                detectControllers();
+                openGameController(e.cdevice.which);
+                break;
+
+            case SDL_CONTROLLERDEVICEREMOVED:
+                closeDisconnectedGameControllers();
                 break;
 
             case SDL_WINDOWEVENT:
@@ -272,16 +272,34 @@ void GoSDL::Window::enqueueDraw(SDL_Texture * texture, SDL_Rect destRect, double
     mDrawingQueue.draw(z, op);
 }
 
-void GoSDL::Window::detectControllers()
-{
-    for (int i = 0; i < SDL_NumJoysticks(); ++i)
-    {
-        if (SDL_IsGameController(i)) {
-            gameController = SDL_GameControllerOpen(i);
-            if (gameController != NULL) {
-                break;
-            }
+void GoSDL::Window::openGameController(Sint32 index) {
+     if (SDL_IsGameController(index)) {
+        SDL_GameController * controller = SDL_GameControllerOpen(index);
+        lDEBUG << "Adding controller: " << SDL_GameControllerName(controller);
+        gameControllers.push_back(controller);
+    }
+}
+
+void GoSDL::Window::closeDisconnectedGameControllers() {
+    std::vector<SDL_GameController*> currentControllers;
+    for (int i = 0; i < int(gameControllers.size()); i++) {
+        if (!SDL_GameControllerGetAttached(gameControllers[i])) {
+            lDEBUG << "Removing controller: " << SDL_GameControllerName(gameControllers[i]);
+            SDL_GameControllerClose(gameControllers[i]);
+            gameControllers[i] = NULL;
+        } else {
+            currentControllers.push_back(gameControllers[i]);
         }
+    }
+
+    gameControllers = currentControllers;
+}
+
+void GoSDL::Window::closeAllGameControllers() {
+    for (int i = 0; i < int(gameControllers.size()); i++) {
+        lDEBUG << "Removing controller: " << SDL_GameControllerName(gameControllers[i]);
+        SDL_GameControllerClose(gameControllers[i]);
+        gameControllers[i] = NULL;
     }
 }
 

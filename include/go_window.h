@@ -113,7 +113,15 @@ namespace GoSDL {
 
         inline SDL_Renderer * getRenderer() { return mRenderer; }
         void enqueueDraw(SDL_Texture * texture, SDL_Rect destRect, double angle, float z, Uint8 alpha, SDL_Color color);
-        void detectControllers();
+
+        // Called when a game controller is connected
+        void openGameController(Sint32);
+
+        // Called when a game controller is disconnected
+        void closeDisconnectedGameControllers();
+
+        // Called when closing the game
+        void closeAllGameControllers();
 
         // Texture used as render target
         SDL_Texture * mScreen;
@@ -145,8 +153,6 @@ namespace GoSDL {
         /// Ticks recorded in last frame
         Uint32 mLastTicks;
 
-        SDL_GameController *gameController = NULL;
-
         /// Mouse coordinates
         int mMouseX, mMouseY;
 
@@ -161,6 +167,9 @@ namespace GoSDL {
 
         // Options manager to get full screen setting
         OptionsManager mOptions;
+
+        // List of connected game controllers
+        std::vector<SDL_GameController*> gameControllers;
     };
 
 }
