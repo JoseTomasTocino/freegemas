@@ -34,11 +34,11 @@ file(GLOB SOURCE_FILES
 # MESSAGE(STATUS "SOURCE FILES: " ${SOURCE_FILES})
 
 if(WIN32)
-	add_executable (freegemas
+	add_executable (freegemas WIN32
 		${SOURCE_FILES}
 	)
 else()
-	add_executable (freegemas WIN32
+	add_executable (freegemas
 		${SOURCE_FILES}
 	)
 endif()
