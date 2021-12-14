@@ -16,8 +16,6 @@ Game::Game ()
     mMouseCursor.setWindow(this);
     mMouseCursor.setPath("media/handCursor.png");
 
-    hideCursor();
-
     changeState("stateMainMenu");
 }
 
@@ -28,9 +26,6 @@ Game::~Game()
 
 void Game::update ()
 {
-    if (!mMouseActive && (mLastMouseX != getMouseX() || mLastMouseY != getMouseY())) {
-        showCursor();
-    }
     if (mCurrentState)
         mCurrentState -> update();
 }
@@ -38,7 +33,7 @@ void Game::update ()
 void Game::draw ()
 {
     #ifndef __vita__
-        if (mMouseActive) {
+        if (getMouseActive()) {
             mMouseCursor.draw(getMouseX(), getMouseY(), 999);
         }
     #endif
@@ -49,7 +44,6 @@ void Game::draw ()
 
 void Game::buttonDown (SDL_Keycode button)
 {
-    hideCursor();
     if (mCurrentState)
         mCurrentState -> buttonDown(button);
 }
@@ -62,7 +56,6 @@ void Game::buttonUp (SDL_Keycode button)
 
 void Game::mouseButtonDown (Uint8 button)
 {
-    showCursor();
     if (mCurrentState)
         mCurrentState -> mouseButtonDown(button);
 }
@@ -75,21 +68,8 @@ void Game::mouseButtonUp (Uint8 button)
 
 void Game::controllerButtonDown (Uint8 button)
 {
-    hideCursor();
     if (mCurrentState)
         mCurrentState -> controllerButtonDown(button);
-}
-
-void Game::hideCursor() {
-    if (mMouseActive) {
-        mLastMouseX = getMouseX();
-        mLastMouseY = getMouseY();
-        mMouseActive = false;
-    }
-}
-
-void Game::showCursor() {
-    mMouseActive = true;
 }
 
 void Game::changeState(string S)

@@ -56,7 +56,7 @@ StateOptions::StateOptions(Game * p) : State(p)
 
 void StateOptions::update(){
 
-    if (mGame->isCursorVisible()) {
+    if (mGame->getMouseActive()) {
         // Update menu highlighting according to mouse position
         int mY = (int) mGame -> getMouseY();
 
