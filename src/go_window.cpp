@@ -146,6 +146,7 @@ void GoSDL::Window::show()
                 break;
 
             case SDL_KEYDOWN:
+                mMouseActive = false;
                 buttonDown(e.key.keysym.sym);
                 break;
 
@@ -154,11 +155,13 @@ void GoSDL::Window::show()
                 break;
 
             case SDL_MOUSEMOTION:
+                mMouseActive = true;
                 mMouseX = (e.motion.x * mWidth) / mWindowWidth;
                 mMouseY = (e.motion.y * mHeight) / mWindowHeight;
                 break;
 
             case SDL_MOUSEBUTTONDOWN:
+                mMouseActive = true;
                 mouseButtonDown(e.button.button);
                 break;
 
@@ -167,6 +170,7 @@ void GoSDL::Window::show()
                 break;
 
             case SDL_CONTROLLERBUTTONDOWN:
+                mMouseActive = false;
                 controllerButtonDown(e.cbutton.button);
                 break;
 

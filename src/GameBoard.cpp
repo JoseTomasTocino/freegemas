@@ -279,7 +279,7 @@ void GameBoard::update()
 
 void GameBoard::draw()
 {
-    if (mGame->isCursorVisible()) {
+    if (mGame->getMouseActive()) {
         // Get mouse position
         int mX = (int) mGame -> getMouseX();
         int mY = (int) mGame -> getMouseY();

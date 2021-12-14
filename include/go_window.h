@@ -93,6 +93,11 @@ namespace GoSDL {
         virtual void controllerButtonDown(Uint8) { }
 
         /**
+         * @brief Returns if the mouse is in use
+         */
+        int getMouseActive() { return mMouseActive; }
+
+        /**
          * @brief Returns the horizontal position of the mouse
          */
         int getMouseX() { return mMouseX; }
@@ -152,6 +157,9 @@ namespace GoSDL {
 
         /// Ticks recorded in last frame
         Uint32 mLastTicks;
+
+        // Whether the mouse is in use
+        bool mMouseActive = false;
 
         /// Mouse coordinates
         int mMouseX, mMouseY;

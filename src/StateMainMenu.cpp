@@ -84,7 +84,7 @@ void StateMainMenu::update(){
 
     }
 
-    if (mGame->isCursorVisible()) {
+    if (mGame->getMouseActive()) {
         // Update menu highlighting according to mouse position
         int mY = (int) mGame -> getMouseY();
 
