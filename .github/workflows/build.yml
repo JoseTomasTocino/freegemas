@@ -35,7 +35,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          vcpkg install --triplet x64-windows sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[libvorbis] jsoncpp
+          vcpkg install --triplet x64-windows sdl2 sdl2-image sdl2-ttf sdl2-mixer[libvorbis] jsoncpp
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
