@@ -31,6 +31,7 @@ class OptionsManager
 
     private:
         const std::string optionsFile = "options.json";
+        std::string optionsDir;
 
         Json::Value options;
 
