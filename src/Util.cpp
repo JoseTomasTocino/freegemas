@@ -16,6 +16,19 @@ std::string getBasePath()
     return basePathStr;
 }
 
+std::string getPrefPath()
+{
+    std::string prefPathStr;
+
+    char *prefPath = SDL_GetPrefPath(NULL, "freegemas");
+    if (prefPath) {
+        prefPathStr = prefPath;
+        SDL_free(prefPath);
+    }
+
+    return prefPathStr;
+}
+
 float getRandomFloat(float a, float b)
 {
     float random = ((float) rand()) / (float) RAND_MAX;

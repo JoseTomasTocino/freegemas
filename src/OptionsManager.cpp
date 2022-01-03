@@ -1,45 +1,17 @@
 #include "OptionsManager.h"
 
+#include "Util.h"
+
 void OptionsManager::loadResources()
 {
-    std::string optionsDir = getOptionsDir();
-
-    // Make sure the directory exists
-    #ifndef WIN32
-        mkdir(optionsDir.c_str(), 0755);
-    #endif
+    optionsDir = getPrefPath();
 
     loadOptions();
 }
 
-std::string OptionsManager::getOptionsDir() 
-{
-    std::string optionsPath;
-
-    #ifdef __vita__
-        optionsPath = "ux0:/data/freegemas/";
-    #elif defined(WIN32)
-         optionsPath = optionsPath = ".\\";
-    #else
-        char *xdgConfHome = getenv("XDG_CONFIG_HOME");
-        if (xdgConfHome) {
-            optionsPath = std::string(xdgConfHome) + "/freegemas/";
-        } else {
-            char *home = getenv("HOME");
-            if (home) {
-                optionsPath = std::string(home) + "/.config/freegemas/";
-            } else {
-                optionsPath = "./";
-            }
-        }
-    #endif
-
-    return optionsPath;
-}
-
 void OptionsManager::writeOptions()
 {
-    std::string optionsPath = getOptionsDir() + optionsFile;
+    std::string optionsPath = optionsDir + optionsFile;
     std::ofstream optionsStream(optionsPath, std::ios::binary);
     optionsStream << options;
     optionsStream.close();
@@ -48,7 +20,7 @@ void OptionsManager::writeOptions()
 void OptionsManager::loadOptions()
 {
     std::ifstream optionsStream;
-    std::string optionsPath = getOptionsDir() + optionsFile;
+    std::string optionsPath = optionsDir + optionsFile;
     optionsStream.open(optionsPath, std::ios::in);
 
     Json::CharReaderBuilder builder;
