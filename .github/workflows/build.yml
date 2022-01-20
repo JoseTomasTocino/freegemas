@@ -5,27 +5,31 @@ on:
   pull_request:
 
 jobs:
-  Ubuntu:
+  Linux:
     runs-on: ubuntu-latest
 
     steps:
       - name: install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev
+          sudo apt-get install -y wget cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev
       - name: checkout
         uses: actions/checkout@v2
       - name: build
         run: |
-          cmake .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
           make
+          strip --strip-unneeded freegemas
+          make install DESTDIR=AppDir
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: freegemas-ubuntu
+          name: freegemas-linux
           path: |
-            freegemas
-            media
+            Freegemas*.AppImage
             LICENSE
             README.md
 
@@ -60,7 +64,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
           make
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
