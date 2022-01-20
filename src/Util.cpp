@@ -3,6 +3,11 @@
 #include <cstdlib>
 #include <SDL.h>
 
+#if !defined(WIN32) && !defined(__vita__)
+    #include <dirent.h>
+#endif
+
+
 std::string getBasePath()
 {
     std::string basePathStr;
@@ -12,6 +17,15 @@ std::string getBasePath()
         basePathStr = basePath;
         SDL_free(basePath);
     }
+
+    #if !defined(WIN32) && !defined(__vita__)
+        // Check if game is installed system wide
+        DIR* dir = opendir(std::string(basePathStr + "../share/freegemas/").c_str());
+        if (dir) {
+            basePathStr += "../share/freegemas/";
+            closedir(dir);
+        }
+    #endif
 
     return basePathStr;
 }

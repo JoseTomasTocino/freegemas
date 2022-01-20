@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Freegemas
+GenericName=Match 3 game
+Comment=an open source match 3 game
+Exec=freegemas
+Icon=freegemas
+Type=Application
+Keywords=match3;games;game;
+Categories=Game;
+StartupWMClass=freegemas

@@ -1,5 +1,5 @@
 project(freegemas_project)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.0)
 
 # Append custom gettext path to CMAKE_PREFIX_PATH - only necessary on OS X.
 if (CMAKE_HOST_APPLE)
@@ -188,4 +188,10 @@ ELSE()
 		freegemas
 		link_media_folder
 	)
+
+	install(TARGETS freegemas DESTINATION bin)
+	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION share/freegemas)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/freegemas.desktop DESTINATION share/applications)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/media/freegemas.ico DESTINATION share/icons/hicolor/48x48/apps)
+	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/freegemas)
 ENDIF()
