@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
       - name: build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
           make
           strip --strip-unneeded freegemas
           make install DESTDIR=AppDir
