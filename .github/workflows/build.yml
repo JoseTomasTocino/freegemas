@@ -49,7 +49,7 @@ jobs:
           cp Release/freegemas.exe .
           cp LICENSE Release/LICENSE.txt
           cp README.md Release/README.txt
-          cp media Release/media
+          cp -Recurse media Release
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
