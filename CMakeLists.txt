@@ -120,6 +120,8 @@ if (VITA)
 		    FILE media media
 	)
 ELSEIF(WIN32)
+	option(BUILD_STATIC "Build a static binary (Windows only)" OFF)
+
 	find_package(SDL2 CONFIG REQUIRED)
 	find_package(sdl2-image CONFIG REQUIRED)
 	find_package(sdl2-ttf CONFIG REQUIRED)
@@ -135,6 +137,7 @@ ELSEIF(WIN32)
 		jsoncpp_object
 		JsonCpp::JsonCpp
 	)
+
 	target_include_directories(freegemas PRIVATE
 		${PROJECT_SOURCE_DIR}/include
 
@@ -144,6 +147,31 @@ ELSEIF(WIN32)
 		${SDL2_MIXER_INCLUDE_DIRS}
 		${JSONCPP_INCLUDE_DIRS}
 	)
+
+	if(BUILD_STATIC)
+		if(MSVC)
+			set(CompilerFlags
+				CMAKE_CXX_FLAGS
+				CMAKE_CXX_FLAGS_DEBUG
+				CMAKE_CXX_FLAGS_RELEASE
+				CMAKE_CXX_FLAGS_MINSIZEREL
+				CMAKE_CXX_FLAGS_RELWITHDEBINFO
+			)
+			foreach(CompilerFlag ${CompilerFlags})
+				string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+				set(${CompilerFlag} "${${CompilerFlag}}" CACHE STRING "msvc compiler flags" FORCE)
+				message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
+			endforeach()
+		endif()
+
+		target_link_libraries(freegemas PRIVATE
+			SDL2::SDL2-static
+			jsoncpp_static
+			vorbis
+			ogg
+			Shlwapi
+		)
+	endif()
 ELSE()
 	find_package(PkgConfig REQUIRED)
 
