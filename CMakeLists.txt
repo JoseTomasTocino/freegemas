@@ -132,7 +132,6 @@ ELSEIF(WIN32)
 		SDL2::SDL2_image
 		SDL2::SDL2_ttf
 		SDL2::SDL2_mixer
-		jsoncpp_lib
 		jsoncpp_object
 		JsonCpp::JsonCpp
 	)
