@@ -74,3 +74,26 @@ jobs:
             freegemas.vpk
             LICENSE
             README.md
+
+  Release:
+    needs: [Linux, Windows, Vita]
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build: [linux, windows, vita]
+    steps:
+    - name: Extract tag name
+      id: tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+    - uses: actions/download-artifact@v2
+    - name: Zip artifacts
+      run: |
+        zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: freegemas-${{matrix.build}}.zip
+        tag_name: ${{ steps.tag.outputs.VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
