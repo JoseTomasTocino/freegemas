@@ -45,12 +45,6 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, boo
                                 #endif
                                 SDL_WINDOW_RESIZABLE );
 
-    // Set window icon
-    std::string iconPath = getBasePath() + "media/freegemas.ico";
-    SDL_Surface* icon = IMG_Load(iconPath.c_str());
-    SDL_SetWindowIcon(mWindow, icon);
-    SDL_FreeSurface(icon);
-
     // If window could not be created, throw an error
     if (mWindow == NULL )
     {
