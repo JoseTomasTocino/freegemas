@@ -36,6 +36,7 @@ file(GLOB SOURCE_FILES
 if(WIN32)
 	add_executable (freegemas WIN32
 		${SOURCE_FILES}
+		${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc
 	)
 else()
 	add_executable (freegemas
@@ -144,12 +145,6 @@ ELSEIF(WIN32)
 		${SDL2_MIXER_INCLUDE_DIRS}
 		${JSONCPP_INCLUDE_DIRS}
 	)
-	IF(NOT CMAKE_BUILD_TYPE MATCHES "Release")
-		set(CMAKE_BUILD_TYPE "Debug")
-	ENDIF()
-
-	file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/media
-		DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/)
 ELSE()
 	find_package(PkgConfig REQUIRED)
 
