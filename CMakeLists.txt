@@ -94,6 +94,7 @@ if (VITA)
 		vorbisfile
 		vorbis
 		ogg
+		modplug
 		jpeg
 		z
 		m
@@ -102,6 +103,7 @@ if (VITA)
 		FLAC
 		SceAppUtil_stub
 		SceAudio_stub
+		SceAudioIn_stub
 		SceCommonDialog_stub
 		SceCtrl_stub
 		SceDisplay_stub
