@@ -125,17 +125,17 @@ ELSEIF(WIN32)
 	option(BUILD_STATIC "Build a static binary (Windows only)" OFF)
 
 	find_package(SDL2 CONFIG REQUIRED)
-	find_package(sdl2-image CONFIG REQUIRED)
-	find_package(sdl2-ttf CONFIG REQUIRED)
-	find_package(sdl2-mixer CONFIG REQUIRED)
+	find_package(SDL2_image CONFIG REQUIRED)
+    find_package(SDL2_ttf CONFIG REQUIRED)
+    find_package(SDL2_mixer CONFIG REQUIRED)
 	find_package(jsoncpp CONFIG REQUIRED)
 
 	target_link_libraries(freegemas PRIVATE
 		SDL2::SDL2
 		SDL2::SDL2main
-		SDL2::SDL2_image
-		SDL2::SDL2_ttf
-		SDL2::SDL2_mixer
+		SDL2_image::SDL2_image
+		SDL2_ttf::SDL2_ttf
+		SDL2_mixer::SDL2_mixer
 		jsoncpp_object
 		JsonCpp::JsonCpp
 	)
@@ -168,6 +168,9 @@ ELSEIF(WIN32)
 
 		target_link_libraries(freegemas PRIVATE
 			SDL2::SDL2-static
+			SDL2_image::SDL2_image-static
+			SDL2_ttf::SDL2_ttf-static
+			SDL2_mixer::SDL2_mixer-static
 			jsoncpp_static
 			vorbis
 			ogg
