@@ -70,7 +70,7 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release .
           make
-          strip --strip-unneeded freegemas
+          strip freegemas
       - name: publish artifacts
         uses: actions/upload-artifact@v2
         with:
