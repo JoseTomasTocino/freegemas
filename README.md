@@ -40,6 +40,13 @@ This assumes that you are already using [Homebrew](https://brew.sh/). You will n
 
     brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
 
+Now run the following commands to setup your environment to use Homebrew as a backup location for libraries.
+
+```
+[[ -z "${LIBRARY_PATH}" ]] && export LIBRARY_PATH=/usr/local/lib
+export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
+```
+
 Now follow the instructions above, starting with `git clone`.
 
 ## Installation on Playstation Vita
