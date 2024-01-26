@@ -80,13 +80,13 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp gettext
+          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
       - name: checkout
         uses: actions/checkout@v4
       - name: build
         run: |
           [[ -z "${LIBRARY_PATH}" ]] && export LIBRARY_PATH=/usr/local/lib
-          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib:$(brew --prefix)/gettext/lib"
+          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
           cmake -DCMAKE_BUILD_TYPE=Release .
           make
           strip freegemas
