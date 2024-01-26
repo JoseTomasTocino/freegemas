@@ -80,8 +80,8 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
-          brew link gettext --force --overwrite
+          brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
+          brew reinstall gettext brew unlink gettext && brew link gettext --force --overwrite
       - name: checkout
         uses: actions/checkout@v4
       - name: build
