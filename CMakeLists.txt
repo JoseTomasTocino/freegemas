@@ -1,28 +1,6 @@
 project(freegemas_project)
 cmake_minimum_required(VERSION 3.0)
 
-# Append custom gettext path to CMAKE_PREFIX_PATH - only necessary on OS X.
-if (CMAKE_HOST_APPLE)
-    find_program(HOMEBREW_PROG brew)
-    if (EXISTS ${HOMEBREW_PROG})
-        execute_process(COMMAND ${HOMEBREW_PROG} --prefix gettext
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            OUTPUT_VARIABLE HOMEBREW_GETTEXT_PREFIX)
-        list(APPEND CMAKE_PREFIX_PATH "${HOMEBREW_GETTEXT_PREFIX}")
-    endif()
-
-    find_path(LIBINTL_INCLUDE_DIRS
-        NAMES libintl.h
-        PATH_SUFFIXES gettext
-    )
-
-    find_library(LIBINTL_LIBRARIES
-        NAMES intl libintl.a
-    )
-endif()
-
-
-
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -std=c++11 -O")
 endif()
