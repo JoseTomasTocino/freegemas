@@ -66,6 +66,7 @@ if(BUILD_STATIC)
         ${SDL2_TTF_STATIC_LIBRARIES}
         ${JSONCPP_STATIC_LIBRARIES}
     )
+	if
 else()
     target_link_libraries(freegemas PRIVATE
         ${SDL2_LIBRARIES}
