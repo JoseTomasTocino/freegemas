@@ -38,24 +38,37 @@ jobs:
 
     steps:
       - name: Install dependencies
-        run: |
-          vcpkg install --triplet x64-windows-static sdl2 sdl2-image sdl2-ttf sdl2-mixer[libvorbis] jsoncpp
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-binutils
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-SDL2
+            mingw-w64-x86_64-SDL2_image
+            mingw-w64-x86_64-SDL2_mixer
+            mingw-w64-x86_64-SDL2_ttf
+            mingw-w64-x86_64-jsoncpp
+          update: true
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DBUILD_STATIC=ON .
-          cmake --build . --config Release
-          cp Release/freegemas.exe .
-          cp LICENSE Release/LICENSE.txt
-          cp README.md Release/README.txt
-          cp -Recurse media Release
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
+          cmake --build .
+          strip --strip-unneeded freegemas.exe
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
           name: freegemas-windows
           path: |
-            Release
+            freegemas.exe
+            media
+            LICENSE
+            README.md
 
   MacOS:
     runs-on: macos-latest
