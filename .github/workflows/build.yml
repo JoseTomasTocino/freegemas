@@ -14,7 +14,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev libfuse2
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
@@ -25,7 +25,7 @@ jobs:
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-linux
           path: |
@@ -58,14 +58,14 @@ jobs:
             mingw-w64-x86_64-jsoncpp
           update: true
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
           cmake --build .
           strip --strip-unneeded freegemas.exe
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-windows
           path: |
@@ -82,14 +82,14 @@ jobs:
         run: |
           brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release .
           make
           strip freegemas
       - name: publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-macos
           path: |
@@ -104,13 +104,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
           make
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-vita
           path: |
@@ -129,7 +129,7 @@ jobs:
     - name: Extract tag name
       id: tag
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
     - name: Zip artifacts
       run: |
         zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
