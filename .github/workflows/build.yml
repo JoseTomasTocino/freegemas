@@ -86,7 +86,7 @@ jobs:
       - name: build
         run: |
           [[ -z "${LIBRARY_PATH}" ]] && export LIBRARY_PATH=/usr/local/lib
-          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib:/opt/homebrew/opt/gettext/lib"
+          export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib:$(brew --prefix)/gettext/lib"
           cmake -DCMAKE_BUILD_TYPE=Release .
           make
           strip freegemas
