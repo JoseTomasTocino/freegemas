@@ -85,18 +85,6 @@ include_directories(
     ${JSONCPP_INCLUDE_DIRS}
 )
 
-if(NOT VITA)
-	add_custom_target(
-		link_media_folder
-		COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
-	)
-
-	add_dependencies(
-		freegemas
-		link_media_folder
-	)
-endif()
-
 if (VITA)
 	include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
 
@@ -119,6 +107,16 @@ if (VITA)
 ELSEIF(WIN32)
 	# Nothing to do
 ELSE()
+	add_custom_target(
+		link_media_folder
+		COMMAND ln -nfs ${PROJECT_SOURCE_DIR}/media ${PROJECT_BINARY_DIR}/media
+	)
+
+	add_dependencies(
+		freegemas
+		link_media_folder
+	)
+
 	install(TARGETS freegemas DESTINATION bin)
 	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION share/freegemas)
 	install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/freegemas.desktop DESTINATION share/applications)
