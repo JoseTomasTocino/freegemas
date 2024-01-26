@@ -47,7 +47,18 @@ Now run the following commands to setup your environment to use Homebrew as a ba
 export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
 ```
 
-Now follow the instructions above, starting with `git clone`.
+After that, clone the repo:
+
+    git clone https://github.com/JoseTomasTocino/freegemas.git
+    
+Do an out-of-source compilation and run the program:
+
+    cd freegemas
+    mkdir build
+    cd build
+    cmake ..
+    make
+    ./freegemas
 
 ## Installation on Playstation Vita
 
