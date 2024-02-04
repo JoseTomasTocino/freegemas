@@ -14,7 +14,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev libfuse2
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
@@ -25,7 +25,7 @@ jobs:
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-linux
           path: |
@@ -36,26 +36,43 @@ jobs:
   Windows:
     runs-on: windows-latest
 
+    defaults:
+      run:
+        shell: msys2 {0}
+
     steps:
       - name: Install dependencies
-        run: |
-          vcpkg install --triplet x64-windows-static sdl2 sdl2-image sdl2-ttf sdl2-mixer[libvorbis] jsoncpp
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-binutils
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-SDL2
+            mingw-w64-x86_64-SDL2_image
+            mingw-w64-x86_64-SDL2_mixer
+            mingw-w64-x86_64-SDL2_ttf
+            mingw-w64-x86_64-jsoncpp
+          update: true
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DBUILD_STATIC=ON .
-          cmake --build . --config Release
-          cp Release/freegemas.exe .
-          cp LICENSE Release/LICENSE.txt
-          cp README.md Release/README.txt
-          cp -Recurse media Release
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
+          cmake --build .
+          strip --strip-unneeded freegemas.exe
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-windows
           path: |
-            Release
+            freegemas.exe
+            media
+            LICENSE
+            README.md
 
   MacOS:
     runs-on: macos-latest
@@ -63,16 +80,18 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
+          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
       - name: checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: build
         run: |
+          export CPATH=$(brew --prefix)/include
+          export LIBRARY_PATH=$(brew --prefix)/lib
           cmake -DCMAKE_BUILD_TYPE=Release .
           make
           strip freegemas
       - name: publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-macos
           path: |
@@ -83,17 +102,17 @@ jobs:
 
   Vita:
     runs-on: ubuntu-latest
-    container: gnuton/vitasdk-docker:latest
+    container: vitasdk/vitasdk:latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
           make
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: freegemas-vita
           path: |
@@ -112,7 +131,7 @@ jobs:
     - name: Extract tag name
       id: tag
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v4
     - name: Zip artifacts
       run: |
         zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
