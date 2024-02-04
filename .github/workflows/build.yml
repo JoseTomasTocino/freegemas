@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp gettext
+          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
       - name: checkout
         uses: actions/checkout@v4
       - name: build
