@@ -91,7 +91,7 @@ jobs:
           cmake --build build
           strip build/freegemas.app/Contents/MacOS/freegemas
           make -C build install
-          codesign --force --deep --sign - dist/freegemas.app
+          codesign --force --sign - dist/freegemas.app
           echo "MACOS_ARCH=$(uname -m)" >> "$GITHUB_ENV"
       - name: publish artifacts
         uses: actions/upload-artifact@v4
