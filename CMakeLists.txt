@@ -1,4 +1,14 @@
 cmake_minimum_required(VERSION 3.5)
+
+# Default the app binary to the oldest macOS that supports Apple Silicon.
+# This must be set before project() to affect the compiler flags. Note that a
+# bundle which embeds Homebrew libraries is still limited by their own
+# deployment targets, so this only moves the floor for the app itself.
+# Override with -DCMAKE_OSX_DEPLOYMENT_TARGET=<version> if needed.
+if(APPLE AND NOT CMAKE_OSX_DEPLOYMENT_TARGET)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET "11.0" CACHE STRING "Minimum macOS version")
+endif()
+
 project(freegemas_project)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
