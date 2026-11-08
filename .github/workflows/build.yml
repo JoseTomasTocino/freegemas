@@ -92,14 +92,22 @@ jobs:
           strip build/freegemas.app/Contents/MacOS/freegemas
           make -C build install
           echo "MACOS_ARCH=$(uname -m)" >> "$GITHUB_ENV"
+      - name: package
+        run: |
+          # upload-artifact uses the least common ancestor of the listed paths as
+          # the artifact root. Uploading dist/freegemas.app alongside LICENSE and
+          # README.md therefore makes the workspace the root and leaves a stray
+          # dist/ wrapper in every download. Staging the files side by side keeps
+          # the extracted archive flat: freegemas.app, LICENSE, README.md.
+          mkdir -p ${{ env.MACOS_ARCH }}
+          cp -R dist/freegemas.app ${{ env.MACOS_ARCH }}/
+          cp LICENSE README.md ${{ env.MACOS_ARCH }}/
       - name: publish artifacts
         uses: actions/upload-artifact@v4
         with:
           name: freegemas-macos-${{ env.MACOS_ARCH }}
-          path: |
-            dist/freegemas.app
-            LICENSE
-            README.md
+          path: ${{ env.MACOS_ARCH }}/
+          if-no-files-found: error
 
   Vita:
     runs-on: ubuntu-latest
