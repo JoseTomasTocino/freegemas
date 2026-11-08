@@ -21,6 +21,14 @@ else()
 endif()
 
 if(APPLE)
+	file(GLOB_RECURSE FREEGEMAS_MEDIA_FILES "${PROJECT_SOURCE_DIR}/media/*")
+	add_custom_target(freegemas_media ALL
+		COMMAND ${CMAKE_COMMAND} -E copy_directory
+			${PROJECT_SOURCE_DIR}/media
+			${CMAKE_CURRENT_BINARY_DIR}/freegemas.app/Contents/Resources/media
+		DEPENDS ${FREEGEMAS_MEDIA_FILES}
+	)
+	add_dependencies(freegemas freegemas_media)
 	set(FREEGEMAS_ICNS "${CMAKE_CURRENT_BINARY_DIR}/AppIcon.icns")
 	add_custom_command(
 		OUTPUT ${FREEGEMAS_ICNS}
@@ -110,6 +118,10 @@ ELSEIF(APPLE)
 	install(TARGETS freegemas BUNDLE DESTINATION .)
 	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION freegemas.app/Contents/Resources)
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/AppIcon.icns DESTINATION freegemas.app/Contents/Resources)
+	install(CODE "
+		include(BundleUtilities)
+		fixup_bundle(\"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/freegemas.app\" \"\" \"${FREEGEMAS_BUNDLE_LIBRARY_DIRS}\")
+	")
 ELSE()
 	add_custom_target(
 		link_media_folder
