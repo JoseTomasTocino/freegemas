@@ -80,7 +80,7 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
+          brew install sdl2 sdl2-compat sdl3 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
       - name: checkout
         uses: actions/checkout@v4
       - name: build
@@ -91,7 +91,18 @@ jobs:
           cmake --build build
           strip build/freegemas.app/Contents/MacOS/freegemas
           make -C build install
-          codesign --force --options runtime --timestamp --sign - dist/freegemas.app
+          # fixup_bundle rewrites every embedded dylib with install_name_tool, which
+          # invalidates the signature the Homebrew bottle shipped with. Apple Silicon
+          # refuses to map a page whose hash no longer matches, killing the process
+          # with "Invalid Page / CODESIGNING". Sign each nested binary before sealing
+          # the bundle, and drop the stale signature first so the new one is clean.
+          find dist/freegemas.app/Contents -name '*.dylib' -print0 \
+            | while IFS= read -r -d '' lib; do
+                codesign --remove-signature "$lib" || exit 1
+                chmod 0755 "$lib" || exit 1
+                codesign --force --sign - "$lib" || exit 1
+              done
+          codesign --force --sign - dist/freegemas.app
           echo "MACOS_ARCH=$(uname -m)" >> "$GITHUB_ENV"
       - name: publish artifacts
         uses: actions/upload-artifact@v4
