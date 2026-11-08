@@ -118,9 +118,70 @@ ELSEIF(APPLE)
 	install(TARGETS freegemas BUNDLE DESTINATION .)
 	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION freegemas.app/Contents/Resources)
 	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/AppIcon.icns DESTINATION freegemas.app/Contents/Resources)
+
+	# Homebrew's dylibs reference their own transitive dependencies through
+	# @rpath (e.g. "@rpath/libwebp.7.dylib"), so BundleUtilities has to be told
+	# where to look for them. Without these directories the @rpath entries stay
+	# unresolved and fixup_bundle fails calling otool on the literal "@rpath/..."
+	# string instead of a real file.
+	set(FREEGEMAS_BUNDLE_LIBRARY_DIRS
+		${SDL2_LIBRARY_DIRS}
+		${SDL2_IMAGE_LIBRARY_DIRS}
+		${SDL2_MIXER_LIBRARY_DIRS}
+		${SDL2_TTF_LIBRARY_DIRS}
+		${JSONCPP_LIBRARY_DIRS}
+	)
+	list(REMOVE_DUPLICATES FREEGEMAS_BUNDLE_LIBRARY_DIRS)
+
 	install(CODE "
 		include(BundleUtilities)
-		fixup_bundle(\"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/freegemas.app\" \"\" \"${FREEGEMAS_BUNDLE_LIBRARY_DIRS}\")
+
+		# A dylib records the exact file name of its dependencies in its install
+		# name, e.g. /opt/homebrew/opt/flac/lib/libFLAC.12.dylib. dyld has no
+		# notion of compatibility versions for that lookup, so a minor-version
+		# bump of a transitive Homebrew dependency (flac 1.4 -> 1.5, jpeg-xl
+		# 0.10 -> 0.11) leaves the reference dangling even though the ABI is
+		# compatible. Rather than hard-failing on a missing file, fall back to
+		# the best installed sibling sharing the same base name. BundleUtilities
+		# then copies it into Contents/Frameworks under the referenced name and
+		# rewrites the load commands, so the bundle stays self-contained.
+		macro(gp_resolve_item_override _ctx _item _exepath _dirs _resolved_item _resolved)
+			if(NOT \${_resolved})
+				string(REGEX REPLACE \"^@(rpath|loader_path|executable_path)/\" \"\" _item_path \"\${_item}\")
+				get_filename_component(_item_name \"\${_item_path}\" NAME)
+				string(REGEX REPLACE \"[.][0-9]+([.][0-9]+)*[.]dylib$\" \"\" _stem \"\${_item_name}\")
+
+				set(_search_dirs \${_dirs})
+				if(IS_ABSOLUTE \"\${_item_path}\")
+					get_filename_component(_item_dir \"\${_item_path}\" DIRECTORY)
+					list(INSERT _search_dirs 0 \"\${_item_dir}\")
+				endif()
+
+				set(_candidates \"\")
+				foreach(_dir \${_search_dirs})
+					file(GLOB _found \"\${_dir}/\${_stem}.*.dylib\")
+					list(APPEND _candidates \${_found})
+				endforeach()
+				if(NOT _candidates)
+					foreach(_dir \${_search_dirs})
+						file(GLOB _found \"\${_dir}/\${_stem}*.dylib\")
+						list(APPEND _candidates \${_found})
+					endforeach()
+				endif()
+
+				if(_candidates)
+					list(SORT _candidates)
+					list(REVERSE _candidates)
+					list(GET _candidates 0 _best)
+					message(STATUS \"note: '\${_item}' not found; using '\${_best}' instead (compatible minor version)\")
+					set(\${_resolved_item} \"\${_best}\")
+					set(\${_resolved} 1)
+				endif()
+			endif()
+		endmacro()
+
+		set(freegemas_bundle_library_dirs ${FREEGEMAS_BUNDLE_LIBRARY_DIRS})
+		fixup_bundle(\"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/freegemas.app\" \"\" \"\${freegemas_bundle_library_dirs}\")
 	")
 ELSE()
 	add_custom_target(
