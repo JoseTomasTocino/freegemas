@@ -102,7 +102,11 @@ jobs:
 
   Vita:
     runs-on: ubuntu-latest
-    container: vitasdk/vitasdk:latest
+    # Pinned by digest, not by a floating tag. `vitasdk/vitasdk:latest` is
+    # rebuilt from new package recipes, and that silently broke this job: the
+    # Sept 2026 SDL2 package began linking vitaGL/vitaShaRK, and vitaShaRK 1.7
+    # needs SceShaccCgExt at link time. Bump this deliberately, never implicitly.
+    container: vitasdk/vitasdk:2026.08-20261029@sha256:acd15285e1ae473e925c6f83fa41e2de45eb8b9e8ba89be7df03e194c35c11d3
 
     steps:
       - name: Checkout

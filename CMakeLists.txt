@@ -74,6 +74,22 @@ if (VITA)
 	# Optional. You can specify more param.sfo flags this way.
 	set(VITA_MKSFOEX_FLAGS "${VITA_MKSFOEX_FLAGS} -d PARENTAL_LEVEL=1")
 
+	# VITASDK's sdl2.pc links -lvitaGL -lvitashark -lSceShaccCg_stub. Since
+	# vitaShaRK 1.7, libvitashark.a calls sceShaccCgExtEnableExtensions and
+	# sceShaccCgExtDisableExtensions, which only libSceShaccCgExt.a defines, so
+	# the link fails with "undefined reference to
+	# `sceShaccCgExtEnableExtensions'". SceShaccCgExt itself uses taihen's
+	# injection/hook helpers, so that stub is needed too. Link them explicitly
+	# rather than relying on the SDK's pkg-config file to carry the chain.
+	find_library(VITA_SCESACC_EXT_LIB NAMES SceShaccCgExt)
+	find_library(VITA_TAIHEN_STUB_LIB NAMES taihen_stub)
+	if(VITA_SCESACC_EXT_LIB AND VITA_TAIHEN_STUB_LIB)
+		target_link_libraries(freegemas PRIVATE
+			${VITA_SCESACC_EXT_LIB}
+			${VITA_TAIHEN_STUB_LIB}
+		)
+	endif()
+
 	vita_create_self(freegemas.self freegemas)
 
 	vita_create_vpk(freegemas.vpk ${VITA_TITLEID} freegemas.self
