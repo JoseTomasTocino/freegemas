@@ -87,16 +87,17 @@ jobs:
         run: |
           export CPATH=$(brew --prefix)/include
           export LIBRARY_PATH=$(brew --prefix)/lib
-          cmake -DCMAKE_BUILD_TYPE=Release .
-          make
-          strip freegemas
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist"
+          cmake --build build
+          strip build/freegemas.app/Contents/MacOS/freegemas
+          make -C build install
+          echo "MACOS_ARCH=$(uname -m)" >> "$GITHUB_ENV"
       - name: publish artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: freegemas-macos
+          name: freegemas-macos-${{ env.MACOS_ARCH }}
           path: |
-            freegemas
-            media
+            dist/freegemas.app
             LICENSE
             README.md
 
@@ -134,11 +135,17 @@ jobs:
     - uses: actions/download-artifact@v4
     - name: Zip artifacts
       run: |
-        zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
+        if [ "${{ matrix.build }}" = "macos" ]; then
+          for artifact in freegemas-macos-*; do
+            [ -d "$artifact" ] && zip -r "${artifact}.zip" "$artifact"
+          done
+        else
+          zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
+        fi
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: freegemas-${{matrix.build}}.zip
+        files: freegemas-${{matrix.build}}*.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

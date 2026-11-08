@@ -20,6 +20,28 @@ else()
 	)
 endif()
 
+if(APPLE)
+	set(FREEGEMAS_ICNS "${CMAKE_CURRENT_BINARY_DIR}/AppIcon.icns")
+	add_custom_command(
+		OUTPUT ${FREEGEMAS_ICNS}
+		COMMAND sh ${PROJECT_SOURCE_DIR}/platform/macos/create-icon.sh
+			${PROJECT_SOURCE_DIR}/platform/macos/AppIcon.png
+			${FREEGEMAS_ICNS}
+		DEPENDS
+			${PROJECT_SOURCE_DIR}/platform/macos/create-icon.sh
+			${PROJECT_SOURCE_DIR}/platform/macos/AppIcon.png
+		VERBATIM
+	)
+	add_custom_target(freegemas_icon DEPENDS ${FREEGEMAS_ICNS})
+	add_dependencies(freegemas freegemas_icon)
+	set_target_properties(freegemas PROPERTIES
+		MACOSX_BUNDLE TRUE
+		MACOSX_BUNDLE_BUNDLE_NAME "FreeGemas"
+		MACOSX_BUNDLE_ICON_FILE "AppIcon.icns"
+		MACOSX_BUNDLE_INFO_PLIST "${PROJECT_SOURCE_DIR}/platform/macos/Info.plist.in"
+	)
+endif()
+
 set(BUILD_STATIC_DEFAULT OFF)
 if(WIN32 OR VITA)
     set(BUILD_STATIC_DEFAULT ON)
@@ -84,6 +106,10 @@ if (VITA)
 	)
 ELSEIF(WIN32)
 	# Nothing to do
+ELSEIF(APPLE)
+	install(TARGETS freegemas BUNDLE DESTINATION .)
+	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION freegemas.app/Contents/Resources)
+	install(FILES ${CMAKE_CURRENT_BINARY_DIR}/AppIcon.icns DESTINATION freegemas.app/Contents/Resources)
 ELSE()
 	add_custom_target(
 		link_media_folder
