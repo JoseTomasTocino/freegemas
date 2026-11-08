@@ -38,7 +38,7 @@ Do an out-of-source compilation and run the program:
 
 This assumes that you are already using [Homebrew](https://brew.sh/). You will need CMake and a few libraries to compile Freegemas:
 
-    brew install cmake sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
+    brew install cmake sdl3 sdl2-compat sdl2 sdl2_mixer sdl2_ttf sdl2_image gettext jsoncpp
 
 Now run the following commands to setup your environment to use Homebrew as a backup location for libraries.
 
@@ -54,10 +54,10 @@ After that, clone the repo:
 Do an out-of-source compilation and run the program:
 
     cd freegemas
-    mkdir build
-    cd build
-    cmake ..
-    make
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/dist"
+    cmake --build build
+    strip build/freegemas.app/Contents/MacOS/freegemas
+    make -C build install
     ./freegemas
 
 ## Installation on Playstation Vita

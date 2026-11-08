@@ -74,6 +74,19 @@ pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
+# Homebrew's "sdl2" formula is now an alias for sdl2-compat, which implements the
+# SDL2 ABI on top of SDL3. sdl2-compat does not link SDL3; it loads it by name at
+# runtime through @loader_path. Once the libraries are copied into
+# Contents/Frameworks the lookup no longer resolves, so SDL3 has to be copied in
+# alongside them. Optional: upstream SDL2 builds have no such dependency.
+pkg_search_module(SDL3 sdl3)
+if(SDL3_FOUND AND SDL3_LIBRARY_DIRS)
+    list(GET SDL3_LIBRARY_DIRS 0 SDL3_LIBRARY_DIR)
+    if(EXISTS "${SDL3_LIBRARY_DIR}/libSDL3.0.dylib")
+        set(FREEGEMAS_SDL3_DYLIB "${SDL3_LIBRARY_DIR}/libSDL3.0.dylib")
+    endif()
+endif()
+
 # Link libraries
 if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
@@ -192,6 +205,71 @@ ELSEIF(APPLE)
 
 		set(freegemas_bundle_library_dirs ${FREEGEMAS_BUNDLE_LIBRARY_DIRS})
 		fixup_bundle(\"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/freegemas.app\" \"\" \"\${freegemas_bundle_library_dirs}\")
+
+		# fixup_bundle cannot see SDL3 because sdl2-compat loads it with dlopen()
+		# rather than recording it as a linked dependency, so copy it in by hand.
+		# @loader_path for the bundled libSDL2 resolves to Contents/Frameworks,
+		# which is exactly where this puts it. Both the versioned name it is
+		# loaded by and the plain name are provided so either reference works.
+		set(_fw_dir \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/freegemas.app/Contents/Frameworks\")
+		set(_sdl3 \"\")
+		if(EXISTS \"${FREEGEMAS_SDL3_DYLIB}\")
+			set(_sdl3 \"${FREEGEMAS_SDL3_DYLIB}\")
+		else()
+			# Fall back to searching the pkg-config library directories, which is
+			# where the sdl3.pc file pointed at configure time.
+			foreach(_dir \"${SDL3_LIBRARY_DIRS}\" ${FREEGEMAS_BUNDLE_LIBRARY_DIRS})
+				if(NOT _sdl3 AND EXISTS \"\${_dir}/libSDL3.0.dylib\")
+					set(_sdl3 \"\${_dir}/libSDL3.0.dylib\")
+				endif()
+			endforeach()
+		endif()
+
+		if(_sdl3)
+			message(STATUS \"bundling SDL3 from '\${_sdl3}'\")
+			configure_file(\"\${_sdl3}\" \"\${_fw_dir}/libSDL3.0.dylib\" COPYONLY)
+			configure_file(\"\${_sdl3}\" \"\${_fw_dir}/libSDL3.dylib\" COPYONLY)
+			# Point the install name at the bundle so the shipped copy does not
+			# advertise (or depend on) the Homebrew path it came from.
+			execute_process(
+				COMMAND install_name_tool -id \"@executable_path/../Frameworks/libSDL3.0.dylib\"
+					\"\${_fw_dir}/libSDL3.0.dylib\"
+				ERROR_QUIET
+			)
+			execute_process(
+				COMMAND install_name_tool -id \"@executable_path/../Frameworks/libSDL3.dylib\"
+					\"\${_fw_dir}/libSDL3.dylib\"
+				ERROR_QUIET
+			)
+		else()
+			message(WARNING \"libSDL3.0.dylib not found; the bundle will only run on machines that have Homebrew SDL3 installed\")
+		endif()
+
+		# Every dylib was rewritten by install_name_tool, which invalidates the
+		# signature the Homebrew bottle shipped with. Apple Silicon refuses to map
+		# a page whose hash no longer matches, so sign each nested binary before
+		# sealing the bundle. The nested signatures must exist first: signing only
+		# the bundle leaves the dylibs stale and the app is killed at launch.
+		file(GLOB _bundled_dylibs \"\${_fw_dir}/*.dylib\")
+		foreach(_lib \${_bundled_dylibs})
+			execute_process(
+				COMMAND codesign --force --sign - \"\${_lib}\"
+				RESULT_VARIABLE _sign_result
+				ERROR_QUIET
+			)
+			if(NOT _sign_result EQUAL 0)
+				message(WARNING \"codesign failed for \${_lib}\")
+			endif()
+		endforeach()
+
+		execute_process(
+			COMMAND codesign --force --sign - \"\$ENV{DESTDIR}\${CMAKE_INSTALL_PREFIX}/freegemas.app\"
+			RESULT_VARIABLE _bundle_sign_result
+			ERROR_QUIET
+		)
+		if(NOT _bundle_sign_result EQUAL 0)
+			message(WARNING \"codesign failed for the app bundle\")
+		endif()
 	")
 ELSE()
 	add_custom_target(
