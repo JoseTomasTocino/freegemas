@@ -106,7 +106,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
       - name: Install dependencies
         run: |
           yes | vdpm sdl2
@@ -115,7 +115,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
           make
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: freegemas-vita
           path: |
@@ -134,12 +134,12 @@ jobs:
     - name: Extract tag name
       id: tag
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v7
     - name: Zip artifacts
       run: |
         zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: freegemas-${{matrix.build}}.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
