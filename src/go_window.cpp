@@ -52,7 +52,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, Uin
     }
 
     // For proper scaling in all resolutions
-    // SDL_SetRenderLogicalPresentation(mRenderer, width, height);
+    SDL_SetRenderLogicalPresentation(mRenderer, width, height, SDL_LOGICAL_PRESENTATION_LETTERBOX);
 
     // Initialize renderer color
     SDL_SetRenderDrawColor( mRenderer, 0, 0, 0, 255 );
@@ -122,6 +122,7 @@ void GoSDL::Window::show()
 
             case SDL_EVENT_MOUSE_MOTION:
                 mMouseActive = true;
+                SDL_ConvertEventToRenderCoordinates(mRenderer, &e);
                 mMouseX = e.motion.x;
                 mMouseY = e.motion.y;
                 break;
