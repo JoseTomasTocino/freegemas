@@ -24,21 +24,27 @@ void GoSDL::Music::setSample(std::string path)
 
     if (!mSample)
     {
-        printf("MIX_LoadAudio ERROR: %s\n", SDL_GetError());
+        SDL_Log("MIX_LoadAudio ERROR: %s\n", SDL_GetError());
         return;
     }
     if (!mSample_track)
     {
         mSample_track = MIX_CreateTrack(mParentWindow->getMixer());
+    }    if (!mSample_track)
+    {
+        SDL_Log("MIX_CreateTrack ERROR: %s\n", SDL_GetError());
+        return;
     }
+    MIX_SetTrackAudio(mSample_track, mSample);
 }
 
 void GoSDL::Music::play (float vol)
 {
-    if (!mSample)
+    if (!mSample || !mSample_track)
         return;
 
-    MIX_SetTrackGain(mSample_track, 128 * vol);
+    MIX_StopTrack(mSample_track, 0);
+    MIX_SetTrackGain(mSample_track, vol);
     
     SDL_PropertiesID properties = SDL_CreateProperties();
     SDL_SetNumberProperty(properties, MIX_PROP_PLAY_LOOPS_NUMBER, -1);
@@ -49,11 +55,16 @@ void GoSDL::Music::play (float vol)
 
 void GoSDL::Music::stop()
 {
+    if (!mSample_track)
+        return;
+
     size_t frames = MIX_TrackMSToFrames(mSample_track, 200);
     MIX_StopTrack(mSample_track, frames);
 }
 
 bool GoSDL::Music::isPlaying()
 {
+    if (!mSample_track)
+        return false;
     return MIX_TrackPlaying(mSample_track);
 }
