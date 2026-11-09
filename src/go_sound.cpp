@@ -14,6 +14,7 @@ void GoSDL::Sound::setWindow(Window *parentWindow)
 
 void GoSDL::Sound::setSample(std::string path)
 {
+    unload();
     std::string mPath = getBasePath() + path;
     mSample = MIX_LoadAudio(mParentWindow->getMixer(), mPath.c_str(), true);
 
@@ -36,12 +37,15 @@ void GoSDL::Sound::setSample(std::string path)
 
 void GoSDL::Sound::unload ()
 {
-    if (mSample_track)
+    if (mSample_track) {
         MIX_StopTrack(this->mSample_track, 0);
-    if (mSample)
-        MIX_DestroyAudio(mSample);
-    if (mSample_track)
         MIX_DestroyTrack(mSample_track);
+        mSample_track = nullptr;
+    }
+    if (mSample) {
+        MIX_DestroyAudio(mSample);
+        mSample = nullptr;
+    }  
 }
 
 void GoSDL::Sound::play (float vol)
