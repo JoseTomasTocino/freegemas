@@ -74,7 +74,13 @@ bool GoSDL::Image::setWindowAndPath(GoSDL::Window * parentWindow, std::string pa
 bool GoSDL::Image::loadTexture()
 {
     // Load texture from file
-    SDL_Texture * texture = IMG_LoadTexture(mParentWindow->getRenderer(), mPath.c_str());
+    SDL_Surface * surface = SDL_LoadSurface(mPath.c_str());
+    if (surface == nullptr)
+    {
+        return false;
+    }
+    SDL_Texture * texture = SDL_CreateTextureFromSurface(mParentWindow->getRenderer(), surface);
+    SDL_DestroySurface(surface);
 
     if (texture == nullptr)
     {
@@ -85,7 +91,10 @@ bool GoSDL::Image::loadTexture()
     mTexture.reset(texture, GoSDL::Image::SDL_Texture_Deleter());
 
     // Get texture's width and height
-    SDL_QueryTexture(mTexture.get(), NULL, NULL, &mWidth, &mHeight);
+    SDL_GetTextureSize(mTexture.get(), &mWidth, &mHeight);
+
+    // Set texture filtering mode to nearest
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_NEAREST);
 
     return true;
 }
@@ -96,7 +105,7 @@ void GoSDL::Image::setTexture (SDL_Texture * texture)
     mTexture.reset(texture, GoSDL::Image::SDL_Texture_Deleter());
 
     // Get texture's width and height
-    SDL_QueryTexture(mTexture.get(), NULL, NULL, &mWidth, &mHeight);
+    SDL_GetTextureSize(mTexture.get(), &mWidth, &mHeight);
 }
 
 int GoSDL::Image::getWidth()
@@ -124,7 +133,7 @@ bool GoSDL::Image::draw(int x, int y, int z, double factorX, double factorY, flo
         return false;
     }
 
-    SDL_Rect destRect;
+    SDL_FRect destRect;
     destRect.w = mWidth * factorX;
     destRect.h = mHeight * factorY;
     destRect.x = x;

@@ -6,7 +6,7 @@
 #include "go_window.h"
 #include "go_image.h"
 
-#include <SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 
 namespace GoSDL {

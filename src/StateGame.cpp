@@ -58,7 +58,7 @@ void StateGame::buttonDown(SDL_Keycode button)
         mGame -> changeState("stateMainMenu");
     }
 
-    else if (button == SDLK_h)
+    else if (button == SDLK_H)
     {
         showHint();
     }
@@ -70,9 +70,9 @@ void StateGame::buttonDown(SDL_Keycode button)
 
 void StateGame::controllerButtonDown(Uint8 button)
 {
-    if (button == SDL_CONTROLLER_BUTTON_START) {
+    if (button == SDL_GAMEPAD_BUTTON_START) {
         mGame -> changeState("stateMainMenu");
-    } else if (button == SDL_CONTROLLER_BUTTON_BACK) {
+    } else if (button == SDL_GAMEPAD_BUTTON_BACK) {
         resetGame();
     } else {
         mGameBoard.controllerButtonDown(button);
