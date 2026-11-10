@@ -121,7 +121,7 @@ jobs:
           tags: vitasdk-candidate:ci
           build-args: |
             BASE_IMAGE=${{ env.BASE_IMAGE }}@${{ needs.plan.outputs.base_digest }}
-            VITASDK_CHANNEL=full
+            VITASDK_CHANNEL=nightly
             EXCLUDED_PACKAGES=vita-libdl curl-mbedtls sdl2_vitagl
           cache-from: type=gha,scope=ci
           cache-to: type=gha,mode=max,scope=ci
