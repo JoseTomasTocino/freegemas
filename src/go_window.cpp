@@ -62,7 +62,7 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, Uin
     setFullscreen(mOptions.getFullscreenEnabled());
 
     // Hide cursor
-    SDL_ShowCursor();
+    SDL_HideCursor();
 }
 
 GoSDL::Window::~Window()
