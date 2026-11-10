@@ -120,7 +120,7 @@ jobs:
           load: true
           tags: vitasdk-candidate:ci
           build-args: |
-            BASE_IMAGE=${{ env.BASE_IMAGE }}@${{ needs.plan.outputs.base_digest }}
+            BASE_IMAGE=ubuntu:24.04@sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac
             VITASDK_CHANNEL=nightly
             EXCLUDED_PACKAGES=vita-libdl curl-mbedtls sdl2_vitagl
           cache-from: type=gha,scope=ci
