@@ -102,6 +102,11 @@ jobs:
 
   VitaSdkBuild:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.image.outputs.ref }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -109,8 +114,16 @@ jobs:
           repository: vitasdk/docker
       - uses: docker/setup-buildx-action@v4
 
-        # Built into the local daemon first so the smoke test runs against the
-        # very image that is about to be published, before it is published.
+      # `container:` is resolved by the runner before any step runs, so the
+      # image has to exist in a registry both jobs can reach. GHCR requires a
+      # lowercase path and github.repository keeps the owner's capitalisation.
+      - name: Resolve image reference
+        id: image
+        run: |
+          echo "ref=ghcr.io/${GITHUB_REPOSITORY,,}/vitasdk-candidate:${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+
+      # Built into the local daemon first so the smoke test runs against the
+      # very image that is about to be published, before it is published.
       - name: Build
         uses: docker/build-push-action@v7
         with:
@@ -118,7 +131,7 @@ jobs:
           target: full
           platforms: linux/amd64
           load: true
-          tags: vitasdk-candidate:ci
+          tags: ${{ steps.image.outputs.ref }}
           build-args: |
             BASE_IMAGE=ubuntu:24.04@sha256:68ee22004a9109b44973313b02ff7b1de250f1de0f5ecb628d73f579aaff33ac
             VITASDK_CHANNEL=nightly
@@ -126,10 +139,27 @@ jobs:
           cache-from: type=gha,scope=ci
           cache-to: type=gha,mode=max,scope=ci
 
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image
+        run: docker push "${{ steps.image.outputs.ref }}"
+
   Vita:
     needs: [VitaSdkBuild]
     runs-on: ubuntu-latest
-    container: vitasdk-candidate:ci
+    permissions:
+      contents: read
+      packages: read
+    container:
+      image: ${{ needs.VitaSdkBuild.outputs.image }}
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout
