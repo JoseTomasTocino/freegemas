@@ -100,9 +100,36 @@ jobs:
             LICENSE
             README.md
 
-  Vita:
+  VitaSdkBuild:
     runs-on: ubuntu-latest
-    container: vitasdk/vitasdk:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: vitasdk/docker
+      - uses: docker/setup-buildx-action@v4
+
+        # Built into the local daemon first so the smoke test runs against the
+        # very image that is about to be published, before it is published.
+      - name: Build
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          target: full
+          platforms: linux/amd64
+          load: true
+          tags: vitasdk-candidate:ci
+          build-args: |
+            BASE_IMAGE=${{ env.BASE_IMAGE }}@${{ needs.plan.outputs.base_digest }}
+            VITASDK_CHANNEL=full
+            EXCLUDED_PACKAGES=vita-libdl curl-mbedtls sdl2_vitagl
+          cache-from: type=gha,scope=ci
+          cache-to: type=gha,mode=max,scope=ci
+
+  Vita:
+    needs: [VitaSdkBuild]
+    runs-on: ubuntu-latest
+    container: vitasdk-candidate:ci
 
     steps:
       - name: Checkout
