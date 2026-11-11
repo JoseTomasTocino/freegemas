@@ -19,7 +19,7 @@ First, you need to install git and gcc:
     
 After that, clone the repo:
 
-    git clone --recurse-submodules --remote-submodules https://github.com/JoseTomasTocino/freegemas.git
+    git clone --recursive https://github.com/JoseTomasTocino/freegemas.git
     
 Do an out-of-source compilation and run the program:
 
@@ -45,7 +45,7 @@ export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
 
 After that, clone the repo:
 
-    git clone --recurse-submodules --remote-submodules https://github.com/JoseTomasTocino/freegemas.git
+    git clone --recursive https://github.com/JoseTomasTocino/freegemas.git
     
 Do an out-of-source compilation and run the program:
 
@@ -62,7 +62,7 @@ For building for Vita, the [Vita SDK](https://vitasdk.org) should be installed.
 
 After that, clone the repo:
 
-    git clone --recurse-submodules --remote-submodules https://github.com/JoseTomasTocino/freegemas.git
+    git clone --recursive https://github.com/JoseTomasTocino/freegemas.git
 
 Do an out-of-source compilation:
 
