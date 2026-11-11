@@ -33,6 +33,7 @@ jobs:
           path: |
             Freegemas*.AppImage
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   Windows:
@@ -70,6 +71,7 @@ jobs:
             freegemas.exe
             media
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   MacOS:
@@ -95,6 +97,7 @@ jobs:
             freegemas
             media
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   Vita:
@@ -118,6 +121,7 @@ jobs:
           path: |
             freegemas.vpk
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   Release:
