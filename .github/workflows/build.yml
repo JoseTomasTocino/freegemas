@@ -116,9 +116,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Install dependencies
-        run: |
-          yes | vdpm sdl2
+        with:
+          submodules: recursive
+
       - name: Build
         run: |
           mkdir build && cd build
