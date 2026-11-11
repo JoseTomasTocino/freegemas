@@ -19,13 +19,16 @@ jobs:
           submodules: recursive
       - name: build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DSDL_X11=OFF .
-          make
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DSDL_X11=OFF ..
+          cmake --build .
           strip --strip-unneeded freegemas
           make install DESTDIR=AppDir
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+          cp Freegemas*.AppImage ../
+          cd ..
       - name: publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -60,9 +63,12 @@ jobs:
           submodules: recursive
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ..
           cmake --build .
           strip --strip-unneeded freegemas.exe
+          cp freegemas.exe ../
+          cd ..
       - name: Publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -84,11 +90,14 @@ jobs:
           submodules: recursive
       - name: build
         run: |
+          mkdir build && cd build
           export CPATH=$(brew --prefix)/include
           export LIBRARY_PATH=$(brew --prefix)/lib
-          cmake -DCMAKE_BUILD_TYPE=Release .
-          make
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build .
           strip freegemas
+          cp freegemas ../
+          cd ..
       - name: publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -112,8 +121,11 @@ jobs:
           yes | vdpm sdl2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
-          make
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
+          cmake --build .
+          cp freegemas.vpk ../
+          cd ..
       - name: Publish artifacts
         uses: actions/upload-artifact@v7
         with:
