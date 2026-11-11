@@ -139,7 +139,7 @@ jobs:
       run: |
         zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
     - name: Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         files: freegemas-${{matrix.build}}.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
