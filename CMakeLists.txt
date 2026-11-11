@@ -27,32 +27,26 @@ endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
 
 # Find libraries
-find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3)
-find_package(SDL3_Mixer REQUIRED)
-find_package(SDL3_TTF REQUIRED)
-include(FindPkgConfig)
+include(vendor/include_dependencies.cmake)
 
 # Link libraries
 if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
-    target_link_libraries(freegemas PRIVATE
-        SDL3::SDL3-static
-        SDL3_mixer::SDL3_mixer-static
-        SDL3_ttf::SDL3_ttf-static
-        ${JSONCPP_STATIC_LIBRARIES}
-    )
-else()
-    target_link_libraries(freegemas PRIVATE
-        SDL3::SDL3
-        SDL3_mixer::SDL3_mixer
-        SDL3_ttf::SDL3_ttf
-        ${JSONCPP_LIBRARIES}
-    )
-endif()
+endif(BUILD_STATIC)
+
+target_link_libraries(freegemas PRIVATE
+	SDL3::SDL3-static
+	SDL3_mixer::SDL3_mixer-static
+	SDL3_ttf::SDL3_ttf-static
+	jsoncpp_static
+)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
-    ${JSONCPP_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/SDL/include
+    ${PROJECT_SOURCE_DIR}/SDL_mixer/include
+    ${PROJECT_SOURCE_DIR}/SDL_ttf/include
+    ${PROJECT_SOURCE_DIR}/jsoncpp/include
 )
 
 if (VITA)

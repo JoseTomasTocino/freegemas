@@ -6,15 +6,17 @@ on:
 
 jobs:
   Linux:
-    runs-on: ubuntu-26.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends ca-certificates wget cmake g++ make cmake libsdl3-dev libsdl3-image-dev libsdl3-ttf-dev libsdl3-mixer-dev libjsoncpp-dev libfuse2 libasound-dev libxkbcommon-dev libdrm-dev libgl1-mesa-dev libgbm-dev libwayland-dev libdecor-0-dev
+          sudo apt-get install --no-install-recommends git ca-certificates g++ make cmake zlib1g-dev libasound-dev libxkbcommon-dev libdrm-dev libgl1-mesa-dev libgbm-dev libwayland-dev libdecor-0-dev
       - name: checkout
         uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DSDL_X11=OFF .
@@ -50,15 +52,11 @@ jobs:
             mingw-w64-x86_64-binutils
             mingw-w64-x86_64-make
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-pkgconf
-            mingw-w64-x86_64-sdl3
-            mingw-w64-x86_64-sdl3-image
-            mingw-w64-x86_64-sdl3-mixer
-            mingw-w64-x86_64-sdl3-ttf
-            mingw-w64-x86_64-jsoncpp
           update: true
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
@@ -78,11 +76,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: install dependencies
-        run: |
-          brew install sdl3 sdl3_mixer sdl3_ttf sdl3_image jsoncpp
       - name: checkout
         uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: build
         run: |
           export CPATH=$(brew --prefix)/include
