@@ -25,7 +25,7 @@ jobs:
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: freegemas-linux
           path: |
@@ -91,7 +91,7 @@ jobs:
           make
           strip freegemas
       - name: publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: freegemas-macos
           path: |
