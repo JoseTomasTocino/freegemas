@@ -1,0 +1,3 @@
+#pragma once
+#define LOADING_TIMED_BLOCKS 186u
+#define LOADING_ENDLESS_BLOCKS 186u

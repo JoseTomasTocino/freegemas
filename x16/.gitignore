@@ -1,0 +1,5 @@
+# Build output
+hostfs/
+build/
+web/dist/
+web/build-cache/
