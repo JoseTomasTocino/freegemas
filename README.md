@@ -56,9 +56,13 @@ Do an out-of-source compilation, install the app bundle and run it:
 
 ### Building a universal app
 
-The bundle above is self-contained: SDL3, SDL3_mixer, SDL3_ttf and JsonCpp are
-linked statically from the submodules, so it has no dependency on Homebrew at
-run time. Build one bundle that runs on both Apple Silicon and Intel with:
+The executable has no third-party dylib dependencies. SDL3, SDL3_mixer,
+SDL3_ttf (including freetype) and JsonCpp are built as static archives from the
+submodules and linked into the binary, so ``Contents/MacOS/freegemas`` carries
+everything it needs and ``Contents/Frameworks`` stays empty. The only libraries
+it loads are Apple's own, from ``/usr/lib`` and ``/System/Library``.
+
+Build one bundle that runs on both Apple Silicon and Intel with:
 
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
@@ -92,6 +96,20 @@ Verify the result with:
     codesign --verify --verbose dist/freegemas.app
     lipo -info dist/freegemas.app/Contents/MacOS/freegemas
     plutil -p dist/freegemas.app/Contents/Info.plist | grep LSMinimumSystemVersion
+
+There is no ``LC_RPATH`` and no non-system ``LC_LOAD_DYLIB`` in the executable,
+which is what makes the bundle relocatable. Confirm that with:
+
+    otool -L dist/freegemas.app/Contents/MacOS/freegemas \
+        | grep -vE "^\s*(/usr/lib/|/System/Library/)"
+
+That should print nothing beyond the executable header. To see what is actually
+loaded at run time, rather than what the load commands claim:
+
+    DYLD_PRINT_LIBRARIES=1 dist/freegemas.app/Contents/MacOS/freegemas 2>&1 \
+        | grep -vE "/(usr/lib|System)/"
+
+Nothing outside the bundle should appear.
 
 #### Signing
 
