@@ -1,0 +1,12 @@
+# Build output and locally supplied toolchain/template files
+build/
+merlin32/build/
+merlin32/src/main_mtest.s
+merlin32/generated/preview_*.png
+merlin32/generated/reference_*.png
+Merlin32.exe
+cadius.exe
+tools/cadius.exe
+*.2mg
+__pycache__/
+*.pyc
