@@ -21,8 +21,7 @@
 #define _DRAWINGQUEUE_H_
 
 #include <map>
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL3/SDL.h>
 
 #include "log.h"
 
@@ -31,7 +30,7 @@ namespace GoSDL {
     struct DrawingQueueOperation
     {
         SDL_Texture * mTexture;
-        SDL_Rect mDstRect;
+        SDL_FRect mDstRect;
         double mAngle;
         Uint8 mAlpha;
         SDL_Color mColor;

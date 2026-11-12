@@ -1,9 +1,7 @@
 #ifndef _IMAGE_H_
 #define _IMAGE_H_
 
-#include <SDL.h>
-#include <SDL_image.h>
-
+#include <SDL3/SDL.h>
 #include <string>
 #include <memory>
 using namespace std;
@@ -71,7 +69,7 @@ namespace GoSDL {
         };
 
         Window * mParentWindow = NULL;
-        int mWidth, mHeight;
+        float mWidth, mHeight;
 
         string mPath;
     };

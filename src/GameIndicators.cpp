@@ -58,6 +58,7 @@ void GameIndicators::loadResources()
     options.loadResources();
 
     if (options.getMusicEnabled()) {
+        sfxSong.setWindow(mGame);
         sfxSong.setSample("media/music.ogg");
         sfxSong.play();
     }

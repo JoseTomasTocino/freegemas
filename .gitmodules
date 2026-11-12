@@ -1,0 +1,12 @@
+[submodule "vendor/SDL"]
+	path = vendor/SDL
+	url = https://github.com/libsdl-org/SDL.git
+[submodule "vendor/SDL_mixer"]
+	path = vendor/SDL_mixer
+	url = https://github.com/libsdl-org/SDL_mixer.git
+[submodule "vendor/SDL_ttf"]
+	path = vendor/SDL_ttf
+	url = https://github.com/libsdl-org/SDL_ttf.git
+[submodule "vendor/jsoncpp"]
+	path = vendor/jsoncpp
+	url = https://github.com/open-source-parsers/jsoncpp.git

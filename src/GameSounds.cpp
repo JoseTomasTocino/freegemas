@@ -1,8 +1,14 @@
 #include "GameSounds.h"
 
-void GameSounds::loadResources()
+void GameSounds::loadResources(GoSDL::Window * w)
 {
     options.loadResources();
+
+    mSfxMatch1.setWindow(w);
+    mSfxMatch2.setWindow(w);
+    mSfxMatch3.setWindow(w);
+    mSfxSelect.setWindow(w);
+    mSfxFall.setWindow(w);
 
     if (options.getSoundEnabled() && !soundsLoaded) {
         mSfxMatch1.setSample("media/match1.ogg");

@@ -1,5 +1,5 @@
-#include <SDL.h>
-
+#include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
 #include <memory>
 #include <cstdio>
 #include <stdexcept>
@@ -41,7 +41,7 @@ void GoSDL::Font::setPathAndSize(std::string path, unsigned size) {
     mFont = TTF_OpenFont(mPath.c_str(), mSize);
 
     if (mFont == NULL) {
-        printf("Oh My Goodness, an error : %s\n", TTF_GetError());
+        printf("Oh My Goodness, an error : %s\n", SDL_GetError());
         throw std::runtime_error("WAT");
     }
 
@@ -57,7 +57,7 @@ int GoSDL::Font::getTextWidth(std::string text) {
     if (!mFont) return 0;
 
     int w;
-    TTF_SizeUTF8(mFont, text.c_str(), &w, NULL);
+    TTF_GetStringSize(mFont, text.c_str(), text.length(), &w, NULL);
 
     return w;
 }
@@ -68,34 +68,34 @@ void GoSDL::Font::setWindow (Window * parentWindow) {
 
 GoSDL::Image GoSDL::Font::renderText (std::string text, SDL_Color color) {
 
-    SDL_Surface * tempSurface = TTF_RenderUTF8_Blended(mFont, text.c_str(), color);
+    SDL_Surface * tempSurface = TTF_RenderText_Blended(mFont, text.c_str(), text.length(), color);
     return surfaceToImage(tempSurface);
 }
 
 GoSDL::Image GoSDL::Font::renderTextWithShadow (std::string text, SDL_Color color, int shadowX, int shadowY, SDL_Color shadowColor) {
 
-    SDL_Surface * textSurface = TTF_RenderUTF8_Blended(mFont, text.c_str(), color);
-    SDL_Surface * shadowSurface = TTF_RenderUTF8_Blended(mFont, text.c_str(), shadowColor);
+    SDL_Surface * textSurface = TTF_RenderText_Blended(mFont, text.c_str(), text.length(), color);
+    SDL_Surface * shadowSurface = TTF_RenderText_Blended(mFont, text.c_str(), text.length(), shadowColor);
     return surfaceToImageWithShadow(textSurface, shadowSurface, shadowX, shadowY);
 }
 
 GoSDL::Image GoSDL::Font::renderBlock (std::string text, SDL_Color color, unsigned width) {
 
-    SDL_Surface * tempSurface = TTF_RenderUTF8_Blended_Wrapped(mFont, text.c_str(), color, width);
+    SDL_Surface * tempSurface = TTF_RenderText_Blended_Wrapped(mFont, text.c_str(), text.length(), color, width);
     return surfaceToImage(tempSurface);
 }
 
 GoSDL::Image GoSDL::Font::renderBlockWithShadow (std::string text, SDL_Color color, unsigned width, int shadowX, int shadowY, SDL_Color shadowColor) {
 
-    SDL_Surface * textSurface = TTF_RenderUTF8_Blended_Wrapped(mFont, text.c_str(), color, width);
-    SDL_Surface * shadowSurface = TTF_RenderUTF8_Blended_Wrapped(mFont, text.c_str(), shadowColor, width);
+    SDL_Surface * textSurface = TTF_RenderText_Blended_Wrapped(mFont, text.c_str(), text.length(), color, width);
+    SDL_Surface * shadowSurface = TTF_RenderText_Blended_Wrapped(mFont, text.c_str(), text.length(), shadowColor, width);
     return surfaceToImageWithShadow(textSurface, shadowSurface, shadowX, shadowY);
 }
 
 GoSDL::Image GoSDL::Font::surfaceToImage (SDL_Surface * tempSurface) {
     SDL_Texture * tempTexture = SDL_CreateTextureFromSurface(mParentWindow->getRenderer(), tempSurface);
 
-    SDL_FreeSurface(tempSurface);
+    SDL_DestroySurface(tempSurface);
 
     GoSDL::Image img;
     img.setWindow(mParentWindow);
@@ -107,7 +107,7 @@ GoSDL::Image GoSDL::Font::surfaceToImage (SDL_Surface * tempSurface) {
 GoSDL::Image GoSDL::Font::surfaceToImageWithShadow (SDL_Surface * textSurface, SDL_Surface * shadowSurface, int shadowX, int shadowY) {
     SDL_Rect rect;
 
-    SDL_Surface * tempSurface = SDL_CreateRGBSurfaceWithFormat(0, shadowX + shadowSurface->w, shadowY + shadowSurface->h, 32, SDL_PIXELFORMAT_RGBA32);
+    SDL_Surface * tempSurface = SDL_CreateSurface(shadowX + shadowSurface->w, shadowY + shadowSurface->h, SDL_PIXELFORMAT_RGBA32);
 
     rect.x = shadowX;
     rect.y = shadowY;
@@ -115,7 +115,7 @@ GoSDL::Image GoSDL::Font::surfaceToImageWithShadow (SDL_Surface * textSurface, S
     rect.w = shadowSurface->h;
     SDL_SetSurfaceBlendMode(shadowSurface, SDL_BLENDMODE_NONE);
     SDL_BlitSurface(shadowSurface, NULL, tempSurface, &rect);
-    SDL_FreeSurface(shadowSurface);
+    SDL_DestroySurface(shadowSurface);
 
     rect.x = 0;
     rect.y = 0;
@@ -123,7 +123,7 @@ GoSDL::Image GoSDL::Font::surfaceToImageWithShadow (SDL_Surface * textSurface, S
     rect.w = textSurface->h;
     SDL_SetSurfaceBlendMode(textSurface, SDL_BLENDMODE_BLEND);
     SDL_BlitSurface(textSurface, NULL, tempSurface, &rect);
-    SDL_FreeSurface(textSurface);
+    SDL_DestroySurface(textSurface);
 
     return surfaceToImage(tempSurface);
 }

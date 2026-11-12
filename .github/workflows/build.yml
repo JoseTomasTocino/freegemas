@@ -12,18 +12,23 @@ jobs:
       - name: install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev libfuse2
+          sudo apt-get install --no-install-recommends git ca-certificates g++ make cmake zlib1g-dev libasound-dev libxkbcommon-dev libdrm-dev libgl1-mesa-dev libgbm-dev libwayland-dev libdecor-0-dev
       - name: checkout
         uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
-          make
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DSDL_X11=OFF ..
+          cmake --build .
           strip --strip-unneeded freegemas
           make install DESTDIR=AppDir
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+          cp Freegemas*.AppImage ../
+          cd ..
       - name: publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -31,6 +36,7 @@ jobs:
           path: |
             Freegemas*.AppImage
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   Windows:
@@ -50,20 +56,19 @@ jobs:
             mingw-w64-x86_64-binutils
             mingw-w64-x86_64-make
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-pkgconf
-            mingw-w64-x86_64-SDL2
-            mingw-w64-x86_64-SDL2_image
-            mingw-w64-x86_64-SDL2_mixer
-            mingw-w64-x86_64-SDL2_ttf
-            mingw-w64-x86_64-jsoncpp
           update: true
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ..
           cmake --build .
           strip --strip-unneeded freegemas.exe
+          cp freegemas.exe ../
+          cd ..
       - name: Publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -72,24 +77,27 @@ jobs:
             freegemas.exe
             media
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   MacOS:
     runs-on: macos-latest
 
     steps:
-      - name: install dependencies
-        run: |
-          brew install sdl2 sdl2_mixer sdl2_ttf sdl2_image jsoncpp
       - name: checkout
         uses: actions/checkout@v7
+        with:
+          submodules: recursive
       - name: build
         run: |
+          mkdir build && cd build
           export CPATH=$(brew --prefix)/include
           export LIBRARY_PATH=$(brew --prefix)/lib
-          cmake -DCMAKE_BUILD_TYPE=Release .
-          make
+          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake --build .
           strip freegemas
+          cp freegemas ../
+          cd ..
       - name: publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -98,6 +106,7 @@ jobs:
             freegemas
             media
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   Vita:
@@ -107,13 +116,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-      - name: Install dependencies
-        run: |
-          yes | vdpm sdl2
+        with:
+          submodules: recursive
+
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
-          make
+          mkdir build && cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
+          cmake --build .
+          cp freegemas.vpk ../
+          cd ..
       - name: Publish artifacts
         uses: actions/upload-artifact@v7
         with:
@@ -121,6 +133,7 @@ jobs:
           path: |
             freegemas.vpk
             LICENSE
+            THIRD-PARTY-LICENSES.md
             README.md
 
   Release:

@@ -82,7 +82,7 @@ void GameBoard::loadResources()
     mHint.setWindow(mGame);
 
     // Initialise the sounds
-    mGame->getGameSounds()->loadResources();
+    mGame->getGameSounds()->loadResources(mGame);
 }
 
 void GameBoard::update()
@@ -521,30 +521,30 @@ void GameBoard::controllerButtonDown(Uint8 button)
 {
     switch (button)
     {
-        case SDL_CONTROLLER_BUTTON_Y:
+        case SDL_GAMEPAD_BUTTON_NORTH:
             showHint();
             break;
 
-        case SDL_CONTROLLER_BUTTON_A:
+        case SDL_GAMEPAD_BUTTON_SOUTH:
             selectGem();
             break;
 
-        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+        case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(0, 1);
             break;
 
-        case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+        case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(-1, 0);
             break;
 
-        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+        case SDL_GAMEPAD_BUTTON_DPAD_UP:
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(0, -1);
             break;
 
-        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+        case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
             mGame->getGameSounds()->playSoundSelect();
             moveSelector(1, 0);
             break;

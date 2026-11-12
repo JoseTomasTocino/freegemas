@@ -2,6 +2,7 @@
 #define GAME_SOUNDS_H
 
 #include "go_sound.h"
+#include "go_window.h"
 #include "OptionsManager.h"
 
 
@@ -10,7 +11,7 @@ class GameSounds
 
 public:
     /// Loads the sounds
-    void loadResources();
+    void loadResources(GoSDL::Window * w);
 
     void playSoundSelect();
     void playSoundFall();

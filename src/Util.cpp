@@ -1,7 +1,7 @@
 #include "Util.h"
 
 #include <cstdlib>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #if !defined(_WIN32) && !defined(__vita__)
     #include <dirent.h>
@@ -12,10 +12,9 @@ std::string getBasePath()
 {
     std::string basePathStr;
 
-    char *basePath = SDL_GetBasePath();
+    const char * basePath = SDL_GetBasePath();
     if (basePath) {
         basePathStr = basePath;
-        SDL_free(basePath);
     }
 
     #if !defined(_WIN32) && !defined(__vita__)

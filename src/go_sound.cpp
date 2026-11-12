@@ -7,32 +7,53 @@ GoSDL::Sound::~Sound ()
     unload();
 }
 
-void GoSDL::Sound::setSample (std::string path)
+void GoSDL::Sound::setWindow(Window *parentWindow)
 {
+    mParentWindow = parentWindow;
+}
+
+void GoSDL::Sound::setSample(std::string path)
+{
+    unload();
     std::string mPath = getBasePath() + path;
-    mSample = Mix_LoadWAV(mPath.c_str());
+    mSample = MIX_LoadAudio(mParentWindow->getMixer(), mPath.c_str(), true);
 
     if(!mSample)
     {
-        printf("Mix_LoadWAV: %s\n", Mix_GetError());
+        SDL_Log("MIX_LoadAudio: %s\n", SDL_GetError());
+        return;
     }
+    if (!mSample_track)
+    {
+        mSample_track = MIX_CreateTrack(mParentWindow->getMixer());
+    }
+    if(!mSample_track)
+    {
+        SDL_Log("MIX_CreateTrack: %s\n", SDL_GetError());
+        return;
+    }
+    MIX_SetTrackAudio(mSample_track, mSample);
 }
 
 void GoSDL::Sound::unload ()
 {
-    if (mSample != nullptr) {
-        Mix_FreeChunk(mSample);
-        mSample = nullptr;
+    if (mSample_track) {
+        MIX_StopTrack(this->mSample_track, 0);
+        MIX_DestroyTrack(mSample_track);
+        mSample_track = nullptr;
     }
+    if (mSample) {
+        MIX_DestroyAudio(mSample);
+        mSample = nullptr;
+    }  
 }
 
 void GoSDL::Sound::play (float vol)
 {
-    if (mSample == nullptr)
+    if (mSample_track == nullptr)
     {
         return;
     }
-
-    Mix_VolumeChunk(mSample, 128 * vol);
-    Mix_PlayChannel(-1, mSample, 0);
+    MIX_SetTrackGain(mSample_track, vol);
+    MIX_PlayTrack(mSample_track, 0);
 }

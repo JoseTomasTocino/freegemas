@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.28)
 project(freegemas_project)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -27,40 +27,26 @@ endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
 
 # Find libraries
-include(FindPkgConfig)
-pkg_search_module(SDL2 REQUIRED sdl2)
-pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
-pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
-pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
-pkg_search_module(JSONCPP REQUIRED jsoncpp)
+include(vendor/include_dependencies.cmake)
 
 # Link libraries
 if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
-    target_link_libraries(freegemas PRIVATE
-        ${SDL2_STATIC_LIBRARIES}
-        ${SDL2_IMAGE_STATIC_LIBRARIES}
-        ${SDL2_MIXER_STATIC_LIBRARIES}
-        ${SDL2_TTF_STATIC_LIBRARIES}
-        ${JSONCPP_STATIC_LIBRARIES}
-    )
-else()
-    target_link_libraries(freegemas PRIVATE
-        ${SDL2_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_MIXER_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${JSONCPP_LIBRARIES}
-    )
-endif()
+endif(BUILD_STATIC)
+
+target_link_libraries(freegemas PRIVATE
+	SDL3::SDL3-static
+	SDL3_mixer::SDL3_mixer-static
+	SDL3_ttf::SDL3_ttf-static
+	jsoncpp_static
+)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
-    ${SDL2_INCLUDE_DIRS}
-    ${SDL2_IMAGE_INCLUDE_DIRS}
-    ${SDL2_MIXER_INCLUDE_DIRS}
-    ${SDL2_TTF_INCLUDE_DIRS}
-    ${JSONCPP_INCLUDE_DIRS}
+    ${PROJECT_SOURCE_DIR}/SDL/include
+    ${PROJECT_SOURCE_DIR}/SDL_mixer/include
+    ${PROJECT_SOURCE_DIR}/SDL_ttf/include
+    ${PROJECT_SOURCE_DIR}/jsoncpp/include
 )
 
 if (VITA)
