@@ -18,5 +18,9 @@
 	<string>AppIcon</string>
 	<key>LSApplicationCategoryType</key>
 	<string>public.app-category.games</string>
+	<!-- CMake expands this from CMAKE_OSX_DEPLOYMENT_TARGET, keeping the
+	     advertised floor in step with what the binary is actually built for. -->
+	<key>LSMinimumSystemVersion</key>
+	<string>@CMAKE_OSX_DEPLOYMENT_TARGET@</string>
 </dict>
 </plist>

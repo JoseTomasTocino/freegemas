@@ -54,15 +54,11 @@ Do an out-of-source compilation, install the app bundle and run it:
     cmake --install build
     open dist/freegemas.app
 
-### Building a redistributable app
+### Building a universal app
 
 The bundle above is self-contained: SDL3, SDL3_mixer, SDL3_ttf and JsonCpp are
 linked statically from the submodules, so it has no dependency on Homebrew at
-run time. It is ad-hoc signed by the install step, which is enough for local use
-but not for distribution to other Macs without a Developer ID.
-
-To ship one bundle that runs on both Apple Silicon and Intel, build a universal
-binary and zip the result:
+run time. Build one bundle that runs on both Apple Silicon and Intel with:
 
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
@@ -70,25 +66,53 @@ binary and zip the result:
     cmake --build build
     strip build/freegemas.app/Contents/MacOS/freegemas
     cmake --install build
+    open dist/freegemas.app
+
+The minimum macOS version is ``CMAKE_OSX_DEPLOYMENT_TARGET``, which defaults to
+``11.0``. It is baked into the binary (``minos``) and written to
+``LSMinimumSystemVersion`` in the bundle's ``Info.plist``, so Finder and
+Gatekeeper refuse to launch it on anything older. Override it the usual CMake
+way if you need a different floor:
+
+    cmake -S . -B build -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 ...
+
+That floor is only the app's own; the SDK used to build it cannot go below its
+own minimum (13.1 for the macOS 26 SDK), so the version you request is clamped
+up if it is lower than the toolchain supports.
+
+To hand the bundle to someone else, zip the app together with the licences:
 
     mkdir -p release/freegemas-macos-universal
     cp -R dist/freegemas.app release/freegemas-macos-universal/
     cp LICENSE THIRD-PARTY-LICENSES.md README.md release/freegemas-macos-universal/
     (cd release && zip -qry freegemas-macos-universal.zip freegemas-macos-universal)
 
-The resulting ``release/freegemas-macos-universal.zip`` can be extracted and run
-on macOS 11 or newer. Verify the bundle with ``codesign --verify --verbose
-dist/freegemas.app`` and ``lipo -info
-dist/freegemas.app/Contents/MacOS/freegemas``.
+Verify the result with:
 
-Redistributing to other people's machines needs a Developer ID signature and
-notarization; replace the ad-hoc ``codesign --sign -`` in ``CMakeLists.txt``
-with your identity, or sign the installed bundle yourself:
+    codesign --verify --verbose dist/freegemas.app
+    lipo -info dist/freegemas.app/Contents/MacOS/freegemas
+    plutil -p dist/freegemas.app/Contents/Info.plist | grep LSMinimumSystemVersion
 
-    codesign --force --deep --options runtime --sign "Developer ID Application: ..." \
+#### Signing
+
+**The install step ad-hoc signs the bundle, so it is not redistributable as
+built.** An ad-hoc signature (``Signature=adhoc``, no ``TeamIdentifier``) is
+accepted only on the machine that produced it; once the zip is downloaded
+elsewhere, Gatekeeper quarantines it and reports the app as damaged or
+unidentified. Copying it to another Mac will not work around this.
+
+Shipping to other people requires a Developer ID certificate and notarization:
+
+    codesign --force --options runtime --timestamp \
+        --sign "Developer ID Application: Your Name (TEAMID)" \
         dist/freegemas.app
-    xcrun notarytool submit dist/freegemas.app --wait \
-        --apple-id ... --team-id ... --password ...
+    ditto -c -k --keepParent dist/freegemas.app FreeGemas.zip
+    xcrun notarytool submit FreeGemas.zip --wait \
+        --apple-id "you@example.com" --team-id TEAMID --password "app-specific-password"
+    xcrun stapler staple dist/freegemas.app
+
+Check available identities with ``security find-identity -v -p codesigning``;
+without one of those, only an ad-hoc build is possible.
 
 ## Installation on Playstation Vita
 

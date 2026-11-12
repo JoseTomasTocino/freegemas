@@ -92,6 +92,11 @@ jobs:
         run: |
           # Nothing is taken from Homebrew: SDL3 and JsonCpp come from the
           # submodules, so no CPATH/LIBRARY_PATH overrides are needed.
+          #
+          # The bundle is ad-hoc signed by the install step, so this artifact is
+          # for inspection and local runs only. Gatekeeper rejects it once it is
+          # quarantined on a machine other than the runner that built it;
+          # shipping to users needs Developer ID signing and notarization.
           mkdir build && cd build
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist" ..
           cmake --build .
