@@ -80,9 +80,15 @@ way if you need a different floor:
 
     cmake -S . -B build -DCMAKE_OSX_DEPLOYMENT_TARGET=13.0 ...
 
-That floor is only the app's own; the SDK used to build it cannot go below its
-own minimum (13.1 for the macOS 26 SDK), so the version you request is clamped
-up if it is lower than the toolchain supports.
+The floor is written to both the binary (``minos``) and ``Info.plist``, and the
+two always match. Two limits apply:
+
+- ``arm64`` cannot go below ``11.0``, because 11.0 is the first macOS release
+  that runs on Apple Silicon. A lower value therefore only applies to the
+  ``x86_64`` slice: ``-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15`` produces a binary
+  that is ``10.15`` on ``x86_64`` and ``11.0`` on ``arm64``.
+- This does not mean the build is tested on that floor. Nothing in the current
+  setup runs the app on anything older than the machine that built it.
 
 To hand the bundle to someone else, zip the app together with the licences:
 
