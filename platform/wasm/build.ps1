@@ -9,7 +9,7 @@ $ErrorActionPreference = "Continue"
 # through $LASTEXITCODE instead of treating stderr as a terminating error.
 $PSNativeCommandUseErrorActionPreference = $false
 
-$RepoRoot = Split-Path -Parent $PSScriptRoot
+$RepoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 if (-not [System.IO.Path]::IsPathRooted($BuildDir)) {
     $BuildDir = Join-Path $RepoRoot $BuildDir
 }

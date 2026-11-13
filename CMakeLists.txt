@@ -77,7 +77,7 @@ ELSEIF(EMSCRIPTEN)
 		"SHELL:-sINVOKE_RUN=0"
 		"SHELL:-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,callMain"
 		"SHELL:--js-library=${EMSCRIPTEN_ROOT_PATH}/src/lib/libidbfs.js"
-		"SHELL:--shell-file ${PROJECT_SOURCE_DIR}/wasm/shell.html"
+		"SHELL:--shell-file ${PROJECT_SOURCE_DIR}/platform/wasm/shell.html"
 		"SHELL:--preload-file ${PROJECT_SOURCE_DIR}/media@/media"
 	)
 ELSE()

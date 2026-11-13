@@ -67,6 +67,8 @@
     }
     .splash p { margin: 0; max-width: 480px; line-height: 1.5; color: #cbe9ff; }
     .splash small { color: #8db7cf; }
+    .splash small a { color: #63ddff; text-decoration: none; }
+    .splash small a:hover { text-decoration: underline; }
     button {
       appearance: none;
       border: 1px solid #63ddff;
@@ -153,7 +155,14 @@
       <h1>FREEGEMAS</h1>
       <p>Swap adjacent gems to line up three or more. Click below to enable sound and start playing.</p>
       <button id="play" type="button">Play</button>
-      <small>Original game by Jose Tomas Tocino &middot; GPLv2</small>
+      <small>
+        Original game by
+        <a href="https://github.com/JoseTomasTocino/freegemas" target="_blank" rel="noopener">Jose Tomas Tocino</a>
+        &middot;
+        <a href="https://github.com/JoseTomasTocino/freegemas/blob/master/LICENSE" target="_blank" rel="noopener">GPLv2</a>
+        &middot;
+        <a href="https://github.com/JoseTomasTocino/freegemas/blob/master/THIRD-PARTY-LICENSES.md" target="_blank" rel="noopener">Licenses</a>
+      </small>
     </div>
 
     <div id="exitScreen" class="overlay hidden">

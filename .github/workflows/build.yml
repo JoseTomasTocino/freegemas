@@ -109,6 +109,28 @@ jobs:
             THIRD-PARTY-LICENSES.md
             README.md
 
+  Emscripten:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Setup Emscripten and build
+        run: |
+          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          cd "$RUNNER_TEMP/emsdk"
+          ./emsdk install latest
+          ./emsdk activate latest
+          source ./emsdk_env.sh
+          cd "$GITHUB_WORKSPACE"
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          cmake --build build-wasm --parallel
+          test -s build-wasm/freegemas.html
+          test -s build-wasm/freegemas.wasm
+          test -s build-wasm/freegemas.data
+
   Vita:
     runs-on: ubuntu-latest
     container: vitasdk/vitasdk:latest
