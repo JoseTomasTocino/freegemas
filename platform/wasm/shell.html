@@ -124,22 +124,50 @@
       position: absolute;
       top: max(10px, env(safe-area-inset-top));
       right: max(10px, env(safe-area-inset-right));
-      z-index: 15;
+      z-index: 40;
       display: flex;
       gap: 8px;
     }
-    #hud button {
+    #hud button,
+    #back {
       padding: 7px 13px;
       border-radius: 8px;
-      font-size: 12px;
+      font: 700 12px/1 "Trebuchet MS", "Segoe UI", sans-serif;
       color: #dff8ff;
       background: rgba(3, 24, 39, .7);
-      border-color: rgba(99, 221, 255, .45);
+      border: 1px solid rgba(99, 221, 255, .45);
       box-shadow: none;
+      text-decoration: none;
+    }
+    #back {
+      position: absolute;
+      top: max(10px, env(safe-area-inset-top));
+      left: max(10px, env(safe-area-inset-left));
+      z-index: 40;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    #back:hover { background: rgba(3, 36, 56, .9); }
+    #back:focus-visible { outline: 3px solid #ff62dd; outline-offset: 3px; }
+    #game:fullscreen,
+    #game:-webkit-full-screen {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
+      background: #000;
+    }
+    #game:fullscreen canvas#canvas,
+    #game:-webkit-full-screen canvas#canvas {
+      width: 100vw;
+      height: 100vh;
+      max-width: none;
+      max-height: none;
     }
     @media (max-width: 620px) {
       .splash p { font-size: 13px; }
-      #hud button { padding: 6px 9px; }
+      #hud button, #back { padding: 6px 9px; }
     }
   </style>
 </head>
@@ -147,8 +175,10 @@
   <main id="game">
     <canvas id="canvas" tabindex="0" aria-label="Freegemas game canvas"></canvas>
 
+    <a id="back" href="../" title="Back to Freegemas" aria-label="Back to Freegemas">← Freegemas</a>
+
     <div id="hud">
-      <button id="fullscreen" type="button" title="Toggle fullscreen">Fullscreen</button>
+      <button id="fullscreen" type="button" title="Toggle fullscreen" aria-pressed="false">Fullscreen</button>
     </div>
 
     <div id="splash" class="overlay splash">
@@ -290,14 +320,59 @@
       if (canvas) canvas.blur();
     };
 
-    document.getElementById('fullscreen').addEventListener('click', function () {
-      var game = document.getElementById('game');
-      if (!document.fullscreenElement) {
-        (game.requestFullscreen || game.webkitRequestFullscreen || function () {}).call(game);
-      } else {
-        document.exitFullscreen();
+    var back = document.getElementById('back');
+    back.addEventListener('click', function (event) {
+      // Prefer the real history so the back control works whether the game is
+      // served as /wasm/ from the landing page or opened directly.
+      if (window.history.length > 1 && document.referrer) {
+        event.preventDefault();
+        window.history.back();
       }
     });
+
+    var fullscreenButton = document.getElementById('fullscreen');
+
+    function fullscreenElement() {
+      return document.fullscreenElement || document.webkitFullscreenElement || null;
+    }
+
+    function updateFullscreenButton() {
+      var active = !!fullscreenElement();
+      fullscreenButton.textContent = active ? 'Exit fullscreen' : 'Fullscreen';
+      fullscreenButton.setAttribute('aria-pressed', active ? 'true' : 'false');
+    }
+
+    function enterFullscreen() {
+      var game = document.getElementById('game');
+      var request = game.requestFullscreen || game.webkitRequestFullscreen || game.mozRequestFullScreen;
+      if (!request) return;
+      try {
+        var result = request.call(game, { navigationUI: 'hide' });
+        if (result && typeof result.catch === 'function') {
+          result.catch(function (err) {
+            console.warn('Fullscreen request failed:', err);
+          });
+        }
+      } catch (err) {
+        console.warn('Fullscreen request failed:', err);
+      }
+    }
+
+    fullscreenButton.addEventListener('click', function () {
+      if (fullscreenElement()) {
+        var exit = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
+        if (exit) {
+          var result = exit.call(document);
+          if (result && typeof result.catch === 'function') result.catch(function () {});
+        }
+      } else {
+        enterFullscreen();
+      }
+      document.getElementById('canvas').focus();
+    });
+
+    document.addEventListener('fullscreenchange', updateFullscreenButton);
+    document.addEventListener('webkitfullscreenchange', updateFullscreenButton);
 
     window.addEventListener('error', function (event) {
       console.error('Freegemas error:', event.error || event.message);
