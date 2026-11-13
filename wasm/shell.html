@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#06121f">
+  <title>Freegemas</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230b2b4a'/%3E%3Cpath d='M18 38l10-20 8 12 5-5 5 13z' fill='%235be7ff'/%3E%3Cpath d='M15 45h34' stroke='%23ff4fd8' stroke-width='4'/%3E%3C/svg%3E">
+  <style>
+    :root { color-scheme: dark; }
+    html, body { width: 100%; height: 100%; margin: 0; background: #06121f; overflow: hidden; }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: #eaf8ff;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #game {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: radial-gradient(ellipse at center, #0d2d4d 0%, #06121f 68%);
+    }
+    canvas#canvas {
+      display: block;
+      width: min(100vw, calc(100vh * 4 / 3));
+      height: min(100vh, calc(100vw * 3 / 4));
+      max-width: 100%;
+      max-height: 100%;
+      background: #000;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+      outline: none;
+      cursor: none;
+    }
+    .overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      padding: 24px;
+      box-sizing: border-box;
+      text-align: center;
+      background: rgba(2, 10, 18, 0.68);
+      backdrop-filter: blur(2px);
+      transition: opacity 180ms ease;
+    }
+    .overlay.hidden { opacity: 0; pointer-events: none; }
+    .splash h1 {
+      margin: 0;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: clamp(44px, 10vw, 92px);
+      letter-spacing: 2px;
+      color: #ff62dd;
+      text-shadow: 0 0 18px rgba(255, 79, 216, .55), 0 3px 0 #68135b;
+    }
+    .splash p { margin: 0; max-width: 480px; line-height: 1.5; color: #cbe9ff; }
+    .splash small { color: #8db7cf; }
+    button {
+      appearance: none;
+      border: 1px solid #63ddff;
+      border-radius: 999px;
+      padding: 13px 30px;
+      font: 700 18px/1 "Trebuchet MS", "Segoe UI", sans-serif;
+      letter-spacing: .04em;
+      color: #06121f;
+      background: linear-gradient(180deg, #c8f7ff, #63ddff);
+      box-shadow: 0 0 24px rgba(99, 221, 255, .25);
+      cursor: pointer;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:focus-visible { outline: 3px solid #ff62dd; outline-offset: 3px; }
+    #loading {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #06121f;
+      transition: opacity 160ms ease;
+    }
+    #loading.hidden { opacity: 0; pointer-events: none; }
+    #loading .brand {
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: clamp(34px, 8vw, 64px);
+      color: #ff62dd;
+      letter-spacing: 2px;
+    }
+    #exitScreen {
+      z-index: 25;
+      background: rgba(2, 10, 18, .9);
+    }
+    #exitScreen h2 {
+      margin: 0;
+      font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+      font-size: clamp(28px, 6vw, 52px);
+      letter-spacing: 1px;
+      color: #63ddff;
+    }
+    #exitScreen p { margin: 0; color: #cbe9ff; }
+    #status { min-height: 1.5em; color: #8db7cf; font-size: 14px; }
+    #progress {
+      width: min(320px, 76vw);
+      height: 8px;
+      accent-color: #63ddff;
+    }
+    #hud {
+      position: absolute;
+      top: max(10px, env(safe-area-inset-top));
+      right: max(10px, env(safe-area-inset-right));
+      z-index: 15;
+      display: flex;
+      gap: 8px;
+    }
+    #hud button {
+      padding: 7px 13px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: #dff8ff;
+      background: rgba(3, 24, 39, .7);
+      border-color: rgba(99, 221, 255, .45);
+      box-shadow: none;
+    }
+    @media (max-width: 620px) {
+      .splash p { font-size: 13px; }
+      #hud button { padding: 6px 9px; }
+    }
+  </style>
+</head>
+<body>
+  <main id="game">
+    <canvas id="canvas" tabindex="0" aria-label="Freegemas game canvas"></canvas>
+
+    <div id="hud">
+      <button id="fullscreen" type="button" title="Toggle fullscreen">Fullscreen</button>
+    </div>
+
+    <div id="splash" class="overlay splash">
+      <h1>FREEGEMAS</h1>
+      <p>Swap adjacent gems to line up three or more. Click below to enable sound and start playing.</p>
+      <button id="play" type="button">Play</button>
+      <small>Original game by Jose Tomas Tocino &middot; GPLv2</small>
+    </div>
+
+    <div id="exitScreen" class="overlay hidden">
+      <h2>Thanks for playing!</h2>
+      <p>The browser game has been closed.</p>
+      <button id="restart" type="button">Play again</button>
+    </div>
+
+    <div id="loading">
+      <div class="brand">FREEGEMAS</div>
+      <div id="status">Loading&hellip;</div>
+      <progress id="progress" value="0" max="100"></progress>
+    </div>
+  </main>
+
+  <script>
+    var Module = {
+      canvas: (function () { return document.getElementById('canvas'); })(),
+      print: function (text) { console.log(text); },
+      printErr: function (text) { console.warn(text); },
+      setStatus: function (text) {
+        var status = document.getElementById('status');
+        var progress = document.getElementById('progress');
+        if (!status) return;
+        if (!text) {
+          status.textContent = 'Ready';
+          progress.value = progress.max;
+          return;
+        }
+        status.textContent = text;
+        var match = /\((\d+)\/(\d+)\)/.exec(text);
+        if (match) {
+          progress.max = parseInt(match[2], 10);
+          progress.value = parseInt(match[1], 10);
+        } else if (/^All downloads complete/.test(text)) {
+          progress.value = progress.max;
+        }
+      },
+      monitorRunDependencies: function (left) {
+        this.totalDependencies = Math.max(this.totalDependencies, left);
+        this.setStatus(left ? 'Preparing... (' + (this.totalDependencies - left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
+      },
+      totalDependencies: 0,
+      onAbort: function (what) {
+        console.error('Freegemas failed to start:', what);
+        var loading = document.getElementById('loading');
+        var status = document.getElementById('status');
+        if (loading) loading.classList.remove('hidden');
+        if (status) status.textContent = 'Could not start Freegemas: ' + what;
+      },
+      onRuntimeInitialized: function () {
+        var module = this;
+        var loading = document.getElementById('loading');
+        var canvas = document.getElementById('canvas');
+        if (canvas) canvas.focus();
+
+        function startGame() {
+          if (module.__freegemasStarted) return;
+          module.__freegemasStarted = true;
+          if (module.__freegemasStartTimer) clearTimeout(module.__freegemasStartTimer);
+          try {
+            if (typeof module.callMain === 'function') {
+              module.callMain([]);
+            } else {
+              throw new Error('Emscripten callMain is not available');
+            }
+          } catch (err) {
+            console.error('Could not start the game:', err);
+            if (window.freegemasQuit) window.freegemasQuit();
+          }
+          if (loading) loading.classList.add('hidden');
+        }
+
+        // Media and the wasm module are already loading before this point.
+        // Mount persistence first, then start main() so options and highscores
+        // are present before the game reads them.
+        var fs = this.FS || (typeof FS !== 'undefined' ? FS : null);
+        var idbfs = this.IDBFS || (typeof IDBFS !== 'undefined' ? IDBFS : null);
+        if (fs && idbfs) {
+          try {
+            if (!fs.analyzePath('/libsdl').exists) fs.mkdir('/libsdl');
+            fs.mount(idbfs, {}, '/libsdl');
+            module.__freegemasStartTimer = setTimeout(startGame, 3000);
+            fs.syncfs(true, function (err) {
+              if (err) console.warn('Could not load persistent data:', err);
+              startGame();
+            });
+            setInterval(function () {
+              fs.syncfs(false, function (err) {
+                if (err) console.warn('Could not save persistent data:', err);
+              });
+            }, 2000);
+            window.addEventListener('beforeunload', function () {
+              fs.syncfs(false, function () {});
+            });
+          } catch (err) {
+            console.warn('Persistent storage unavailable:', err);
+            startGame();
+          }
+        } else {
+          startGame();
+        }
+      }
+    };
+
+    document.getElementById('play').addEventListener('click', function () {
+      document.getElementById('splash').classList.add('hidden');
+      var canvas = document.getElementById('canvas');
+      canvas.focus();
+      if (Module.SDL3 && Module.SDL3.audioContext && Module.SDL3.audioContext.state === 'suspended') {
+        Module.SDL3.audioContext.resume();
+      }
+    });
+
+    document.getElementById('restart').addEventListener('click', function () {
+      window.location.reload();
+    });
+
+    window.freegemasQuit = function () {
+      var exitScreen = document.getElementById('exitScreen');
+      if (exitScreen) exitScreen.classList.remove('hidden');
+      var splash = document.getElementById('splash');
+      if (splash) splash.classList.add('hidden');
+      var canvas = document.getElementById('canvas');
+      if (canvas) canvas.blur();
+    };
+
+    document.getElementById('fullscreen').addEventListener('click', function () {
+      var game = document.getElementById('game');
+      if (!document.fullscreenElement) {
+        (game.requestFullscreen || game.webkitRequestFullscreen || function () {}).call(game);
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    window.addEventListener('error', function (event) {
+      console.error('Freegemas error:', event.error || event.message);
+    });
+  </script>
+  {{{ SCRIPT }}}
+</body>
+</html>

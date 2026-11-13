@@ -130,6 +130,14 @@ namespace GoSDL {
         // Called when closing the game
         void closeAllGameControllers();
 
+        // Process one frame (event polling + game logic + rendering)
+        void tick();
+
+#ifdef __EMSCRIPTEN__
+        // Callback used by Emscripten's requestAnimationFrame main loop
+        static void tickCallback(void * arg);
+#endif
+
         // Process game logic, drawing and rendering
         void gameLoop();
 

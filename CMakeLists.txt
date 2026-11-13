@@ -70,6 +70,16 @@ if (VITA)
 	)
 ELSEIF(WIN32)
 	# Nothing to do
+ELSEIF(EMSCRIPTEN)
+	set_target_properties(freegemas PROPERTIES SUFFIX ".html")
+	target_link_options(freegemas PRIVATE
+		"SHELL:-sFORCE_FILESYSTEM=1"
+		"SHELL:-sINVOKE_RUN=0"
+		"SHELL:-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,callMain"
+		"SHELL:--js-library=${EMSCRIPTEN_ROOT_PATH}/src/lib/libidbfs.js"
+		"SHELL:--shell-file ${PROJECT_SOURCE_DIR}/wasm/shell.html"
+		"SHELL:--preload-file ${PROJECT_SOURCE_DIR}/media@/media"
+	)
 ELSE()
 	add_custom_target(
 		link_media_folder
