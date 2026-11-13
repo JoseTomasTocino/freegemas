@@ -13,10 +13,13 @@ __Freegemas__ is an open source version of the well known Bejeweled, for GNU/Lin
 
 ## Installation on Debian-based GNU/Linux systems
 
-First, you need to install git and gcc:
+SDL3 and its satellite libraries are built from the bundled submodules, so only
+the system development headers they need have to be installed:
 
-    sudo apt-get install git build-essential cmake
-    
+    sudo apt-get install git build-essential cmake \
+        zlib1g-dev libasound2-dev libxkbcommon-dev libdrm-dev libgl1-mesa-dev \
+        libgbm-dev libwayland-dev libdecor-0-dev
+
 After that, clone the repo:
 
     git clone --recursive https://github.com/JoseTomasTocino/freegemas.git
@@ -27,34 +30,29 @@ Do an out-of-source compilation and run the program:
     mkdir build
     cd build
     cmake ..
-    make
+    cmake --build .
     ./freegemas
 
 ## Installation on OS X
 
-This assumes that you are already using [Homebrew](https://brew.sh/). You will need CMake and a few libraries to compile Freegemas:
+This assumes that you are already using [Homebrew](https://brew.sh/). SDL3,
+SDL3_mixer, SDL3_ttf and JsonCpp are built from the bundled submodules, so
+Homebrew is only needed for CMake:
 
-    brew install cmake gettext
-
-Now run the following commands to setup your environment to use Homebrew as a backup location for libraries.
-
-```
-[[ -z "${LIBRARY_PATH}" ]] && export LIBRARY_PATH=/usr/local/lib
-export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
-```
+    brew install cmake
 
 After that, clone the repo:
 
     git clone --recursive https://github.com/JoseTomasTocino/freegemas.git
     
-Do an out-of-source compilation and run the program:
+Do an out-of-source compilation, install the app bundle and run it:
 
     cd freegemas
-    mkdir build
-    cd build
-    cmake ..
-    make
-    ./freegemas
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$PWD/dist"
+    cmake --build build
+    strip build/freegemas.app/Contents/MacOS/freegemas
+    cmake --install build
+    open dist/freegemas.app
 
 ## Installation on Playstation Vita
 
@@ -70,7 +68,7 @@ Do an out-of-source compilation:
     mkdir vita
     cd vita
     cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
-    make
+    cmake --build .
 
 Now ``freegemas.vpk`` can be tranfered and installed on Vita.
 
