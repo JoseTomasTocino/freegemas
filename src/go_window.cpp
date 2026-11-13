@@ -67,7 +67,15 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, Uin
     }
 
     // For proper scaling in all resolutions
+#ifdef __EMSCRIPTEN__
+    // The browser shell can make the canvas fill the whole viewport in
+    // fullscreen. Stretching the logical presentation here keeps the game
+    // content filling that canvas instead of leaving SDL's 4:3 letterbox bars
+    // inside it.
+    SDL_SetRenderLogicalPresentation(mRenderer, width, height, SDL_LOGICAL_PRESENTATION_STRETCH);
+#else
     SDL_SetRenderLogicalPresentation(mRenderer, width, height, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+#endif
 
     // Initialize renderer color
     SDL_SetRenderDrawColor( mRenderer, 0, 0, 0, 255 );
