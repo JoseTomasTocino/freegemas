@@ -102,6 +102,12 @@ Then open <http://localhost:8000/freegemas.html>. Opening the HTML file directly
 from disk does not work because browsers block the runtime's file fetches. Click
 **Play** once to enable browser audio.
 
+The browser shell has two small controls: **← Freegemas** in the top-left returns
+to the landing page (or the previous page when the build was opened from one),
+and **Fullscreen** in the top-right enters the browser's fullscreen mode. In
+fullscreen the game fills the whole display and the button changes to
+**Exit fullscreen**; press `Esc` to leave fullscreen.
+
 ![Freegemas WebAssembly build](platform/wasm/screenshot.png)
 
 ## Music licensing
