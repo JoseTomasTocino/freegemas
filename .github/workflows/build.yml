@@ -117,15 +117,15 @@ jobs:
         uses: actions/checkout@v7
         with:
           submodules: recursive
-      - name: Setup Emscripten and build
+      - name: Install Emscripten
         run: |
-          git clone --depth 1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
-          cd "$RUNNER_TEMP/emsdk"
-          ./emsdk install latest
-          ./emsdk activate latest
-          source ./emsdk_env.sh
-          cd "$GITHUB_WORKSPACE"
-          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y emscripten
+      - name: Build WebAssembly
+        run: |
+          export EMSCRIPTEN_ROOT_PATH="$(em-config EMSCRIPTEN_ROOT)"
+          echo "EMSCRIPTEN_ROOT_PATH=$EMSCRIPTEN_ROOT_PATH" >> "$GITHUB_ENV"
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release -DEMSCRIPTEN_ROOT_PATH="$EMSCRIPTEN_ROOT_PATH"
           cmake --build build-wasm --parallel
           test -s build-wasm/freegemas.html
           test -s build-wasm/freegemas.wasm
