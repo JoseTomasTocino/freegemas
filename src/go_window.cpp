@@ -5,12 +5,22 @@
 #include <iostream>
 #include <stdexcept>
 
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
+
 using namespace std;
 
 
 GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, Uint32 updateInterval) :
     mUpdateInterval(updateInterval)
 {
+#ifdef __EMSCRIPTEN__
+    // Use the canvas from wasm/shell.html for rendering and keyboard input.
+    SDL_SetHint(SDL_HINT_EMSCRIPTEN_CANVAS_SELECTOR, "#canvas");
+    SDL_SetHint(SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT, "#canvas");
+#endif
+
     // Init SDL
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMEPAD))
     {
@@ -57,7 +67,15 @@ GoSDL::Window::Window (unsigned width, unsigned height, std::string caption, Uin
     }
 
     // For proper scaling in all resolutions
+#ifdef __EMSCRIPTEN__
+    // The browser shell can make the canvas fill the whole viewport in
+    // fullscreen. Stretching the logical presentation here keeps the game
+    // content filling that canvas instead of leaving SDL's 4:3 letterbox bars
+    // inside it.
+    SDL_SetRenderLogicalPresentation(mRenderer, width, height, SDL_LOGICAL_PRESENTATION_STRETCH);
+#else
     SDL_SetRenderLogicalPresentation(mRenderer, width, height, SDL_LOGICAL_PRESENTATION_LETTERBOX);
+#endif
 
     // Initialize renderer color
     SDL_SetRenderDrawColor( mRenderer, 0, 0, 0, 255 );
@@ -86,97 +104,127 @@ GoSDL::Window::~Window()
 
 void GoSDL::Window::show()
 {
-    // To poll events
-    SDL_Event e;
-
     // Show the window
     SDL_ShowWindow(mWindow);
 
     mShouldRun = true;
     mApplicationActive = true;
 
+#ifdef __EMSCRIPTEN__
+    // Browsers cannot block forever in a native while loop. Let Emscripten
+    // drive the game at approximately the native frame rate; the third
+    // argument (true) keeps the C++ stack alive so Window/Game are not
+    // destroyed when show() unwinds.
+    emscripten_set_main_loop_arg(&GoSDL::Window::tickCallback, this, 60, true);
+#else
     // Main game loop
     while (mShouldRun) {
+        tick();
+    }
+#endif
+}
 
-        // Event loop
-        while (SDL_PollEvent (&e))
+#ifdef __EMSCRIPTEN__
+void GoSDL::Window::tickCallback(void * arg)
+{
+    static_cast<GoSDL::Window*>(arg)->tick();
+}
+#endif
+
+void GoSDL::Window::tick()
+{
+    // To poll events
+    SDL_Event e;
+
+    // Event loop
+    while (SDL_PollEvent (&e))
+    {
+        switch (e.type)
         {
-            switch (e.type)
-            {
-            case SDL_EVENT_WILL_ENTER_BACKGROUND:
-                mApplicationActive = false;
-                break;
+        case SDL_EVENT_WILL_ENTER_BACKGROUND:
+            mApplicationActive = false;
+            break;
 
-            case SDL_EVENT_WILL_ENTER_FOREGROUND:
-                mApplicationActive = true;
-                break;
+        case SDL_EVENT_WILL_ENTER_FOREGROUND:
+            mApplicationActive = true;
+            break;
 
-            case SDL_EVENT_QUIT:
-                // Yes, goto: http://stackoverflow.com/a/1257776/276451
-                goto exit;
-                break;
+        case SDL_EVENT_QUIT:
+            close();
+            break;
 
-            case SDL_EVENT_KEY_DOWN:
-                mMouseActive = false;
-                buttonDown(e.key.key);
-                break;
+        case SDL_EVENT_KEY_DOWN:
+            mMouseActive = false;
+            buttonDown(e.key.key);
+            break;
 
-            case SDL_EVENT_KEY_UP:
-                buttonUp(e.key.key);
-                break;
+        case SDL_EVENT_KEY_UP:
+            buttonUp(e.key.key);
+            break;
 
-            case SDL_EVENT_MOUSE_MOTION:
-                mMouseActive = true;
-                SDL_ConvertEventToRenderCoordinates(mRenderer, &e);
-                mMouseX = e.motion.x;
-                mMouseY = e.motion.y;
-                break;
+        case SDL_EVENT_MOUSE_MOTION:
+            mMouseActive = true;
+            SDL_ConvertEventToRenderCoordinates(mRenderer, &e);
+            mMouseX = e.motion.x;
+            mMouseY = e.motion.y;
+            break;
 
-            case SDL_EVENT_MOUSE_BUTTON_DOWN:
-                mMouseActive = true;
-                mouseButtonDown(e.button.button);
-                break;
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+            mMouseActive = true;
+            mouseButtonDown(e.button.button);
+            break;
 
-            case SDL_EVENT_MOUSE_BUTTON_UP:
-                mouseButtonUp(e.button.button);
-                break;
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+            mouseButtonUp(e.button.button);
+            break;
 
-            case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
-                mMouseActive = false;
-                controllerButtonDown(e.gbutton.button);
-                break;
+        case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+            mMouseActive = false;
+            controllerButtonDown(e.gbutton.button);
+            break;
 
-            case SDL_EVENT_GAMEPAD_ADDED:
-                openGameController(e.gbutton.which);
-                break;
+        case SDL_EVENT_GAMEPAD_ADDED:
+            openGameController(e.gbutton.which);
+            break;
 
-            case SDL_EVENT_GAMEPAD_REMOVED:
-                closeDisconnectedGameControllers();
-                break;
-            }
-        }
-
-        if (mApplicationActive)
-        {
-            Uint32 gameCycleTicks = SDL_GetTicks();
-
-            gameLoop();
-
-            // Limit to framerate
-            gameCycleTicks = SDL_GetTicks() - gameCycleTicks;
-            if (gameCycleTicks < mUpdateInterval)
-            {
-                SDL_Delay(mUpdateInterval - gameCycleTicks);
-            }
-        }
-        else
-        {
-            SDL_WaitEvent(nullptr);
+        case SDL_EVENT_GAMEPAD_REMOVED:
+            closeDisconnectedGameControllers();
+            break;
         }
     }
-    // Exit point for goto within switch
-exit:
-    ;
+
+    if (!mShouldRun)
+    {
+#ifdef __EMSCRIPTEN__
+        emscripten_cancel_main_loop();
+#endif
+        return;
+    }
+
+    if (mApplicationActive)
+    {
+#ifndef __EMSCRIPTEN__
+        Uint32 gameCycleTicks = SDL_GetTicks();
+#endif
+
+        gameLoop();
+
+#ifndef __EMSCRIPTEN__
+        // Limit to framerate. In the browser the requestAnimationFrame
+        // callback already supplies the frame pacing.
+        gameCycleTicks = SDL_GetTicks() - gameCycleTicks;
+        if (gameCycleTicks < mUpdateInterval)
+        {
+            SDL_Delay(mUpdateInterval - gameCycleTicks);
+        }
+#endif
+    }
+#ifndef __EMSCRIPTEN__
+    else
+    {
+        SDL_WaitEvent(nullptr);
+    }
+#endif
 }
 
 void GoSDL::Window::gameLoop()
@@ -232,6 +280,16 @@ void GoSDL::Window::gameLoop()
 void GoSDL::Window::close()
 {
     mShouldRun = false;
+
+#ifdef __EMSCRIPTEN__
+    // Let the web shell replace the frozen game canvas with a friendly
+    // "closed" screen instead of leaving the last frame on the page.
+    EM_ASM({
+        if (window.freegemasQuit) {
+            window.freegemasQuit();
+        }
+    }, 0);
+#endif
 }
 
 void GoSDL::Window::enqueueDraw(SDL_Texture * texture, SDL_FRect destRect, double angle, float z, Uint8 alpha, SDL_Color color)
