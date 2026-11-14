@@ -97,7 +97,7 @@ jobs:
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist"
           cmake --build build -j"$(sysctl -n hw.ncpu)"
           strip build/freegemas.app/Contents/MacOS/freegemas
-          cmake --install .
+          cmake --install build
           cd ..
       - name: package
         run: |
