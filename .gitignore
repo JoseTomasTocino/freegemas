@@ -33,6 +33,7 @@
 x64/
 x86/
 build/
+build*/
 bld/
 dist/
 [Bb]in/
@@ -205,3 +206,6 @@ UpgradeLog*.htm
 
 # Microsoft Fakes
 FakesAssemblies/
+
+# MacOS thumbnail caches
+.DS_Store
