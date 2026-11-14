@@ -94,13 +94,11 @@ jobs:
           # for inspection and local runs only. Gatekeeper rejects it once it is
           # quarantined on a machine other than the runner that built it;
           # shipping to users needs Developer ID signing and notarization.
-          mkdir build && cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist" ..
-          cmake --build .
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist"
+          cmake --build build -j"$(sysctl -n hw.ncpu)"
           strip freegemas.app/Contents/MacOS/freegemas
           cmake --install .
           cd ..
-          echo "MACOS_ARCH=$(uname -m)" >> "$GITHUB_ENV"
       - name: package
         run: |
           # upload-artifact uses the least common ancestor of the listed paths as
@@ -108,14 +106,14 @@ jobs:
           # README.md therefore makes the workspace the root and leaves a stray
           # dist/ wrapper in every download. Staging the files side by side keeps
           # the extracted archive flat: freegemas.app, LICENSE, README.md.
-          mkdir -p ${{ env.MACOS_ARCH }}
-          cp -R dist/freegemas.app ${{ env.MACOS_ARCH }}/
-          cp LICENSE THIRD-PARTY-LICENSES.md README.md ${{ env.MACOS_ARCH }}/
+          mkdir -p universal
+          cp -R dist/freegemas.app universal/
+          cp LICENSE THIRD-PARTY-LICENSES.md README.md universal/
       - name: publish artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: freegemas-macos-${{ env.MACOS_ARCH }}
-          path: ${{ env.MACOS_ARCH }}/
+          name: freegemas-macos-universal
+          path: universal/
           if-no-files-found: error
 
   Vita:
