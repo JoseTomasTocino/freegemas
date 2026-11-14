@@ -81,7 +81,7 @@ jobs:
             README.md
 
   MacOS:
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: checkout
@@ -90,24 +90,33 @@ jobs:
           submodules: recursive
       - name: build
         run: |
+          # The bundle is ad-hoc signed by the install step, so this artifact is
+          # for inspection and local runs only. Gatekeeper rejects it once it is
+          # quarantined on a machine other than the runner that built it;
+          # shipping to users needs Developer ID signing and notarization.
           mkdir build && cd build
-          export CPATH=$(brew --prefix)/include
-          export LIBRARY_PATH=$(brew --prefix)/lib
-          cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist" ..
           cmake --build .
-          strip freegemas
-          cp freegemas ../
+          strip freegemas.app/Contents/MacOS/freegemas
+          cmake --install .
           cd ..
+          echo "MACOS_ARCH=$(uname -m)" >> "$GITHUB_ENV"
+      - name: package
+        run: |
+          # upload-artifact uses the least common ancestor of the listed paths as
+          # the artifact root. Uploading dist/freegemas.app alongside LICENSE and
+          # README.md therefore makes the workspace the root and leaves a stray
+          # dist/ wrapper in every download. Staging the files side by side keeps
+          # the extracted archive flat: freegemas.app, LICENSE, README.md.
+          mkdir -p ${{ env.MACOS_ARCH }}
+          cp -R dist/freegemas.app ${{ env.MACOS_ARCH }}/
+          cp LICENSE THIRD-PARTY-LICENSES.md README.md ${{ env.MACOS_ARCH }}/
       - name: publish artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: freegemas-macos
-          path: |
-            freegemas
-            media
-            LICENSE
-            THIRD-PARTY-LICENSES.md
-            README.md
+          name: freegemas-macos-${{ env.MACOS_ARCH }}
+          path: ${{ env.MACOS_ARCH }}/
+          if-no-files-found: error
 
   Emscripten:
     runs-on: ubuntu-latest
@@ -172,11 +181,17 @@ jobs:
     - uses: actions/download-artifact@v7
     - name: Zip artifacts
       run: |
-        zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
+        if [ "${{ matrix.build }}" = "macos" ]; then
+          for artifact in freegemas-macos-*; do
+            [ -d "$artifact" ] && zip -r "${artifact}.zip" "$artifact"
+          done
+        else
+          zip -r freegemas-${{matrix.build}}.zip freegemas-${{matrix.build}}
+        fi
     - name: Release
       uses: softprops/action-gh-release@v3
       with:
-        files: freegemas-${{matrix.build}}.zip
+        files: freegemas-${{matrix.build}}*.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

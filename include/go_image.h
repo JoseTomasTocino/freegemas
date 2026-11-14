@@ -45,7 +45,7 @@ namespace GoSDL {
             eventually avoided this class from being copyable,
             because whenever I returned an Image from a function by copy,
             the instance in the function internally destroyed the
-            SDL_Texture. Furthermore, SDL2 does not currently
+            SDL_Texture. Furthermore, SDL3 does not currently
             offer any easy way of duplicating a SDL_Texture, so
             using a copy constructor was not possible.
 
