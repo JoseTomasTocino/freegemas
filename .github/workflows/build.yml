@@ -96,7 +96,7 @@ jobs:
           # shipping to users needs Developer ID signing and notarization.
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/dist"
           cmake --build build -j"$(sysctl -n hw.ncpu)"
-          strip freegemas.app/Contents/MacOS/freegemas
+          strip build/freegemas.app/Contents/MacOS/freegemas
           cmake --install .
           cd ..
       - name: package
