@@ -1,0 +1,59 @@
+/* Freegemas — Commander X16 web player. */
+:root { color-scheme: dark; }
+html, body { margin: 0; background: #090b14; color: #d8d8e0;
+  font: 15px/1.6 "Segoe UI", system-ui, sans-serif; }
+body { min-height: 100vh; display: flex; flex-direction: column; }
+
+.topbar { display: flex; align-items: baseline; gap: 14px; padding: 10px 18px;
+  border-bottom: 1px solid #1e1e2c; font-size: 13px; }
+.topbar .back { color: #d98cff; text-decoration: none; }
+.topbar .back:hover { text-decoration: underline; }
+.topbar .tag { color: #6d6d85; letter-spacing: .04em; }
+
+main { flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: 12px; padding: 18px 16px 26px; box-sizing: border-box; }
+
+#screen { position: relative; width: min(100%, 960px); aspect-ratio: 4 / 3;
+  background: #000; border: 1px solid #26263a; border-radius: 6px; overflow: hidden; }
+#canvas { display: block; width: 100%; height: 100%; outline: none;
+  image-rendering: pixelated; background: #000; }
+/* The X16 boots into BASIC before BOOT.PRG starts the game; the cover hides
+   that first blink and doubles as the audio gesture. */
+#boot { position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 10px; text-align: center;
+  padding: 24px; box-sizing: border-box;
+  background: radial-gradient(circle at 50% 35%, #1d122b, #070811 75%); }
+#boot[hidden] { display: none; }
+#boot h1 { margin: 0; font: 700 clamp(28px, 6vw, 56px)/1.05 "Trebuchet MS", "Segoe UI", sans-serif;
+  letter-spacing: .12em; color: #ff5cd0; text-shadow: 0 0 18px #7a0d52, 0 2px 0 #33001e; }
+#boot p { margin: 0; max-width: 620px; color: #a6a0bb; font-size: 13px; }
+#boot .hint { color: #7d748e; font-size: 12px; }
+#boot .err { color: #ff8f8f; font-size: 12px; }
+#play { margin: 8px 0 2px; padding: 10px 26px; font: 600 15px/1 inherit;
+  color: #0b0b10; background: #ffd15c; border: 0; border-radius: 6px; cursor: pointer; }
+#play:hover { background: #ffe39a; }
+#play:disabled { background: #4a4a55; color: #9a9aac; cursor: default; }
+kbd { font: 11px ui-monospace, monospace; background: #1c1c28; border: 1px solid #33334a;
+  border-radius: 3px; padding: 1px 4px; color: #c8c8d8; }
+
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+  width: min(100%, 960px); font-size: 12.5px; color: #8a8a9c; }
+#status { flex: 1 1 260px; font: 12px ui-monospace, monospace; color: #66e6b0; }
+.buttons { display: flex; gap: 8px; }
+.buttons button { font: 12.5px/1 inherit; padding: 6px 12px; color: #c8c8d8;
+  background: #16161f; border: 1px solid #2c2c40; border-radius: 5px; cursor: pointer; }
+.buttons button:hover:not(:disabled) { border-color: #6a4a92; }
+.buttons button:disabled { opacity: .45; cursor: default; }
+
+.notes { width: min(100%, 960px); color: #9a9aac; font-size: 12.5px;
+  border-top: 1px solid #1e1e2c; padding-top: 10px; }
+.notes summary { cursor: pointer; color: #c8c8d8; font-size: 13px; }
+.notes h2 { margin: 14px 0 4px; font-size: 13px; color: #d8d8e0; }
+.notes table { border-collapse: collapse; margin: 4px 0 8px; }
+.notes th, .notes td { text-align: left; padding: 2px 12px 2px 0; font-size: 12px; }
+.notes a { color: #d98cff; text-decoration: none; }
+.notes a:hover { text-decoration: underline; }
+.notes code, #boot code { font: 11.5px ui-monospace, monospace; color: #c8b8d8; }
+#error { position: absolute; inset: auto 12px 12px 12px; padding: 10px 12px;
+  background: #2a1010; border: 1px solid #6a2a2a; border-radius: 6px;
+  color: #ffb0b0; font-size: 12.5px; }
