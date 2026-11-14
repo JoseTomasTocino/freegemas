@@ -1,0 +1,285 @@
+{
+ "find_pattern": [
+  0,
+  0,
+  255,
+  15,
+  220,
+  12,
+  51,
+  14,
+  60,
+  13,
+  160,
+  15,
+  144,
+  0,
+  243,
+  15
+ ],
+ "find_pattern_scb": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "find_pattern_art_scb": [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+ ],
+ "gem_fast_files": [
+  "GEMS0.RAW",
+  "GEMS1.RAW",
+  "GEMS2.RAW"
+ ],
+ "gem_rasters": {
+  "file": "GEMS.RAW",
+  "bytes": 10260,
+  "row_table_bytes": 4480,
+  "format": "16 palettes x 7 gems x 20 uint16 offsets; native A16/X16 long-store RTL rows"
+ },
+ "sections": {
+  "gempals": 0,
+  "scbtab": 512,
+  "gemoff": 712,
+  "cellgem": 726,
+  "celloff": 854,
+  "dgtSh": 982,
+  "dgtSpitch": 983,
+  "dgtSptr": 984,
+  "dgtSdata": 1006,
+  "dgtTh": 1105,
+  "dgtTpitch": 1106,
+  "dgtTptr": 1107,
+  "dgtTdata": 1129,
+  "dgtSleft": 1437,
+  "dgtSright": 1459,
+  "dgtTleft": 1481,
+  "dgtTright": 1503,
+  "gemFastOffset": 1525,
+  "gemFastBank": 1833,
+  "gemFastAlign": 2141,
+  "titleGemOff": 2541,
+  "titleCacheRows": 2555,
+  "titleRiseY": 2955,
+  "gameScb": 3017,
+  "gamePalOfs": 3217,
+  "cellBgOff": 3617,
+  "cellGemY": 3745,
+  "cellGemX": 3873,
+  "screenRows": 4001,
+  "boardRows": 4401,
+  "fxStar": 4753,
+  "txtglyphs": 5009,
+  "titlepals": 5737,
+  "howtopals": 6121,
+  "optionspals": 6505,
+  "titleScb": 6889,
+  "howtoScb": 7089,
+  "optionsScb": 7289
+ },
+ "section_total": 7489,
+ "preview_board": [
+  5,
+  4,
+  6,
+  2,
+  3,
+  6,
+  1,
+  3,
+  1,
+  1,
+  6,
+  2,
+  2,
+  6,
+  5,
+  5,
+  4,
+  3,
+  5,
+  4,
+  5,
+  2,
+  6,
+  2,
+  3,
+  2,
+  5,
+  3,
+  4,
+  5,
+  3,
+  2,
+  5,
+  4,
+  4,
+  3,
+  3,
+  5,
+  1,
+  4,
+  4,
+  2,
+  2,
+  5,
+  2,
+  2,
+  3,
+  3,
+  2,
+  4,
+  4,
+  6,
+  1,
+  5,
+  3,
+  6,
+  1,
+  3,
+  3,
+  6,
+  1,
+  4,
+  5,
+  6
+ ],
+ "legal_swaps": [
+  [
+   13,
+   21
+  ],
+  [
+   20,
+   21
+  ],
+  [
+   21,
+   22
+  ],
+  [
+   30,
+   38
+  ],
+  [
+   32,
+   40
+  ],
+  [
+   40,
+   41
+  ],
+  [
+   40,
+   48
+  ],
+  [
+   42,
+   43
+  ],
+  [
+   43,
+   44
+  ],
+  [
+   45,
+   53
+  ]
+ ],
+ "scene": {
+  "tt": "SCENE4.RAW",
+  "endless": "SCENE4E.RAW",
+  "bytes": 32000
+ },
+ "art": {
+  "title": "TITLE.RAW",
+  "howto": "HOWTO.RAW",
+  "options": "OPTIONS.RAW",
+  "bytes": 32000
+ },
+ "layout": {
+  "screen": [
+   320,
+   200
+  ],
+  "bpr": 160,
+  "board": [
+   96,
+   14,
+   208,
+   176
+  ],
+  "cell": [
+   26,
+   22
+  ],
+  "gem": [
+   24,
+   20
+  ],
+  "score_digit_y": 44,
+  "score_right": 64,
+  "score_slots": 5,
+  "score_pitch": 8,
+  "time_digit_y": 82,
+  "time_right": 68,
+  "time_slots": 4,
+  "time_pitch": 12,
+  "buttons": [
+   {
+    "label": "Show hint",
+    "x": 7,
+    "y": 136,
+    "w": 78,
+    "h": 14
+   },
+   {
+    "label": "Reset game",
+    "x": 7,
+    "y": 151,
+    "w": 78,
+    "h": 14
+   },
+   {
+    "label": "Exit",
+    "x": 7,
+    "y": 179,
+    "w": 78,
+    "h": 14
+   }
+  ],
+  "font": {
+   "first": 32,
+   "last": 122,
+   "rows": 8,
+   "advance": 6
+  }
+ }
+}
