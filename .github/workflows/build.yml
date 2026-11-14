@@ -90,9 +90,6 @@ jobs:
           submodules: recursive
       - name: build
         run: |
-          # Nothing is taken from Homebrew: SDL3 and JsonCpp come from the
-          # submodules, so no CPATH/LIBRARY_PATH overrides are needed.
-          #
           # The bundle is ad-hoc signed by the install step, so this artifact is
           # for inspection and local runs only. Gatekeeper rejects it once it is
           # quarantined on a machine other than the runner that built it;
