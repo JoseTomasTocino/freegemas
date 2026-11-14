@@ -89,7 +89,7 @@ include_directories(
      ${PROJECT_SOURCE_DIR}/vendor/SDL/include
     ${PROJECT_SOURCE_DIR}/vendor/SDL_mixer/include
     ${PROJECT_SOURCE_DIR}/vendor/SDL_ttf/include
-    ${PROJECT_SOURCE_DIR/vendor}/jsoncpp/include
+    ${PROJECT_SOURCE_DIR}/vendor/jsoncpp/include
 )
 
 if (VITA)
