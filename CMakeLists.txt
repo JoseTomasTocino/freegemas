@@ -113,6 +113,23 @@ if (VITA)
 	)
 ELSEIF(WIN32)
 	# Nothing to do
+ELSEIF(EMSCRIPTEN)
+	set_target_properties(freegemas PROPERTIES SUFFIX ".html")
+	# Emscripten moved the IDBFS JS library from src/lib/libidbfs.js to
+	# src/library_idbfs.js. Support both layouts so the emsdk and the Ubuntu
+	# package can build the same tree.
+	set(EMSCRIPTEN_IDBFS_JS "${EMSCRIPTEN_ROOT_PATH}/src/lib/libidbfs.js")
+	if(NOT EXISTS "${EMSCRIPTEN_IDBFS_JS}")
+		set(EMSCRIPTEN_IDBFS_JS "${EMSCRIPTEN_ROOT_PATH}/src/library_idbfs.js")
+	endif()
+	target_link_options(freegemas PRIVATE
+		"SHELL:-sFORCE_FILESYSTEM=1"
+		"SHELL:-sINVOKE_RUN=0"
+		"SHELL:-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,callMain"
+		"SHELL:--js-library=${EMSCRIPTEN_IDBFS_JS}"
+		"SHELL:--shell-file ${PROJECT_SOURCE_DIR}/platform/wasm/shell.html"
+		"SHELL:--preload-file ${PROJECT_SOURCE_DIR}/media@/media"
+	)
 ELSEIF(APPLE)
 	install(TARGETS freegemas BUNDLE DESTINATION .)
 	install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/media DESTINATION freegemas.app/Contents/Resources)

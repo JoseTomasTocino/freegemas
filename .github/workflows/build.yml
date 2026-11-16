@@ -118,6 +118,28 @@ jobs:
           path: ${{ env.MACOS_ARCH }}/
           if-no-files-found: error
 
+  Emscripten:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - name: Install Emscripten
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y emscripten
+      - name: Build WebAssembly
+        run: |
+          export EMSCRIPTEN_ROOT_PATH="$(em-config EMSCRIPTEN_ROOT)"
+          echo "EMSCRIPTEN_ROOT_PATH=$EMSCRIPTEN_ROOT_PATH" >> "$GITHUB_ENV"
+          emcmake cmake -S . -B build-wasm -DCMAKE_BUILD_TYPE=Release -DEMSCRIPTEN_ROOT_PATH="$EMSCRIPTEN_ROOT_PATH"
+          cmake --build build-wasm --parallel
+          test -s build-wasm/freegemas.html
+          test -s build-wasm/freegemas.wasm
+          test -s build-wasm/freegemas.data
+
   Vita:
     runs-on: ubuntu-latest
     container: vitasdk/vitasdk:latest
