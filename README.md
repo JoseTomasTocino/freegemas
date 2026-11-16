@@ -67,7 +67,7 @@ Build one bundle that runs on both Apple Silicon and Intel with:
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
         -DCMAKE_INSTALL_PREFIX="$PWD/dist"
-    cmake --build build
+    cmake --build build -j"$(sysctl -n hw.ncpu)"
     strip build/freegemas.app/Contents/MacOS/freegemas
     cmake --install build
     open dist/freegemas.app
