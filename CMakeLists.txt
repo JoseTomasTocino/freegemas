@@ -125,6 +125,7 @@ ELSEIF(EMSCRIPTEN)
 	target_link_options(freegemas PRIVATE
 		"SHELL:-sFORCE_FILESYSTEM=1"
 		"SHELL:-sINVOKE_RUN=0"
+		"SHELL:-sMINIFY_HTML=0"
 		"SHELL:-sEXPORTED_RUNTIME_METHODS=FS,IDBFS,callMain"
 		"SHELL:--js-library=${EMSCRIPTEN_IDBFS_JS}"
 		"SHELL:--shell-file ${PROJECT_SOURCE_DIR}/platform/wasm/shell.html"
