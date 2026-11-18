@@ -191,5 +191,6 @@ jobs:
       with:
         files: freegemas-${{matrix.build}}*.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
+        prerelease: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
