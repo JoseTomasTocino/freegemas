@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Freegemas — Commander X16</title>
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <a class="back" href="https://github.com/anomixer/freegemas/tree/master/x16">← Freegemas X16</a>
+  <span class="tag">Commander X16 · the port running on the official WebAssembly emulator</span>
+</header>
+
+<main>
+  <section id="screen">
+    <canvas id="canvas" width="640" height="480" tabindex="0" aria-label="Commander X16 screen"></canvas>
+    <div id="boot">
+      <h1>FREEGEMAS</h1>
+      <p>The Commander X16 port boots the real X16 KERNAL and
+        <code>BOOT.PRG</code> in your browser: the title, How to Play,
+        Options, Timetrial and Endless modes, high scores and the PCM music.</p>
+      <button id="play" type="button">▶ Boot the X16</button>
+      <p class="hint">Arrows move · <kbd>Space</kbd> select/swap · <kbd>Enter</kbd>
+        confirm · <kbd>H</kbd> hint · <kbd>R</kbd> reset · <kbd>Esc</kbd> title</p>
+      <p class="err" id="bootError" hidden></p>
+    </div>
+    <div id="error" hidden></div>
+  </section>
+
+  <div class="bar">
+    <span id="status" role="status">Ready. Click “Boot the X16”.</span>
+    <span class="buttons">
+      <button id="sound" type="button" disabled>Sound off</button>
+      <button id="fullscreen" type="button" disabled>Fullscreen</button>
+      <button id="restart" type="button" disabled>Restart</button>
+    </span>
+  </div>
+
+  <details class="notes">
+    <summary>What this is, the controls, and the notices</summary>
+
+    <h2>What you are running</h2>
+    <p>The real Commander X16 build from this repository's
+      <a href="https://github.com/anomixer/freegemas/tree/master/x16/hostfs">x16/hostfs/</a>
+      — the same <code>boot.prg</code>, loader, overlays, scene chunks, sound
+      effects and <code>music.zcm</code> you would put on an SD card — copied into
+      the emulator's virtual drive and started with <code>-prg boot.prg -run</code>.
+      The emulator is the official
+      <a href="https://github.com/X16Community/x16-emulator/releases/tag/r49">X16Community
+      WebAssembly release r49</a>, fetched and checksum-checked when this page is
+      built; it is not vendored in the repository.</p>
+
+    <h2>Controls (keyboard)</h2>
+    <table>
+      <tr><th>Keys</th><th>Action</th></tr>
+      <tr><td>Arrow keys</td><td>Move the cursor and highlight menu rows</td></tr>
+      <tr><td><kbd>Space</kbd></td><td>Select a gem, then swap with an adjacent gem; confirms a menu item</td></tr>
+      <tr><td><kbd>Enter</kbd></td><td>Confirm the highlighted menu item</td></tr>
+      <tr><td><kbd>H</kbd></td><td>Show a hint / find a possible move</td></tr>
+      <tr><td><kbd>R</kbd></td><td>Reset or reshuffle the board</td></tr>
+      <tr><td><kbd>Esc</kbd></td><td>Return from the game to the title</td></tr>
+      <tr><td><kbd>Title Exit</kbd></td><td>Quit to the X16 BASIC <code>READY.</code> prompt</td></tr>
+    </table>
+    <p>A USB gamepad works too: the D-pad moves, A/B select and swap, Start acts
+      as Enter, Select as Space. The emulator keeps the X16 keyboard layout
+      (<code>en-us</code>), so physical key positions are what the KERNAL sees.</p>
+
+    <h2>Notes</h2>
+    <p>Audio starts muted; use the “Sound” button (browsers require a click before
+      they allow sound). “Fullscreen” scales the 640×480 VERA screen; “Restart”
+      reloads the page and boots the X16 again. On slower machines the first boot
+      takes a few seconds while the HostFS files are copied into the emulator's
+      memory. High scores are written to the emulator's in-memory filesystem, so
+      they last for this page session only.</p>
+
+    <h2>Licences</h2>
+    <p>The emulator is 2-clause BSD (© 2019 Michael Steil); its bundled X16 ROM
+      mixes Commodore/Microsoft-licensed KERNAL and BASIC code with BSD-licensed
+      additions — see <a href="emulator-license.txt">emulator-license.txt</a> and
+      <a href="rom-license.md">rom-license.md</a> for the exact terms. The game
+      code and assets are covered by this repository's
+      <a href="https://github.com/anomixer/freegemas/blob/master/LICENSE">LICENSE</a>.</p>
+  </details>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
