@@ -1,0 +1,13 @@
+# Build output and local system files (not redistributed with the port)
+llvm/build/
+freegemas.hdv
+assets/prodos-system/
+__pycache__/
+*.pyc
+
+# Scratch/intermediate outputs from build_assets.mjs; not build inputs.
+generated/game_board.bin
+generated/game_board_map.bin
+generated/game_gems_4.idx
+generated/game_scene.idx
+generated/*_preview*.png
